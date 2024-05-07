@@ -1,0 +1,263 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@tailwind variants;
+@import "react-datepicker/dist/react-datepicker.css";
+body {
+  margin: 0;
+}
+@layer base {
+  :root {
+    --color-primary: var(--color-primary);
+  }
+}
+
+body {
+  @apply bg-white text-slate-700 dark:bg-primary-950 dark:text-primary-50;
+}
+
+// Définir le mixin pour le bouton
+@mixin button($color: blue, $variant: "solid") {
+  @apply border text-white rounded active:scale-95;
+  border-color: $color;
+
+  @if $variant == "solid" {
+    @apply border text-white active:brightness-95;
+    background-color: $color;
+  }
+  @elseif $variant == "outlined" {
+    color: $color;
+    &:active {
+      background-color: $color;
+    }
+    @apply bg-transparent active:text-white;
+  }
+
+  @elseif $variant == "link" {
+    color: $color;
+    &:active {
+      background-color: $color;
+    }
+    @apply bg-transparent active:text-white border-transparent hover:bg-slate-100 dark:hover:bg-slate-800;
+  }
+}
+
+@mixin padding($size) {
+  @if $size == "small" {
+    @apply px-1 py-1 text-sm;
+  }
+  @elseif $size == "large" {
+    @apply px-4 py-2 text-lg;
+  }
+  @elseif $size == "medium" {
+    @apply px-2 py-1 text-base;
+  }
+}
+
+$colors: (
+  black theme("colors.black"),
+  white theme("colors.black"),
+  gray theme("colors.gray.500"),
+  red theme("colors.red.500"),
+  orange theme("colors.orange.500"),
+  yellow theme("colors.yellow.500"),
+  green theme("colors.green.500"),
+  teal theme("colors.teal.500"),
+  blue theme("colors.blue.500"),
+  indigo theme("colors.indigo.500"),
+  purple theme("colors.purple.500"),
+  primary theme("colors.primary.500"),
+  secondary theme("colors.secondary.500"),
+  pink theme("colors.pink.500")
+);
+
+$buttonVariants: ("solid", "outlined", "ghost", "soft", "white", "link");
+
+@each $color, $value in $colors {
+  .btn-#{$color} {
+    @include padding("medium");
+    @include button($value);
+  }
+
+  @each $variant in $buttonVariants {
+    .btn-#{$color}-#{$variant} {
+      @include padding("medium");
+      @include button($value, $variant);
+    }
+  }
+}
+
+@each $size in ("small", "medium", "large") {
+  .btn-#{$size} {
+    @include padding($size);
+  }
+}
+
+.input {
+  @apply dark:bg-slate-700 bg-slate-100 border dark:border-slate-600 rounded outline-primary-500;
+  @include padding("medium");
+}
+
+.lk-input--switch {
+  // appearance: none;
+  // height: 23px;
+  // width: 38px;
+  // padding: 4px;
+  // background-color: rgba($color: grey, $alpha: 0.1);
+  // display: inline-flex;
+  // border-radius: theme("borderRadius.full");
+  transition: all ease-in-out 0.2s;
+  @apply appearance-none h-[23px] w-[38px] p-[4px] bg-primary-100 dark:bg-slate-700 inline-flex rounded-full;
+
+  &::before {
+    content: "";
+    height: 100%;
+    width: 50%;
+    border-radius: theme("borderRadius.full");
+    appearance: none;
+    background-color: theme("colors.white");
+    margin-left: 0%;
+    transition: all ease-in-out 0.2s;
+  }
+  &:checked {
+    background-color: theme("colors.primary.500");
+    &::before {
+      margin-left: 50%;
+      transition: all ease-in-out 0.2s;
+    }
+  }
+}
+
+.lk-input--select {
+  @apply appearance-none bg-slate-500 dark:bg-primary-800 py-2 px-4 border dark:border-primary-700 rounded;
+  option {
+    @apply p-4 mb-1 appearance-none h-24;
+  }
+}
+
+.lk-input--checkbox {
+  @apply appearance-none border border-slate-500 rounded h-4 w-4 relative inline-flex justify-center align-middle p-[2px];
+  &:checked {
+    @apply bg-primary-500 border-primary-500;
+    &::before {
+      content: " ";
+      clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+      height: 100%;
+      width: 100%;
+
+      @apply bg-white;
+    }
+  }
+}
+
+.lk-link {
+  color: inherit;
+  text-decoration: underline;
+
+  &--primary {
+    color: theme("colors.primary.500");
+  }
+
+  &--secondary {
+    color: gray;
+  }
+
+  &--large {
+    font-size: 1.2em;
+  }
+
+  &--small {
+    font-size: 0.8em;
+  }
+}
+.form {
+  input[type="text"],
+  input[type="number"],
+  input[type="email"],
+  input[type="datetime-local"],
+  select,
+  textarea {
+    @apply appearance-none bg-white px-2 py-1 w-full border border-primary-200 rounded outline-primary-500;
+  }
+  .field-description {
+    @apply text-xs;
+  }
+  .control-label {
+    @apply text-base font-bold;
+  }
+
+  input[type="checkbox"] {
+    @apply lk-input--switch;
+  }
+
+  .required {
+    @apply text-primary-300;
+  }
+
+  .form-group {
+    @apply mb-4;
+  }
+
+  div > button[type="submit"] {
+    @apply btn-primary w-full;
+  }
+}
+
+.itemFormular {
+  div > button[type="submit"] {
+    display: none;
+  }
+}
+
+.lk-scroll {
+  &::-webkit-scrollbar {
+    width: 0.5rem;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    // position: absolute;
+    // left: 20px;
+    // background-color: #8f54a0;
+    // border-radius: 10px;
+    @apply rounded-lg;
+  }
+  &:hover {
+    &::-webkit-scrollbar-thumb {
+      // position: absolute;
+      // left: 20px;
+      // background-color: #8f54a0;
+      // border-radius: 10px;
+      @apply bg-gray-200;
+    }
+  }
+}
+
+/* Chrome, Edge, and Safari */
+
+.react-datepicker {
+  @apply border-none;
+  &__header {
+    @apply bg-gray-100 border-none p-2;
+  }
+
+  &-popper {
+    @apply shadow-lg rounded-xl;
+  }
+  &__triangle {
+    @apply hidden;
+  }
+
+  &__navigation {
+    @apply bg-white mx-1  flex align-middle  rounded place-content-center;
+    &-icon {
+      @apply fill-gray-700 m-auto bg-gray-600;
+    }
+  }
+
+  &__day {
+    @apply font-semibold text-gray-600 text-base h-8 w-8 place-content-center rounded;
+    &--selected {
+      @apply bg-primary-500 text-white hover:bg-primary-700;
+    }
+  }
+}

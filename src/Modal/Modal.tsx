@@ -1,0 +1,28 @@
+import { Dialog } from "@headlessui/react";
+import React from "react";
+import { ModalLegacyProps } from "./modal.ctx";
+
+const Modal: React.FC<ModalLegacyProps> = ({ onCancel, onConfirm }) => {
+  return (
+    <Dialog open className="relative z-50" onClose={onCancel}>
+      <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
+        <Dialog.Panel className={"bg-white p-2 rounded shadow-lg"}>
+          <Dialog.Title>Deactivate account</Dialog.Title>
+          <Dialog.Description>
+            This will permanently deactivate your account
+          </Dialog.Description>
+
+          <p>
+            Are you sure you want to deactivate your account? All of your data
+            will be permanently removed. This action cannot be undone.
+          </p>
+
+          <button onClick={onConfirm}>Deactivate</button>
+          <button onClick={onConfirm}>Cancel</button>
+        </Dialog.Panel>
+      </div>
+    </Dialog>
+  );
+};
+
+export default Modal;

@@ -1,0 +1,19 @@
+.summary-card {
+  @apply bg-primary-100 dark:bg-primary-900 border dark:border-primary-900  rounded-xl flex  justify-between p-4  gap-2 flex-row;
+
+  &__body {
+    @apply dark:text-white  flex flex-col justify-end;
+  }
+
+  &__image {
+    @apply mix-blend-color-burn dark:mix-blend-color-dodge  dark:invert;
+  }
+
+  &__title {
+    @apply text-3xl font-bold;
+  }
+
+  &__text {
+    @apply text-sm font-semibold;
+  }
+}
