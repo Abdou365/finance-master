@@ -175,10 +175,10 @@ const ItemDrawer: React.FC<ItemDrawerProps> = (props) => {
   return (
     <Dialog
       open
-      className="z-50 h-full w-full  top-0 right-0 absolute "
+      className="z-50 h-full w-full bg-primary-950 bg-opacity-50  top-0 right-0 absolute "
       onClose={onClose}
     >
-      <div className="fixed inset-0 flex w-[500px] items-center justify-center p-4 ml-auto">
+      <div className="fixed inset-0 flex w-[500px] items-center justify-center ml-auto">
         <Transition
           as={Fragment}
           show={isShowing}
@@ -190,7 +190,7 @@ const ItemDrawer: React.FC<ItemDrawerProps> = (props) => {
           leaveTo="opacity-0 translate-x-full"
         >
           <Dialog.Panel
-            className={"bg-white rounded shadow-lg h-full w-full flex flex-col"}
+            className={"bg-white  shadow-lg h-full w-full flex flex-col"}
           >
             <Dialog.Title className="border-b p-3 flex justify-between">
               <h2 className=" text-xl font-bold">{props.title} </h2>

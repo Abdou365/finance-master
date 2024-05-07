@@ -9,16 +9,16 @@ import { useAuth } from "../../Login/useLogin";
 const Sidebar = () => {
   const { logout } = useAuth();
   return (
-    <div className="h-screen  flex justify-between   flex-col items-center   p-3">
+    <div className="h-screen  flex justify-between   flex-col items-center    border-r">
       <div className="space-y-48 rounded-md">
-        <ul className=" flex flex-col gap-2">
+        <ul className=" flex flex-col ">
           <Link to={"/"}>
-            <li className="bg-gray-200 h-12 w-12 rounded-lg content-center">
+            <li className=" h-12 w-12 border content-center">
               <FaChartBar className="m-auto" />
             </li>
           </Link>
           <Link to={"/activity"}>
-            <li className=" bg-gray-200 h-12 w-12 rounded-lg flex">
+            <li className=" border h-12 w-12 flex">
               <FaMoneyBillWave className="m-auto" />
             </li>
           </Link>
