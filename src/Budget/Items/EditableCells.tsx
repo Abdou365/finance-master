@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { CellContext } from "@tanstack/react-table";
-import { formatInTimeZone } from "date-fns-tz";
 import TextareaAutosize from "react-textarea-autosize";
 
 import { Listbox } from "@headlessui/react";
@@ -8,25 +7,15 @@ import { keyBy } from "lodash";
 import React, { useState } from "react";
 import { TableColumnType } from "./ItemsTable";
 // import { format } from "date-fns";
-import ReactDatePicker from "react-datepicker";
+import { format } from "date-fns";
 import DatePicker from "../../components/DatePicker/DatePicker";
+import { formatOptions } from "../../utils/formatOptions";
+import { Select } from "../../components/Select/Select";
 
 interface Props extends CellContext<any, string> {
   onChange: (item: any) => void;
   columnOptions: TableColumnType;
 }
-
-const formatOptions = (options: { name: string; value: any }[] | string[]) => {
-  return options.map((option: any) => {
-    if (typeof option === "string") {
-      return {
-        name: option,
-        value: option,
-      };
-    }
-    return option;
-  });
-};
 
 const EditableCells: React.FC<Props> = (props) => {
   const [inputState, setInputState] = useState(props.getValue());
@@ -43,16 +32,12 @@ const EditableCells: React.FC<Props> = (props) => {
         className="outline-none text-right w-full"
         name={props.column.id}
         dateFormat={"YYYY-MM-dd"}
-        value={props.cell.getValue()}
+        value={format(props.cell.getValue(), "yyyy-MM-dd")}
         selected={inputState}
         onSelect={(date) => {
           props.onChange({
             ...props.row.original,
-            [props.column.id]: formatInTimeZone(
-              date,
-              Intl.DateTimeFormat().resolvedOptions().timeZone,
-              "yyyy-MM-dd"
-            ),
+            [props.column.id]: date.toISOString(),
           });
         }}
         type={props.columnOptions.type}
@@ -67,7 +52,7 @@ const EditableCells: React.FC<Props> = (props) => {
         name={props.column.id}
         style={{ resize: "none" }}
         defaultValue={inputState}
-        onChange={(e) => setInputState(e.target.value)}
+        onChange={(e) => setInputState(+e.target.value)}
         type={props.columnOptions.type}
         onBlur={handleUpdate}
       />
@@ -75,34 +60,17 @@ const EditableCells: React.FC<Props> = (props) => {
   }
 
   if (props.columnOptions.type === "select" && props.columnOptions.options) {
-    const options = formatOptions(props.columnOptions.options);
-    const optionByKey = keyBy(options, "value");
     return (
-      <Listbox>
-        <Listbox.Button className="max-w-full">
-          {optionByKey[inputState]?.name || inputState}
-        </Listbox.Button>
-
-        <Listbox.Options className="border absolute  bg-white z-10 cursor-pointer rounded shadow">
-          {options.map((option) => {
-            return (
-              <Listbox.Option
-                className="py-1 px-2 hover:bg-slate-100 active:bg-primary-100 w-full"
-                key={option.name}
-                value={option.value}
-                onClick={() => {
-                  props.onChange({
-                    ...props.row.original,
-                    [props.column.id]: option.value,
-                  });
-                }}
-              >
-                {option.name}
-              </Listbox.Option>
-            );
-          })}
-        </Listbox.Options>
-      </Listbox>
+      <Select
+        state={inputState}
+        options={props.columnOptions.options}
+        onChange={(data) => {
+          props.onChange({
+            ...props.row.original,
+            [props.column.id]: data?.value,
+          });
+        }}
+      />
     );
   }
 

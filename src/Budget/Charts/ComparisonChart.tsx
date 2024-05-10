@@ -10,21 +10,19 @@ import {
   YAxis,
 } from "recharts";
 import tailwindConfig from "../../../tailwind.config";
-import { useItems } from "../../store.tsx/store.ctx";
 import { useMemo, useState } from "react";
 import { filterByDate } from "../../utils/items.utils";
 import { Listbox } from "@headlessui/react";
+import { ItemType } from "../../types/item.type";
 
-const ComparisonChart = () => {
-  const { items } = useItems();
-
+const ComparisonChart = ({ items }: { items: ItemType[] }) => {
   const [separateBy, setSeparateBy] = useState<"day" | "month" | "year">(
     "month"
   );
   const data = useMemo(
     () =>
       filterByDate({
-        name: "created_at",
+        name: "date",
         items,
         separateBy,
         limit: 10,
@@ -32,10 +30,12 @@ const ComparisonChart = () => {
     [items, separateBy]
   );
 
+  console.log(data);
+
   const separateObj = { month: "Month", day: "Day", year: "Year" };
 
   return (
-    <section>
+    <section className="bg-white p-2 rounded border">
       <div>
         <Listbox>
           <Listbox.Button className={" border p-2  w-40 max-w-full"}>

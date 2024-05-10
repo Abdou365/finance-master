@@ -1,11 +1,20 @@
 import bem from "bem-ts";
-import { format } from "date-fns";
+import {
+  FaCross,
+  FaEdit,
+  FaRemoveFormat,
+  FaSave,
+  FaTimes,
+  FaTrash,
+  FaTrashAlt,
+} from "react-icons/fa";
 import { editItemDrawer } from "../../Modal/ItemDrawer";
 import { useItems } from "../../store.tsx/store.ctx";
 import { ItemType } from "../../types/item.type";
 import "./Items.scss";
 import Table from "./ItemsTable";
-import { FaEdit } from "react-icons/fa";
+import store from "../../store.tsx/store";
+import { useParams } from "react-router-dom";
 
 export const itemCx = bem("item-group");
 
@@ -17,17 +26,20 @@ const Items = () => {
     updateItems,
     createItems,
     deleteSelectedItems,
+    save,
   } = useItems();
+  const { accountId } = useParams();
   const handleCreate = () => {
     createItems({
-      id: "",
       title: "",
       description: "",
-      effect_date: format(new Date(), "yyyy-MM-dd"),
+      date: new Date().toISOString(),
       value: 0,
-      category: filter.view,
+      category: "All",
+      accountId: accountId || "",
       isExpense: false,
       status: "published",
+      userId: store.user()?.id || "",
     });
   };
 
@@ -43,62 +55,31 @@ const Items = () => {
   };
   return (
     <>
-      {/* <div className={itemCx("category")}>
-        {categories.map((category) => {
-          return (
-            <button
-              className={
-                filter.view === category
-                  ? "nav-link active btn-primary"
-                  : "nav-link active btn-primary-link"
-              }
-              aria-current="page"
-              onClick={() => updateFilter(category)}
-            >
-              {category}
-            </button>
-          );
-        })}
-      </div> */}
       <div className={itemCx("filter")}>
-        <div className="flex gap-2">
-          <input
-            type="text"
-            className="input"
-            placeholder="Recipient's username"
-            aria-label="Recipient's username"
-            aria-describedby="button-addon2"
-          />
-        </div>
-        <div className="">
+        <div className="ml-auto flex gap-2">
           <button className="btn-primary btn-small" onClick={handleCreate}>
             Ajouter un item
-          </button>
-          <button type="button" className="btn-primary-link btn-small">
-            Désactiver
           </button>
           <button
             type="button"
             className="btn-red btn-small"
             onClick={handleDelete}
           >
-            Supprimer
+            <FaTrashAlt />
+          </button>
+          <button className="btn-primary btn-small" onClick={save}>
+            <FaSave />
           </button>
         </div>
       </div>
       <div className={`${itemCx()} lk-scroll`}>
-        {/* <div className={itemCx("body")}> */}
-        {/* {items &&
-            items.map((item) => {
-              return <Item {...item} />;
-            })} */}
         <Table
           columns={[
             {
               name: "category",
               label: "Caetegory",
               type: "select",
-              options: categories,
+              options: ["All", "Financement", "Facture", "Prime", "Salaire"],
               dtatype: "string",
               size: 50,
             },
@@ -120,7 +101,7 @@ const Items = () => {
               size: 40,
             },
             {
-              name: "effect_date",
+              name: "date",
               label: "Date de mise En effet",
               type: "date",
               dtatype: "date",
@@ -147,11 +128,9 @@ const Items = () => {
               size: 40,
             },
           ]}
-          selectable
           onChange={updateItems}
           tableData={items}
         />
-        {/* </div> */}
       </div>
     </>
   );

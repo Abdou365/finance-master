@@ -1,13 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, {
-  Component,
-  createContext,
-  useContext,
-  useRef,
-  useState,
-} from "react";
 import { uniqueId } from "lodash";
+import React, { useRef, useState } from "react";
 
 export const modalPromise = {
   current: (props: any) => {

@@ -5,11 +5,10 @@ import { FieldProps, RJSFSchema } from "@rjsf/utils";
 import validator from "@rjsf/validator-ajv8";
 import { pick } from "lodash";
 import React, { Fragment, useEffect, useState } from "react";
-import { ItemType } from "../types/item.type";
-import { ModalLegacyProps, openModal } from "./modal.ctx";
 import ReactDatePicker from "react-datepicker";
 import { useItems } from "../store.tsx/store.ctx";
-import { format } from "date-fns";
+import { ItemType } from "../types/item.type";
+import { ModalLegacyProps, openModal } from "./modal.ctx";
 
 interface ItemDrawerProps extends ModalLegacyProps, ItemType {}
 
@@ -38,7 +37,7 @@ const useSchema = (): RJSFSchema => {
         format: "textarea",
         description: "A detailed description of the form entry.",
       },
-      effect_date: {
+      date: {
         title: "Date",
         type: "string",
         format: "date",
@@ -66,7 +65,7 @@ const useSchema = (): RJSFSchema => {
   };
 };
 
-const MyCustomWidget = (props: FieldProps) => {
+export const MyCustomWidget = (props: FieldProps) => {
   // const [inputData, setInputData] = useState(props.formData);
   const handleChange = (data: any) => {
     props.onChange(data);
@@ -163,7 +162,7 @@ const ItemDrawer: React.FC<ItemDrawerProps> = (props) => {
     "id",
     "title",
     "description",
-    "effect_date",
+    "date",
     "value",
     "category",
     "isExpense",

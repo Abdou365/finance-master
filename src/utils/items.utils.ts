@@ -7,12 +7,12 @@ export const filterByDate = ({
   limit,
 }: {
   name: string;
-  items: Record<string, any>[];
+  items?: Record<string, any>[];
   separateBy: "year" | "month" | "day";
   limit?: number;
 }) => {
   const dates = uniq(
-    items.map((item) => {
+    items?.map((item) => {
       if (separateBy == "year") {
         return new Date(item[name]!).getFullYear().toString();
       } else if (separateBy === "month") {

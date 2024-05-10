@@ -16,17 +16,17 @@ const router = createBrowserRouter([
     Component: ProtectedRoute,
     children: [
       {
-        path: "/",
+        path: "/app",
         Component: Budget,
         children: [
-          { path: "", Component: DashBoard },
-          { path: "activity", Component: Activity },
+          { path: ":accountId", Component: DashBoard },
+          { path: ":accountId/activity", Component: Activity },
         ],
       },
+      { path: "/account", Component: Account },
     ],
   },
   { path: "/auth", Component: Login },
-  { path: "/account", Component: Account },
 ]);
 
 const queryClient = new QueryClient();
@@ -35,11 +35,9 @@ function App() {
   return (
     <>
       <QueryClientProvider client={queryClient}>
-        <ItemsProvider>
-          <ModalManager>
-            <RouterProvider router={router}></RouterProvider>
-          </ModalManager>
-        </ItemsProvider>
+        <ModalManager>
+          <RouterProvider router={router}></RouterProvider>
+        </ModalManager>
       </QueryClientProvider>
     </>
   );

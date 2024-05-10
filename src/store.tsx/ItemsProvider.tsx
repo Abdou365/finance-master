@@ -4,9 +4,12 @@ import { v4 as uuidv4 } from "uuid";
 import { ItemType } from "../types/item.type";
 import { ItemCtx, useItems } from "./store.ctx";
 import { upsertItems, useGetItems } from "./useItems";
+import { useParams } from "react-router-dom";
 
-const ItemsProvider = ({ children }) => {
-  const { data, refetch } = useGetItems();
+const ItemsProvider = ({ children }: { children: React.ReactNode }) => {
+  const { accountId } = useParams();
+
+  const { data, refetch } = useGetItems(accountId);
   const [items, setItems] = useState<ItemType[]>([]);
   const [filter, setFilter] = useState({ view: "All", date: null });
   const [selectedItem, setSelectedItem] = useState<string[]>([]);
@@ -33,7 +36,12 @@ const ItemsProvider = ({ children }) => {
     setItems(newItem);
   };
 
-  const createItems = (item: Omit<ItemType, "id">) => {
+  const createItems = (
+    item: Omit<
+      ItemType,
+      "id" | "createdAt" | "userId" | "accountId" | "updatedAt"
+    >
+  ) => {
     setItems((prev) => [
       { ...item, id: uuidv4(), category: filter.view },
       ...prev,

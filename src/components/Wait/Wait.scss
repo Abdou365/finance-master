@@ -1,0 +1,37 @@
+.wrapper {
+  @apply w-full h-full flex;
+
+  svg {
+    @apply m-auto;
+  }
+
+  @keyframes fillFadeInOut {
+    0%,
+    75% {
+      fill-opacity: 0;
+    }
+    50% {
+      fill-opacity: 1;
+    }
+  }
+
+  .fill-opacity-animation {
+    fill-opacity: 0;
+    animation: fillFadeInOut 5s infinite ease-in-out;
+  }
+
+  @keyframes drawStroke {
+    50% {
+      stroke-dashoffset: 0%;
+    }
+    100% {
+      stroke-dashoffset: 100%;
+    }
+  }
+
+  .path-stroke {
+    stroke-dasharray: 100%;
+    stroke-dashoffset: 100%;
+    animation: drawStroke 5s forwards infinite;
+  }
+}

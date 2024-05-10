@@ -1,37 +1,36 @@
-import partition from "lodash/partition";
-import sumBy from "lodash/sumBy";
-import { useItems } from "../../store.tsx/store.ctx";
+import { AccountSummarize } from "../../types/account.type";
 import SummaryCard from "./SummaryCard";
 
-const SummaryContainer = () => {
-  const { items } = useItems();
-  const [decaiss, encaiss] = partition(items, (e) => e.isExpense);
-  const sommeEncaiss = sumBy(encaiss, "value");
-  const sommeDecaiss = sumBy(decaiss, "value");
+const SummaryContainer = ({ account }: { account?: AccountSummarize }) => {
+  if (!account) {
+    return <div>...chargement</div>;
+  }
   const result = [
     {
       name: "encaissement",
       title: "Total de mes entrée",
-      result: sommeEncaiss,
+      result: account.sumPayment,
       image: "../assets/getting-paid.svg",
     },
     {
       name: "decaissement",
       title: "Total de mes sortie",
-      result: sommeDecaiss,
+      result: account.sumExpense,
       image: "../assets/spend-your-money-alt.svg",
     },
     {
       name: "solde",
       title: "Solde des transactions",
-      result: sommeEncaiss - sommeDecaiss,
+      result: account.balance,
       image: "../assets/rich.svg",
     },
   ];
   return (
     <div className=" grid grid-cols-3 gap-2">
-      {result.map((r) => {
-        return <SummaryCard title={r.title} result={r.result.toString()} />;
+      {result.map((r, key) => {
+        return (
+          <SummaryCard key={key} title={r.title} result={r.result.toString()} />
+        );
       })}
     </div>
   );

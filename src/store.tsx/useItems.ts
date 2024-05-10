@@ -1,16 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from ".";
+import axios from "axios";
 import { ItemType } from "../types/item.type";
 
-export const useGetItems = () => {
+export const useGetItems = (accountId?: string) => {
   const query = useQuery({
     queryKey: ["item"],
     queryFn: async () => {
-      const { data: item } = await supabase
-        .from("item")
-        .select("*")
-        .eq("status", "published")
-        .order("created_at", { ascending: false });
+      const { data: item } = await axios.get(
+        `http://localhost:3000/item/${accountId}`
+      );
       return item;
     },
   });
@@ -18,7 +16,7 @@ export const useGetItems = () => {
 };
 
 export const upsertItems = async (items: ItemType[]) => {
-  const query = await supabase.from("item").upsert(items);
+  const query = await axios.post("http://localhost:3000/item", items);
 
   return query;
 };

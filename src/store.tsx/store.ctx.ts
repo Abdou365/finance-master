@@ -14,7 +14,7 @@ export type StoreType = {
   filter: StoreFilterType;
   updateFilter: (string: string) => void;
   updateItems: (item: ItemType) => void;
-  createItems: (item: ItemType) => void;
+  createItems: (item: Omit<ItemType, "id" | "updatedAt" | "createdAt">) => void;
   deleteItem: (id: string) => void;
   deleteSelectedItems: () => void;
   save: () => void;

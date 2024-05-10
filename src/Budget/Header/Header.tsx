@@ -21,9 +21,6 @@ export function Header() {
       </ul> */}
 
       <div className={cx("actions")}>
-        <button className="btn-primary" onClick={save}>
-          Sauvegarder les modifications
-        </button>
         {/* <ReactDatePicker
           placeholderText="Select the date"
           onChange={(e) => console.log(e)}

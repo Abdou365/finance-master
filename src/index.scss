@@ -44,13 +44,13 @@ body {
 
 @mixin padding($size) {
   @if $size == "small" {
-    @apply px-1 py-1 text-sm;
+    @apply px-1 py-1 text-sm min-h-8 min-w-8 align-middle;
   }
   @elseif $size == "large" {
-    @apply px-4 py-2 text-lg;
+    @apply px-4 py-2 text-lg align-middle;
   }
   @elseif $size == "medium" {
-    @apply px-2 py-1 text-base;
+    @apply px-2 py-1 text-base align-middle;
   }
 }
 
@@ -204,6 +204,33 @@ $buttonVariants: ("solid", "outlined", "ghost", "soft", "white", "link");
 }
 
 .itemFormular {
+  input[type="text"],
+  input[type="number"],
+  input[type="email"],
+  input[type="datetime-local"],
+  select,
+  textarea {
+    @apply appearance-none bg-white px-2 py-1 w-full border border-primary-200 rounded outline-primary-500;
+  }
+  .field-description {
+    @apply text-xs;
+  }
+  .control-label {
+    @apply text-base font-bold;
+  }
+
+  input[type="checkbox"] {
+    @apply lk-input--switch;
+  }
+
+  .required {
+    @apply text-primary-300;
+  }
+
+  .form-group {
+    @apply mb-4;
+  }
+
   div > button[type="submit"] {
     display: none;
   }
