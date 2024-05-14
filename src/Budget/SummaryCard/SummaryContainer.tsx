@@ -1,4 +1,5 @@
 import { AccountSummarize } from "../../types/account.type";
+import { intelligentRound } from "../../utils/rounding";
 import SummaryCard from "./SummaryCard";
 
 const SummaryContainer = ({ account }: { account?: AccountSummarize }) => {
@@ -9,19 +10,19 @@ const SummaryContainer = ({ account }: { account?: AccountSummarize }) => {
     {
       name: "encaissement",
       title: "Total de mes entrée",
-      result: account.sumPayment,
+      result: intelligentRound(account.sumPayment, "standard", 1, 2),
       image: "../assets/getting-paid.svg",
     },
     {
       name: "decaissement",
       title: "Total de mes sortie",
-      result: account.sumExpense,
+      result: intelligentRound(account.sumExpense, "standard", 1, 2),
       image: "../assets/spend-your-money-alt.svg",
     },
     {
       name: "solde",
       title: "Solde des transactions",
-      result: account.balance,
+      result: intelligentRound(account.balance, "standard", 1, 2),
       image: "../assets/rich.svg",
     },
   ];

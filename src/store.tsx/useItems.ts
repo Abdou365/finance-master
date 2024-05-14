@@ -4,7 +4,8 @@ import { ItemType } from "../types/item.type";
 
 export const useGetItems = (accountId?: string) => {
   const query = useQuery({
-    queryKey: ["item"],
+    queryKey: ["getAllItems"],
+    staleTime: 60 * 60 * 10,
     queryFn: async () => {
       const { data: item } = await axios.get(
         `http://localhost:3000/item/${accountId}`

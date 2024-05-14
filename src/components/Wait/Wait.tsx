@@ -25,7 +25,7 @@ const Wait: React.FC = () => {
             <g
               stroke="#000"
               strokeMiterlimit="4"
-              ariaLabel="CashMaster"
+              aria-label="CashMaster"
               style={{ lineHeight: "1.25" }}
               fill="#000"
               strokeWidth="0.299"

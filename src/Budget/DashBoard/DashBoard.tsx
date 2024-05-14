@@ -18,7 +18,7 @@ const DashBoard = () => {
   return (
     <div
       style={{ height: "calc(100vh - 3rem)" }}
-      className=" bg-gray-50 flex flex-col align-middle flex-1 justify-center place-items-center p-3 gap-2"
+      className=" bg-gray-100 flex flex-col align-middle flex-1 justify-center place-items-center p-3 gap-2"
     >
       <div className=" container flex flex-col gap-2">
         <SummaryContainer account={account?.summarize} />

@@ -2,14 +2,11 @@
 import { CellContext } from "@tanstack/react-table";
 import TextareaAutosize from "react-textarea-autosize";
 
-import { Listbox } from "@headlessui/react";
-import { keyBy } from "lodash";
 import React, { useState } from "react";
 import { TableColumnType } from "./ItemsTable";
 // import { format } from "date-fns";
 import { format } from "date-fns";
 import DatePicker from "../../components/DatePicker/DatePicker";
-import { formatOptions } from "../../utils/formatOptions";
 import { Select } from "../../components/Select/Select";
 
 interface Props extends CellContext<any, string> {
@@ -67,7 +64,7 @@ const EditableCells: React.FC<Props> = (props) => {
         onChange={(data) => {
           props.onChange({
             ...props.row.original,
-            [props.column.id]: data?.value,
+            [props.column.id]: data,
           });
         }}
       />

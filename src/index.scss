@@ -94,7 +94,7 @@ $buttonVariants: ("solid", "outlined", "ghost", "soft", "white", "link");
 }
 
 .input {
-  @apply dark:bg-slate-700 bg-slate-100 border dark:border-slate-600 rounded outline-primary-500;
+  @apply dark:bg-gray-700 min-h-[37.33px] bg-white border dark:border-gray-600 rounded outline-primary-500;
   @include padding("medium");
 }
 
@@ -283,7 +283,8 @@ $buttonVariants: ("solid", "outlined", "ghost", "soft", "white", "link");
 
   &__day {
     @apply font-semibold text-gray-600 text-base h-8 w-8 place-content-center rounded;
-    &--selected {
+    &--selected,
+    &--in-range {
       @apply bg-primary-500 text-white hover:bg-primary-700;
     }
   }

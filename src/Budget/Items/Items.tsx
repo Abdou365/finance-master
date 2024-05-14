@@ -1,28 +1,19 @@
 import bem from "bem-ts";
-import {
-  FaCross,
-  FaEdit,
-  FaRemoveFormat,
-  FaSave,
-  FaTimes,
-  FaTrash,
-  FaTrashAlt,
-} from "react-icons/fa";
+import { FaEdit, FaSave, FaTrashAlt } from "react-icons/fa";
+import { useParams } from "react-router-dom";
 import { editItemDrawer } from "../../Modal/ItemDrawer";
+import store from "../../store.tsx/store";
 import { useItems } from "../../store.tsx/store.ctx";
 import { ItemType } from "../../types/item.type";
 import "./Items.scss";
 import Table from "./ItemsTable";
-import store from "../../store.tsx/store";
-import { useParams } from "react-router-dom";
 
 export const itemCx = bem("item-group");
 
 const Items = () => {
   const {
     items,
-    categories,
-    filter,
+
     updateItems,
     createItems,
     deleteSelectedItems,
@@ -95,8 +86,8 @@ const Items = () => {
               type: "select",
               dtatype: "boolean",
               options: [
-                { name: "dépense", value: true },
-                { name: "encaissement", value: false },
+                { label: "dépense", value: true },
+                { label: "encaissement", value: false },
               ],
               size: 40,
             },

@@ -1,0 +1,22 @@
+.circle-progress {
+  position: relative;
+
+  .circle-progress-background,
+  .circle-progress-progress {
+    fill: none;
+  }
+
+  .circle-progress-background {
+    @apply stroke-gray-300;
+  }
+
+  .circle-progress-progress {
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.5s ease-in-out;
+    @apply stroke-primary-500;
+  }
+
+  .circle-progress-text {
+    @apply fill-gray-600 text-3xl font-bold;
+  }
+}

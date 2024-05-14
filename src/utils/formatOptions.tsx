@@ -1,10 +1,10 @@
 export const formatOptions = (
-  options: { name: string; value: any }[] | string[]
+  options: { label: string; value: any }[] | string[]
 ) => {
   return options.map((option: any) => {
     if (typeof option === "string") {
       return {
-        name: option,
+        label: option,
         value: option,
       };
     }

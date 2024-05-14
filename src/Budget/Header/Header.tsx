@@ -1,7 +1,5 @@
-import ReactDatePicker from "react-datepicker";
-import { useItems } from "../../store.tsx/store.ctx";
-import { Link } from "react-router-dom";
 import bem from "bem-ts";
+import { useItems } from "../../store.tsx/store.ctx";
 import "./Header.scss";
 
 const cx = bem("header");

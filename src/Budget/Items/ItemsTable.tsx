@@ -34,7 +34,7 @@ export type TableDataType = Record<string, unknown>;
 export type TableColumnOptionsType =
   | string[]
   | {
-      name: string;
+      label: string;
       value: any;
     }[];
 

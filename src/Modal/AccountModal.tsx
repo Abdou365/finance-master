@@ -2,7 +2,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { RJSFSchema } from "@rjsf/utils";
 import validator from "@rjsf/validator-ajv8";
 import React, { Fragment, useEffect, useState } from "react";
-import { MyCustomWidget } from "./ItemDrawer";
+import { MyCustomWidget } from "./MyCustomWidget";
 import { ModalLegacyProps, openModal } from "./modal.ctx";
 import Form from "@rjsf/core";
 import { FaTimes } from "react-icons/fa";
