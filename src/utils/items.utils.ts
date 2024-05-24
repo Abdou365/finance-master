@@ -33,14 +33,19 @@ export const filterByDate = ({
     })
   )
     .sort((a: any, b: any) => {
-      return new Date(b) - new Date(a);
+      return new Date(b).getTime() - new Date(a).getTime();
     })
     .slice(0, limit || 5);
   const output: Record<string, any> = {};
-  const formatted: Record<string, any> = [];
+  const formatted: {
+    name: string;
+    cashing: number;
+    payment: number;
+    amt: number;
+  }[] = [];
   for (const date of dates) {
     const regex = new RegExp(date);
-    const filteredItem = items.filter((i) => regex.test(i[name]));
+    const filteredItem = items?.filter((i) => regex.test(i[name]));
     const [cashingList, paymentList] = partition(filteredItem, "isExpense");
     const cashing = sumBy(cashingList, "value");
     const payment = sumBy(paymentList, "value");

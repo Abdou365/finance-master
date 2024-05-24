@@ -3,23 +3,19 @@
     @apply text-2xl font-bold mt-3;
   }
 
-  &__button {
-    @apply flex items-baseline gap-2;
-  }
-
   &__content {
-    @apply flex gap-1 flex-wrap md:items-start;
+    @apply flex gap-3 flex-wrap md:items-start;
     @media (max-width: 768px) {
       @apply flex-col-reverse;
     }
   }
 
   &__list {
-    @apply grid lg:grid-cols-2 flex-1 lg:place-content-start gap-1;
+    @apply grid lg:grid-cols-2 flex-1 lg:place-content-start gap-3;
   }
 
   &__info {
-    @apply bg-white p-3 border rounded space-y-3 md:w-80 w-full flex items-center flex-col;
+    @apply bg-white p-3 border rounded space-y-3 md:w-80 w-full max-w-full flex items-center flex-col;
   }
 
   &__circle-progress {

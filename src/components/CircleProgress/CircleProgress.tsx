@@ -12,14 +12,14 @@ const CircleProgress: React.FC<CircleProgressProps> = ({
   strokeWidth,
   progress,
 }) => {
-  const [offset, setOffset] = useState(0);
+  const radius = size / 2 - strokeWidth / 2;
+  const circumference = 2 * Math.PI * radius;
+  const [offset, setOffset] = useState(circumference);
 
   useEffect(() => {
-    const radius = size / 2 - strokeWidth / 2;
-    const circumference = 2 * Math.PI * radius;
-    const newOffset = ((100 - progress) / 100) * circumference; // Reverse the animation
+    const newOffset = circumference - (progress / 100) * circumference;
     setOffset(newOffset);
-  }, [progress, size, strokeWidth]);
+  }, [circumference, progress, size, strokeWidth]);
 
   return (
     <svg
@@ -43,7 +43,7 @@ const CircleProgress: React.FC<CircleProgressProps> = ({
         strokeWidth={strokeWidth}
         strokeLinecap="round"
         strokeDasharray={2 * Math.PI * (size / 2 - strokeWidth / 2)}
-        strokeDashoffset={-offset}
+        strokeDashoffset={offset}
       />
       <text
         x="50%"

@@ -1,7 +1,7 @@
 export const formatOptions = (
-  options: { label: string; value: any }[] | string[]
+  options: { label: string; value: unknown }[] | string[]
 ) => {
-  return options.map((option: any) => {
+  return options.map((option: unknown) => {
     if (typeof option === "string") {
       return {
         label: option,

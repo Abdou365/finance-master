@@ -1,3 +1,5 @@
+import { Listbox } from "@headlessui/react";
+import { useMemo, useState } from "react";
 import {
   Bar,
   BarChart,
@@ -9,11 +11,12 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { ContentType } from "recharts/types/component/Tooltip";
 import tailwindConfig from "../../../tailwind.config";
-import { useMemo, useState } from "react";
-import { filterByDate } from "../../utils/items.utils";
-import { Listbox } from "@headlessui/react";
 import { ItemType } from "../../types/item.type";
+import { filterByDate } from "../../utils/items.utils";
+import { CustomTooltip } from "./CustomTooltip";
+import { CustomLegend } from "./CustomLegend";
 
 const ComparisonChart = ({ items }: { items: ItemType[] }) => {
   const [separateBy, setSeparateBy] = useState<"day" | "month" | "year">(
@@ -29,8 +32,6 @@ const ComparisonChart = ({ items }: { items: ItemType[] }) => {
       }).graph,
     [items, separateBy]
   );
-
-  console.log(data);
 
   const separateObj = { month: "Month", day: "Day", year: "Year" };
 
@@ -65,27 +66,30 @@ const ComparisonChart = ({ items }: { items: ItemType[] }) => {
       <div className="  h-80 flex flex-col p-2">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart width={500} height={300} data={data}>
-            <CartesianGrid strokeDasharray="3 3" />
+            <CartesianGrid strokeDasharray="3" />
             <XAxis dataKey="name" />
             <YAxis />
-            <Tooltip />
-            <Legend />
+            <Tooltip content={CustomTooltip} />
+            <Legend name="cashing" content={CustomLegend} />
             <Bar
+              radius={3}
               dataKey="payment"
-              fill={tailwindConfig.theme.extend.colors.primary[900]}
-              stroke={tailwindConfig.theme.extend.colors.primary[900]}
+              fill={tailwindConfig.theme.extend.colors.primary[800]}
               activeBar={
                 <Rectangle
-                  fill={tailwindConfig.theme.extend.colors.primary[500]}
-                  stroke={tailwindConfig.theme.extend.colors.primary[500]}
+                  fill={tailwindConfig.theme.extend.colors.primary[700]}
                 />
               }
             />
             <Bar
               dataKey="cashing"
-              fill="transparent"
-              stroke={tailwindConfig.theme.extend.colors.primary[900]}
-              activeBar={<Rectangle fill="gold" stroke="purple" />}
+              radius={3}
+              fill={tailwindConfig.theme.extend.colors.primary[400]}
+              activeBar={
+                <Rectangle
+                  fill={tailwindConfig.theme.extend.colors.primary[300]}
+                />
+              }
             />
           </BarChart>
         </ResponsiveContainer>

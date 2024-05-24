@@ -1,6 +1,15 @@
-import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
+import {
+  Cell,
+  Legend,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+} from "recharts";
 import tailwindConfig from "../../../tailwind.config";
 import { AccountExpenseRepartition } from "../../types/account.type";
+import { CustomTooltip } from "./CustomTooltip";
+import { CustomDetailLegend, CustomLegend } from "./CustomLegend";
 
 const COLORS = [
   tailwindConfig.theme.extend.colors.primary[300],
@@ -32,6 +41,8 @@ const RepartitionChart = ({ data }: { data?: AccountExpenseRepartition[] }) => {
                 />
               ))}
             </Pie>
+            <Tooltip content={CustomTooltip} />
+            <Legend content={CustomDetailLegend} />
           </PieChart>
         </ResponsiveContainer>
       </div>

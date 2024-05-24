@@ -1,0 +1,55 @@
+// ObjectifCard.module.scss
+
+.objectifCard {
+  @apply bg-white p-3 rounded border;
+
+  &:has(input:checked) {
+    @apply border-primary-500 text-primary-500 bg-primary-50;
+  }
+
+  &__header {
+    @apply flex justify-between;
+
+    &__main {
+      &__checkbox {
+        @apply flex gap-2 items-center;
+
+        &__title {
+          @apply font-bold;
+        }
+      }
+
+      &__dates {
+        @apply flex;
+
+        &__datePicker {
+          @apply text-xs font-semibold cursor-pointer w-full;
+
+          &__icon {
+            @apply text-xs;
+          }
+        }
+      }
+    }
+
+    &__menuButton {
+      @apply bg-gray-100 rounded mb-auto;
+    }
+  }
+
+  &__progressBar {
+    @apply flex items-baseline gap-2 mt-3;
+
+    &__bar {
+      @apply w-full rounded bg-gray-300 h-2 overflow-hidden;
+
+      &__fill {
+        @apply bg-primary-500 rounded;
+      }
+    }
+
+    &__percentage {
+      @apply text-sm font-bold;
+    }
+  }
+}

@@ -6,7 +6,6 @@ const ProtectedRoute = () => {
 
   useEffect(() => {
     const login = localStorage.getItem("login");
-    console.log("Champion");
 
     if (!login) {
       window.location.replace("/auth");

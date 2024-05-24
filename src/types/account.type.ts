@@ -29,4 +29,18 @@ export interface AccountDashboard
   item: Pick<ItemType, "id" | "date" | "isExpense" | "category" | "value">[];
   expenseRepartition: AccountExpenseRepartition[];
   summarize: AccountSummarize;
+  Item: {
+    category: string;
+    date: string;
+    id: string;
+    isExpense: boolean;
+    title: string;
+    value: number;
+  }[];
+  Objectif: {
+    completed: number;
+    opened: number;
+    total: number;
+    progress: number;
+  };
 }

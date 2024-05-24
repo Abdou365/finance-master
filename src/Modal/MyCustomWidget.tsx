@@ -39,8 +39,6 @@ export const MyCustomWidget = (props: FieldProps) => {
   }
 
   if (props.schema.type === "string" && props.schema.format === "date") {
-    console.log({ form: props.formData });
-
     return (
       <ReactDatePicker
         wrapperClassName="w-full"

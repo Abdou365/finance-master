@@ -1,71 +1,93 @@
 import { FaTrophy } from "react-icons/fa";
-import CircleProgress from "../../components/CircleProgress/CircleProgress";
 import Wait from "../../components/Wait/Wait";
 import { upsertObjectif, useGetAllObjectif } from "../../store.tsx/useObject";
 import { ObjectifCard } from "./ObjectifCard";
 import "./Objectif.scss"; // Importez le fichier SCSS pour les styles
-import { createObjectif } from "../../Modal/ObjectifDrawer";
+import { createObjectif, updateObjectif } from "../../Modal/ObjectifDrawer";
 import { useParams } from "react-router-dom";
 import store from "../../store.tsx/store";
 import { v4 as uuidv4 } from "uuid";
-import { uniqueId } from "lodash";
+import { omit, uniqueId } from "lodash";
+import { useState } from "react";
+import { ObjectifType } from "../../types/objectif.type";
+import { ObjectifInfo } from "./ObjectifInfo";
+import Button from "../../components/Button/Button";
 
 const Objectif: React.FC = () => {
   const { accountId } = useParams();
+  const [setselected, setSetselected] = useState<ObjectifType[]>([]);
   const { user } = store;
   const objectifs = useGetAllObjectif();
   const handleCreate = async () => {
     const res: any = await createObjectif();
-    console.log(res);
 
-    upsertObjectif({
-      id: uuidv4(),
-      accountId,
-      userId: user()?.id,
-      title: res?.title || "Objectif" + uniqueId(),
-      description: res?.description || null,
-      categories: res.categories || [],
-      from: res?.from ? new Date(res.from).toISOString() : null,
-      to: res?.to ? new Date(res.to).toISOString() : null,
-      targetAmount: res.targetAmount || 1,
-      type: res?.type || "savings",
-    });
+    if (res) {
+      upsertObjectif({
+        id: uuidv4(),
+        accountId,
+        userId: user()?.id,
+        title: res?.title || "Objectif" + uniqueId(),
+        description: res?.description || null,
+        categories: res.categories || [],
+        from: res?.from ? new Date(res.from).toISOString() : null,
+        to: res?.to ? new Date(res.to).toISOString() : null,
+        targetAmount: res.targetAmount || 1,
+        type: res?.type || "savings",
+      });
+    }
   };
 
   if (!objectifs) {
     return <Wait />;
   }
 
+  const handleSelect = (obj: ObjectifType) => {
+    if (setselected.includes(obj)) {
+      setSetselected(setselected.filter((select) => select === obj));
+    } else {
+      setSetselected((select) => [...select, obj]);
+    }
+  };
+
+  const handleEdit = async (obj: ObjectifType) => {
+    const res: any = await updateObjectif(obj);
+    const cleanObj = omit(obj, "currentAmount", "progress");
+
+    if (res) {
+      upsertObjectif({
+        ...cleanObj,
+        ...res,
+      });
+    }
+  };
+
   return (
     <section className="bg-gray-100 h-full p-3 overflow-auto objectif">
       <div className="container mx-auto space-y-3">
         <div className="flex items-baseline justify-between flex-wrap">
           <h3 className="objectif__title">Objectif</h3>
-          <button
-            onClick={handleCreate}
-            className="objectif__button btn-primary"
-          >
-            <FaTrophy /> Ajouter un Objectif
-          </button>
+          <div className=" flex gap-3 flex-wrap">
+            <Button
+              onClick={handleCreate}
+              className="objectif__button btn-primary"
+            >
+              <FaTrophy /> Ajouter un Objectif
+            </Button>
+            <Button color="red">Supprimer</Button>
+          </div>
         </div>
         <div className="objectif__content">
           <div className="objectif__list">
             {objectifs.map((objectif, index) => (
-              <ObjectifCard key={index} objectif={objectif} />
+              <ObjectifCard
+                key={index}
+                objectif={objectif}
+                onSelect={handleSelect}
+                onEdit={handleEdit}
+              />
             ))}
           </div>
-          <div className="objectif__info">
-            <div className="objectif__circle-progress">
-              <div>
-                <span className="objectif__progress-number">21</span>
-                <span className="objectif__progress-label">/21</span>
-              </div>
-              <span className="objectif__progress-label">Budget respecté</span>
-            </div>
-            <div>
-              <CircleProgress size={200} strokeWidth={10} progress={75} />
-            </div>
-          </div>
+          <ObjectifInfo />
         </div>
       </div>
     </section>

@@ -57,7 +57,6 @@ const ItemsProvider = ({ children }: { children: React.ReactNode }) => {
         return i;
       })
       .filter((item) => item.status === "published");
-    console.log(newItem);
     setItems(newItem);
   };
   const deleteSelectedItems = () => {
@@ -69,7 +68,6 @@ const ItemsProvider = ({ children }: { children: React.ReactNode }) => {
         return i;
       })
       .filter((item) => item.status === "published");
-    console.log(newItem);
     setItems(newItem);
   };
 
@@ -89,7 +87,6 @@ const ItemsProvider = ({ children }: { children: React.ReactNode }) => {
 
   const save = async () => {
     const editedItems = difference(items, data!);
-    console.log(defaultItem);
     const res = await upsertItems(editedItems);
     if (res.status === 200) {
       refetch();

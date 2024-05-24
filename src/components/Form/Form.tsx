@@ -1,15 +1,19 @@
-import { format } from "date-fns";
+// import { format } from "date-fns";
 import React, { HTMLInputTypeAttribute } from "react";
 import ReactDatePicker from "react-datepicker";
 import { useForm } from "react-hook-form";
 import { FaCalendar } from "react-icons/fa";
-import { Select } from "../Select/Select";
+import Select from "react-select";
+import { formatOptions } from "../../utils/formatOptions";
+import Textarea from "react-textarea-autosize";
+
+// import { Select } from "../Select/Select";
 
 interface FieldType {
   type: HTMLInputTypeAttribute | "date-range";
   name: string;
   label: string;
-  options?: { value: string; name: string }[];
+  options?: { value: string; label: string }[];
   defaultValue?: string;
   format?: string;
   multiple?: boolean;
@@ -23,7 +27,7 @@ interface FormProps {
 
 const FormComponent: React.FC<FormProps> = (props) => {
   const { fields, data, onChange } = props;
-  const { register, watch, setValue } = useForm<{
+  const { register, watch, setValue, getValues } = useForm<{
     [key: string]: string;
   }>({
     defaultValues: data,
@@ -78,7 +82,7 @@ const FormComponent: React.FC<FormProps> = (props) => {
       }
       case "textarea": {
         return (
-          <textarea
+          <Textarea
             className="input w-full"
             {...register(field.name, {
               onChange: (event) => {
@@ -91,17 +95,25 @@ const FormComponent: React.FC<FormProps> = (props) => {
       case "select": {
         return (
           <Select
-            {...register(field.name)}
-            state={watch(field.name)}
-            className="input w-full"
-            options={field.options}
-            defaultValue={field.defaultValue}
-            multiple={field.multiple}
             onChange={(value) => {
-              console.log(value);
-
-              handleChange(field.name, value);
+              if (field.multiple) {
+                handleChange(
+                  field.name,
+                  value.map((v) => v.value)
+                );
+              } else {
+                handleChange(field.name, value.value);
+              }
             }}
+            isMulti={field.multiple}
+            options={formatOptions(field.options)}
+            isClearable
+            isSearchable
+            defaultValue={
+              field.multiple
+                ? data[field.name].map((e) => ({ label: e, value: e }))
+                : { value: data[field.name], label: data[field.name] }
+            }
           />
         );
       }

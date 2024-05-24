@@ -168,8 +168,6 @@ const Table: React.FC<Props> = ({
   const columnHelper = createColumnHelper<TableDataType>();
 
   const updateData = (item: TableDataType) => {
-    console.log(item);
-
     onChange(item);
   };
 
@@ -281,7 +279,7 @@ const Table: React.FC<Props> = ({
       <table className="bg-white w-full text-sm text-left text-gray-500 dark:text-gray-400">
         <thead
           style={{ zIndex: 1 }}
-          className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 sticky  top-0"
+          className="text-xs text-gray-700 border-b uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 sticky  top-0"
         >
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>

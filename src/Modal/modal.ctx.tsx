@@ -27,7 +27,6 @@ export const ModalManager = ({ children }: { children: React.ReactNode }) => {
 
   modalPromise.current = (props) => {
     const { modal, ...otherProps } = props;
-    console.log(props);
 
     return new Promise((resolve) => {
       setModals((prev) => [
@@ -54,7 +53,7 @@ export const ModalManager = ({ children }: { children: React.ReactNode }) => {
         return (
           <Component
             key={m.modalId}
-            id={m.modalId}
+            modalId={m.modalId}
             {...m.props}
             onCancel={() => onCancel(m.modalId)}
             onConfirm={(data: any) => onConfirm(m.modalId, data)}
