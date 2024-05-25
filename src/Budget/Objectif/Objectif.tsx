@@ -55,6 +55,17 @@ const Objectif: React.FC = () => {
     }
   };
 
+  const handleDelete = async (obj: ObjectifType) => {
+    const deletedObjectif = await upsertObjectif({
+      ...omit(obj, "currentAmount", "progress"),
+      status: "deleted",
+    });
+
+    if (deletedObjectif?.statusCode === 201) {
+      refetch();
+    }
+  };
+
   const handleEdit = async (obj: ObjectifType) => {
     const res: any = await updateObjectif(obj);
     const cleanObj = omit(obj, "currentAmount", "progress");
@@ -94,6 +105,7 @@ const Objectif: React.FC = () => {
                 objectif={objectif}
                 onSelect={handleSelect}
                 onEdit={handleEdit}
+                onDelete={handleDelete}
               />
             ))}
           </div>

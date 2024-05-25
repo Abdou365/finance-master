@@ -15,7 +15,7 @@ export interface ObjectifType {
   customRecurrence: null | string;
   isCompleted: false;
   type: "savings" | "income";
-  status: "active";
+  status: "active" | "deleted";
   currentAmount: number;
   progress: number;
 }

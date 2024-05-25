@@ -10,7 +10,8 @@ export const ObjectifCard: React.FC<{
   objectif: ObjectifType;
   onSelect: (objectif: ObjectifType) => void;
   onEdit: (objectif: ObjectifType) => void;
-}> = ({ objectif, onSelect, onEdit }) => {
+  onDelete: (objectif: ObjectifType) => void;
+}> = ({ objectif, onSelect, onEdit, onDelete }) => {
   return (
     <div className="objectifCard">
       <div className="flex justify-between">
@@ -46,17 +47,23 @@ export const ObjectifCard: React.FC<{
         <div>
           <Tooltip
             trigger={
-              <Button
-                variant="outlined"
-                id="clickable"
-                // onClick={() => onEdit(objectif)}
-                size="small"
-              >
+              <Button variant="link" id="clickable" size="small">
                 <FaEllipsisV className="m-auto" />
               </Button>
             }
           >
-            <div>kpkpkpkkp</div>
+            <>
+              <Button onClick={() => onEdit(objectif)} variant="link">
+                Edit
+              </Button>
+              <Button
+                onClick={() => onDelete(objectif)}
+                color="red"
+                variant="link"
+              >
+                Delete
+              </Button>
+            </>
           </Tooltip>
         </div>
       </div>

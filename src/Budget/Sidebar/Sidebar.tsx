@@ -1,30 +1,39 @@
+import React from "react";
 import {
   FaChartBar,
   FaClosedCaptioning,
+  FaHome,
   FaMoneyBillWave,
   FaTrophy,
 } from "react-icons/fa";
 import { Link, useParams } from "react-router-dom";
 import { useAuth } from "../../Login/useLogin";
-import { IconBase } from "react-icons/lib";
-import React from "react";
+import Tooltip from "../../components/Tooltip/Tooltip";
 
 const Sidebar = () => {
   const { logout } = useAuth();
   const { accountId } = useParams();
 
-  const routes: { icon: React.ReactNode; link: string }[] = [
+  const routes: { icon: React.ReactNode; link: string; name: string }[] = [
+    {
+      icon: <FaHome className="m-auto" />,
+      link: `/`,
+      name: "Acceuil",
+    },
     {
       icon: <FaChartBar className="m-auto" />,
       link: `${accountId}/`,
+      name: "Dashboard",
     },
     {
       icon: <FaMoneyBillWave className="m-auto" />,
       link: `${accountId}/activity`,
+      name: "Activity",
     },
     {
       icon: <FaTrophy className="m-auto" />,
       link: `${accountId}/objectif`,
+      name: "Objectif",
     },
   ];
   return (
@@ -32,16 +41,24 @@ const Sidebar = () => {
       <div className="space-y-48 rounded-md">
         <ul className=" flex flex-col ">
           {routes.map((route) => (
-            <Link to={route.link}>
-              <li className=" border h-12 w-12 flex">{route.icon}</li>
-            </Link>
+            <Tooltip
+              mode="hover"
+              as="Legend"
+              trigger={
+                <Link to={route.link}>
+                  <li className=" border h-12 w-12 flex">{route.icon}</li>
+                </Link>
+              }
+            >
+              {route.name}
+            </Tooltip>
           ))}
         </ul>
       </div>
       <div>
-        <button onClick={() => logout()} className="btn-red">
+        <div onClick={() => logout()}>
           <FaClosedCaptioning />
-        </button>
+        </div>
       </div>
     </div>
   );

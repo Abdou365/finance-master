@@ -1,7 +1,9 @@
+import ReactDOM from "react-dom";
 import { Placement, VirtualElement } from "@popperjs/core";
 import { ReactNode, useState, useRef, useEffect } from "react";
 import { usePopper } from "react-popper";
 import "./Tooltip.scss";
+import bem from "bem-ts";
 
 type Props = {
   direction?: Placement;
@@ -11,7 +13,7 @@ type Props = {
   keepOpen?: boolean;
   size?: "small" | "medium" | "large";
   closeOnClick?: boolean;
-  as?: "Proppup" | "Tooltip";
+  as?: "Poppup" | "Tooltip" | "Legend";
 };
 
 const Tooltip: React.FC<Props> = ({
@@ -24,6 +26,7 @@ const Tooltip: React.FC<Props> = ({
   keepOpen = false,
   as = "Tooltip",
 }) => {
+  const cx = bem(as, { elementDelimiter: "-" });
   const [referenceElement, setReferenceElement] = useState<
     Element | VirtualElement | null | undefined
   >(null);
@@ -102,28 +105,32 @@ const Tooltip: React.FC<Props> = ({
       >
         {trigger}
       </div>
-      {visible && (
-        <>
-          <div
-            className="tooltip"
-            ref={setPopperElement}
-            style={{
-              ...styles.popper,
-            }}
-            {...attributes.popper}
-          >
-            <div className="tooltip-content">{children}</div>
+      {visible &&
+        ReactDOM.createPortal(
+          <>
             <div
-              className="tooltip-arrow"
-              ref={setArrowElement}
-              {...attributes.arrow}
+              className={cx()}
+              ref={setPopperElement}
               style={{
-                ...styles.arrow,
+                ...styles.popper,
               }}
-            />
-          </div>
-        </>
-      )}
+              {...attributes.popper}
+            >
+              <div className={cx("content")}>{children}</div>
+              {as !== "Poppup" && (
+                <div
+                  className={cx("arrow")}
+                  ref={setArrowElement}
+                  {...attributes.arrow}
+                  style={{
+                    ...styles.arrow,
+                  }}
+                />
+              )}
+            </div>
+          </>,
+          document.body
+        )}
     </>
   );
 };
