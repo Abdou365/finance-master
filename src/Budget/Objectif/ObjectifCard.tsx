@@ -1,5 +1,6 @@
 import { FaCalendarDay, FaEllipsisV } from "react-icons/fa";
 import { twMerge } from "tailwind-merge";
+import Button from "../../components/Button/Button";
 import DatePicker from "../../components/DatePicker/DatePicker";
 import { ObjectifType } from "../../types/objectif.type";
 import "./ObjectifCard.scss";
@@ -20,7 +21,7 @@ export const ObjectifCard: React.FC<{
               className="lk-input--checkbox"
               onClick={() => onSelect(objectif)}
             />
-            <h5 className="font-bold ">{objectif.title}</h5>
+            <h5 className="font-bold line-clamp-1">{objectif.title}</h5>
           </div>
           <div className="flex">
             <DatePicker
@@ -41,20 +42,23 @@ export const ObjectifCard: React.FC<{
             />
           </div>
         </div>
-        <Tooltip
-          content="Modifier l'objectif"
-          direction="right"
-          keepOpen
-          mode="click"
-          trigger={
-            <button
-              id="clickable"
-              className="btn-small bg-gray-100 mix-blend-multiply rounded mb-auto"
-            >
-              <FaEllipsisV className="m-auto" />
-            </button>
-          }
-        />
+
+        <div>
+          <Tooltip
+            trigger={
+              <Button
+                variant="outlined"
+                id="clickable"
+                // onClick={() => onEdit(objectif)}
+                size="small"
+              >
+                <FaEllipsisV className="m-auto" />
+              </Button>
+            }
+          >
+            <div>kpkpkpkkp</div>
+          </Tooltip>
+        </div>
       </div>
 
       <div className=" flex items-baseline gap-2 mt-3">

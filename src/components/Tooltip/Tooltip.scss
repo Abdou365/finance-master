@@ -1,84 +1,35 @@
 .tooltip {
-  position: relative;
-  display: inline-block;
-
-  &-medium {
-    .tooltip-content {
-      @apply w-40 p-2;
+  @apply z-10 rounded;
+  box-shadow: 0 0px 0px 1px theme("colors.gray.300");
+  &-content {
+    @apply bg-white rounded  p-2;
+  }
+  &[data-popper-placement="top"] {
+    .tooltip-arrow {
+      @apply left-[-9px];
+      clip-path: polygon(50% 100%, 0% 0%, 100% 0%);
     }
   }
-
-  &-large {
-    .tooltip-content {
-      @apply w-60 p-3;
+  &[data-popper-placement="right"] {
+    .tooltip-arrow {
+      @apply left-[-9px];
+      clip-path: polygon(0 50%, 100% 100%, 100% 0%);
     }
   }
-}
-
-.tooltip-content {
-  @apply absolute z-10 bg-white text-gray-600 text-sm px-2 py-1 rounded shadow-md;
-
-  //   &::before {
-  //     content: "";
-  //     position: absolute;
-  //     border-width: 5px;
-  //     border-style: solid;
-  //     @apply shadow-xl shadow-primary-600;
-  //   }
-}
-
-.tooltip-top .tooltip-content {
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-
-  //   &::before {
-  //     bottom: -10px;
-  //     left: 50%;
-  //     transform: translateX(-50%);
-  //     border-color: transparent transparent white transparent;
-  //     @apply shadow-xl shadow-primary-600;
-  //   }
-}
-
-.tooltip-right .tooltip-content {
-  top: 50%;
-  left: 100%;
-  transform: translateY(-50%);
-
-  //   &::before {
-  //     top: 50%;
-  //     left: -10px;
-  //     transform: translateY(-50%);
-  //     border-color: transparent white transparent transparent;
-  //     @apply shadow-xl shadow-primary-600;
-  //   }
-}
-
-.tooltip-bottom .tooltip-content {
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-
-  //   &::before {
-  //     top: -10px;
-  //     left: 50%;
-  //     transform: translateX(-50%);
-  //     border-color: white transparent transparent transparent;
-  //     @apply shadow-xl shadow-primary-600;
-  //   }
-}
-
-.tooltip-left .tooltip-content {
-  top: 50%;
-  right: 100%;
-  transform: translateY(-50%);
-
-  //   &::before {
-  //     top: 50%;
-  //     right: -10px;
-  //     transform: translateY(-50%);
-  //     border-color: transparent transparent transparent white;
-  //     @apply shadow-xl shadow-primary-600;
-  //   }
+  &[data-popper-placement="left"] {
+    .tooltip-arrow {
+      @apply right-[-9px];
+      clip-path: polygon(0 0, 100% 50%, 0 100%);
+    }
+  }
+  &[data-popper-placement="bottom"] {
+    .tooltip-arrow {
+      @apply top-[-9px];
+      clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    }
+  }
+  &-arrow {
+    @apply p-[.25rem] bg-gray-300;
+    filter: drop-shadow(0 0 0px 10px black);
+  }
 }

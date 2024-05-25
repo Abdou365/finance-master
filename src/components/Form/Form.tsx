@@ -27,7 +27,7 @@ interface FormProps {
 
 const FormComponent: React.FC<FormProps> = (props) => {
   const { fields, data, onChange } = props;
-  const { register, watch, setValue, getValues } = useForm<{
+  const { register, watch, setValue } = useForm<{
     [key: string]: string;
   }>({
     defaultValues: data,
@@ -99,7 +99,7 @@ const FormComponent: React.FC<FormProps> = (props) => {
               if (field.multiple) {
                 handleChange(
                   field.name,
-                  value.map((v) => v.value)
+                  value?.map((v) => v.value)
                 );
               } else {
                 handleChange(field.name, value.value);
@@ -111,7 +111,7 @@ const FormComponent: React.FC<FormProps> = (props) => {
             isSearchable
             defaultValue={
               field.multiple
-                ? data[field.name].map((e) => ({ label: e, value: e }))
+                ? data[field.name]?.map((e) => ({ label: e, value: e }))
                 : { value: data[field.name], label: data[field.name] }
             }
           />

@@ -24,6 +24,13 @@ export interface AccountSummarize {
   balance: number;
 }
 
+export type SummaryObjectType = {
+  completed: number;
+  opened: number;
+  total: number;
+  progress: number;
+};
+
 export interface AccountDashboard
   extends Pick<AccountType, "id" | "userId" | "title"> {
   item: Pick<ItemType, "id" | "date" | "isExpense" | "category" | "value">[];
@@ -37,10 +44,5 @@ export interface AccountDashboard
     title: string;
     value: number;
   }[];
-  Objectif: {
-    completed: number;
-    opened: number;
-    total: number;
-    progress: number;
-  };
+  Objectif: SummaryObjectType;
 }

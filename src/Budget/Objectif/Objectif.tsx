@@ -17,12 +17,14 @@ const Objectif: React.FC = () => {
   const { accountId } = useParams();
   const [setselected, setSetselected] = useState<ObjectifType[]>([]);
   const { user } = store;
-  const objectifs = useGetAllObjectif();
+  const { data, refetch } = useGetAllObjectif();
+  const { objectifs, summary } = data;
+
   const handleCreate = async () => {
     const res: any = await createObjectif();
 
     if (res) {
-      upsertObjectif({
+      const newObjectif = await upsertObjectif({
         id: uuidv4(),
         accountId,
         userId: user()?.id,
@@ -34,6 +36,10 @@ const Objectif: React.FC = () => {
         targetAmount: res.targetAmount || 1,
         type: res?.type || "savings",
       });
+
+      if (newObjectif?.statusCode === 201) {
+        refetch();
+      }
     }
   };
 
@@ -54,10 +60,14 @@ const Objectif: React.FC = () => {
     const cleanObj = omit(obj, "currentAmount", "progress");
 
     if (res) {
-      upsertObjectif({
+      const update = await upsertObjectif({
         ...cleanObj,
         ...res,
       });
+
+      if (update?.statusCode === 201) {
+        refetch();
+      }
     }
   };
 
@@ -87,7 +97,11 @@ const Objectif: React.FC = () => {
               />
             ))}
           </div>
-          <ObjectifInfo />
+          <ObjectifInfo
+            completed={summary.completed}
+            length={summary.total}
+            progress={summary.progress}
+          />
         </div>
       </div>
     </section>
