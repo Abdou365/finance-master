@@ -12,7 +12,7 @@ export const CustomTooltip: React.FC<TooltipProps<ValueType, NameType>> = ({
 }) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-white rounded p-3 shadow-xl">
+      <div className="bg-white dark:bg-primary-800 rounded p-3 shadow-xl">
         <p className="font-bold">{label}</p>
         {payload.map((entry, index) => (
           <p className="text-sm" key={`item-${index}`}>

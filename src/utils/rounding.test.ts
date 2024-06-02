@@ -1,4 +1,4 @@
-import { intelligentRound } from "./rounding";
+import { formatNumber, intelligentRound } from "./rounding";
 
 describe("intelligentRound", () => {
   test("standard rounding with decimals", () => {
@@ -34,4 +34,18 @@ describe("intelligentRound", () => {
       "Unknown rounding method. Use 'standard', 'zero', 'multiple', or 'bankers'."
     );
   });
+});
+test("formatNumber - number greater than 1000000", () => {
+  expect(formatNumber({ number: 1500000 })).toBe("1.50M");
+  expect(formatNumber({ number: 2500000 })).toBe("2.50M");
+});
+
+test("formatNumber - number greater than 1000", () => {
+  expect(formatNumber({ number: 1500 })).toBe("1.50K");
+  expect(formatNumber({ number: 2500 })).toBe("2.50K");
+});
+
+test("formatNumber - number less than or equal to 1000", () => {
+  expect(formatNumber({ number: 500 })).toBe("500.00");
+  expect(formatNumber({ number: 750 })).toBe("750.00");
 });

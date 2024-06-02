@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./CircleProgress.scss"; // Import SCSS file for styles
+import "./CircleProgress.scss";
 
 interface CircleProgressProps {
   size: number;

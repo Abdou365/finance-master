@@ -26,17 +26,12 @@ export type TableColumnInputType =
 
 export type TableColumnDataType = "string" | "date" | "integer" | "boolean";
 
-// Define a type for the data types
-// type DataType = 'string' | 'date' | 'integer' | 'boolean';
-
 export type TableDataType = Record<string, unknown>;
 
-export type TableColumnOptionsType =
-  | string[]
-  | {
-      label: string;
-      value: any;
-    }[];
+export type TableColumnOptionsType = {
+  label: string;
+  value: string | number;
+}[];
 
 // Define a type for a form field
 export interface TableColumnType {
@@ -49,7 +44,8 @@ export interface TableColumnType {
   required?: boolean;
   disabled?: boolean;
   size?: number;
-  options?: TableColumnOptionsType; // Only used for 'radio' and 'select' input types
+  options?: TableColumnOptionsType;
+  creatable?: boolean;
 }
 
 export interface TableAcion {
@@ -91,7 +87,7 @@ function DebouncedInput({
   );
 }
 
-function Filter({ column }: { column: Column<any, unknown> }) {
+function Filter({ column }: { column: Column<string | number, unknown> }) {
   const columnFilterValue = column.getFilterValue();
   const { filterVariant } = column.columnDef.meta ?? {};
 
@@ -279,7 +275,7 @@ const Table: React.FC<Props> = ({
       <table className="bg-white w-full text-sm text-left text-gray-500 dark:text-gray-400">
         <thead
           style={{ zIndex: 1 }}
-          className="text-xs text-gray-700 border-b uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 sticky  top-0"
+          className="text-xs text-gray-700 border-b dark:border-b-primary-600 uppercase bg-gray-50 dark:bg-primary-800 dark:text-primary-200 sticky  top-0"
         >
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
@@ -329,7 +325,7 @@ const Table: React.FC<Props> = ({
         <tbody>
           {table.getRowModel().rows.map((row) => (
             <tr
-              className="g-white border-b dark:bg-gray-800 dark:border-gray-700"
+              className="g-white border-b dark:bg-primary-900 dark:border-primary-600"
               key={row.id}
             >
               {row.getVisibleCells().map((cell) => {

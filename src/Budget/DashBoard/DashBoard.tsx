@@ -10,13 +10,13 @@ import List from "../../components/List/List";
 import ListItem from "../../components/List/ListItem";
 import Badge from "../../components/Badge/Badge";
 import { twMerge } from "tailwind-merge";
+import AnimatedNumber from "../../components/AnimatedNumber";
 
 const DashBoard = () => {
   const { accountId } = useParams();
-  const { data } = useGetItems(accountId);
   const account = useAccountDashboard(accountId);
 
-  if (!data) {
+  if (!account) {
     return <Wait />;
   }
   console.log(account?.Item);
@@ -24,29 +24,28 @@ const DashBoard = () => {
   return (
     <div
       style={{ height: "calc(100vh - 3rem)" }}
-      className=" bg-gray-100 flex flex-col align-middle flex-1 justify-center place-items-center p-3 gap-2"
+      className=" flex flex-col align-middle flex-1 justify-center place-items-center p-3 gap-2"
     >
-      <div className=" container flex flex-col gap-2">
-        <SummaryContainer account={account?.summarize} />
-      </div>
+      <SummaryContainer account={account?.summarize} />
       <div className=" container flex flex-1 overflow-hidden gap-2">
         <div className=" flex-col gap-2 flex overflow-hidden flex-1">
-          <ComparisonChart items={data} />
-          <div className="bg-white rounded">
+          <ComparisonChart chartData={account.comparison} />
+          <div className="bg-white dark:bg-primary-900 rounded border dark:border-primary-600">
             <List title="Les derniers mouvements">
               {account?.Item.map((item) => {
                 return (
                   <ListItem>
                     <Badge type="primary">{item.category}</Badge>
                     <p className="text-sm">{item.title}</p>
-                    <span
+                    <AnimatedNumber
                       className={twMerge(
-                        "ml-auto text-sm font-bold",
+                        "ml-auto text-sm font-semibold",
                         item.isExpense ? "text-red-500" : "text-green-500"
                       )}
-                    >
-                      {item.value}€
-                    </span>
+                      value={item.value}
+                      duration={500}
+                      withSign
+                    />
                   </ListItem>
                 );
               })}

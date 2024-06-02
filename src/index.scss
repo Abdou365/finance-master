@@ -13,7 +13,7 @@ body {
 }
 
 body {
-  @apply bg-white text-slate-700 dark:bg-primary-950 dark:text-primary-50;
+  @apply bg-gray-100 text-slate-700 dark:bg-primary-950 dark:text-primary-50;
 }
 
 // Définir le mixin pour le bouton
@@ -94,7 +94,7 @@ $buttonVariants: ("solid", "outlined", "ghost", "soft", "white", "link");
 }
 
 .input {
-  @apply dark:bg-gray-700 min-h-[37.33px] bg-white border dark:border-gray-600 rounded outline-primary-500;
+  @apply dark:bg-primary-700 min-h-[37.33px] bg-white border dark:border-primary-600 rounded outline-primary-500;
   @include padding("medium");
 }
 
@@ -254,38 +254,66 @@ $buttonVariants: ("solid", "outlined", "ghost", "soft", "white", "link");
       // left: 20px;
       // background-color: #8f54a0;
       // border-radius: 10px;
-      @apply bg-gray-200;
+      @apply bg-gray-200 dark:bg-primary-700;
     }
   }
 }
 
 /* Chrome, Edge, and Safari */
-
 .react-datepicker {
-  @apply border-none;
+  @apply relative;
+
   &__header {
-    @apply bg-gray-100 border-none p-2;
+    @apply flex flex-col justify-between items-center bg-primary-200 dark:bg-primary-800 p-4 border-b border-primary-300 dark:border-primary-700;
   }
 
-  &-popper {
-    @apply shadow-lg rounded-xl;
-  }
-  &__triangle {
-    @apply hidden;
+  &__current-month {
+    @apply text-lg font-semibold text-primary-900 dark:text-primary-200;
   }
 
-  &__navigation {
-    @apply bg-white mx-1  flex align-middle  rounded place-content-center;
-    &-icon {
-      @apply fill-gray-700 m-auto bg-gray-600;
-    }
+  &__day-name {
+    @apply text-sm text-primary-700 dark:text-primary-400;
   }
 
   &__day {
-    @apply font-semibold text-gray-600 text-base h-8 w-8 place-content-center rounded;
+    @apply items-center justify-center inline-flex p-2 h-7 w-7 rounded cursor-pointer;
+
     &--selected,
-    &--in-range {
-      @apply bg-primary-500 text-white hover:bg-primary-700;
+    &--keyboard-selected {
+      @apply bg-secondary-500 text-white;
     }
+
+    &--today {
+      @apply bg-primary-200 dark:bg-primary-700;
+    }
+
+    &--disabled {
+      @apply text-primary-400 dark:text-primary-600 cursor-not-allowed;
+    }
+
+    &:hover {
+      @apply bg-secondary-100 dark:bg-secondary-900;
+    }
+  }
+
+  &__month-container {
+    @apply bg-white dark:bg-primary-900 text-primary-900 dark:text-primary-200 rounded shadow-lg overflow-hidden;
+  }
+
+  &__navigation {
+    &--previous,
+    &--next {
+      @apply w-10 h-10 flex items-center justify-center text-primary-700 dark:text-primary-400;
+    }
+
+    &:hover {
+      @apply text-secondary-500 dark:text-secondary-300;
+    }
+  }
+}
+
+.dark-mode {
+  .react-datepicker {
+    @apply bg-primary-900 text-primary-200;
   }
 }

@@ -7,7 +7,7 @@
   }
 
   .circle-progress-background {
-    @apply stroke-gray-300;
+    @apply stroke-gray-300 dark:stroke-primary-300;
   }
 
   .circle-progress-progress {
@@ -19,6 +19,6 @@
   }
 
   .circle-progress-text {
-    @apply fill-gray-600 text-3xl font-bold;
+    @apply fill-gray-600 dark:fill-primary-300 text-3xl font-bold;
   }
 }

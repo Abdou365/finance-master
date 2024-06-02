@@ -49,10 +49,6 @@ const SummaryCard: React.FC<SummaryCardProps> = ({
           />
         </div>
       </div>
-
-      <div className={cx("image")}>
-        <img src="" className="w-full max-h-full object-contain" alt="..." />
-      </div>
     </div>
   );
 };

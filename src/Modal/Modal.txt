@@ -6,7 +6,9 @@ const Modal: React.FC<ModalLegacyProps> = ({ onCancel, onConfirm }) => {
   return (
     <Dialog open className="relative z-50" onClose={onCancel}>
       <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
-        <Dialog.Panel className={"bg-white p-2 rounded shadow-lg"}>
+        <Dialog.Panel
+          className={"bg-white dark:bg-primary-700 p-2 rounded shadow-lg"}
+        >
           <Dialog.Title>Deactivate account</Dialog.Title>
           <Dialog.Description>
             This will permanently deactivate your account

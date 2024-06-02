@@ -15,7 +15,7 @@
   }
 
   &__info {
-    @apply bg-white p-3 border rounded space-y-3 md:w-80 w-full max-w-full flex items-center flex-col;
+    @apply bg-white dark:bg-primary-900 p-3 border dark:border-none rounded space-y-3 md:w-80 w-full max-w-full flex items-center flex-col;
   }
 
   &__circle-progress {
@@ -23,10 +23,10 @@
   }
 
   &__progress-number {
-    @apply text-3xl font-bold text-gray-800;
+    @apply text-3xl font-bold text-gray-800 dark:text-white;
   }
 
   &__progress-label {
-    @apply text-gray-400 font-semibold text-sm;
+    @apply text-gray-400 dark:text-primary-300 font-semibold text-sm;
   }
 }

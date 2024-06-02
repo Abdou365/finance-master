@@ -5,9 +5,9 @@ import { AccountType } from "../types/account.type";
 export const AccountCard = (props: AccountType) => {
   const nav = useNavigate();
   return (
-    <div className="rounded relative  border p-5 overflow-hidden">
-      <div className="absolute h-full w-full bg-white top-0 left-0 blur-2xl">
-        <div className="h-24 w-24 ml-auto bg-green-300"></div>
+    <div className="rounded relative  border dark:border-primary-600 p-5 overflow-hidden">
+      <div className="absolute h-full w-full bg-white dark:bg-primary-900 top-0 left-0 blur-2xl">
+        <div className="h-24 w-24 ml-auto bg-secondary-300 dark:bg-secondary-700"></div>
       </div>
       <div className="relative h-full w-full   space-y-3">
         <div className="flex justify-between w-full">
@@ -32,14 +32,16 @@ export const AccountCard = (props: AccountType) => {
             </span>
           </div> */}
         </div>
-        <h3 className=" font-bold text-gray-800 text-xl">{props.title}</h3>
-        <p className=" text-gray-600 text-sm line-clamp-3">
+        <h3 className=" font-bold text-gray-800 dark:text-white text-xl">
+          {props.title}
+        </h3>
+        <p className=" text-gray-600 dark:text-primary-100 text-sm line-clamp-3">
           {props.description}
         </p>
         <div className="w-full h-2 bg-green-200 rounded-full">
           <div className="w-2/3 h-full text-center text-xs text-white bg-green-600 rounded-full"></div>
         </div>
-        <table className=" w-full rounded text-sm text-gray-600">
+        <table className=" w-full rounded text-sm  text-gray-600 dark:text-primary-100 ">
           <tbody>
             <tr>
               <td className="px-2">Dépense</td>

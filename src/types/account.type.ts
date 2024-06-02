@@ -31,6 +31,16 @@ export type SummaryObjectType = {
   progress: number;
 };
 
+type GraphData = {
+  byKey: Record<string, any>;
+  graph: {
+    name: string;
+    cashing: number;
+    payment: number;
+    amt: number;
+  }[];
+};
+
 export interface AccountDashboard
   extends Pick<AccountType, "id" | "userId" | "title"> {
   item: Pick<ItemType, "id" | "date" | "isExpense" | "category" | "value">[];
@@ -45,4 +55,9 @@ export interface AccountDashboard
     value: number;
   }[];
   Objectif: SummaryObjectType;
+  comparison: {
+    month: GraphData["graph"];
+    year: GraphData["graph"];
+    day: GraphData["graph"];
+  };
 }

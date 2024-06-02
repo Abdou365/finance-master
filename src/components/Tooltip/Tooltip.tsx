@@ -1,9 +1,9 @@
-import ReactDOM from "react-dom";
 import { Placement, VirtualElement } from "@popperjs/core";
-import { ReactNode, useState, useRef, useEffect } from "react";
+import bem from "bem-ts";
+import { ReactNode, useEffect, useRef, useState } from "react";
+import ReactDOM from "react-dom";
 import { usePopper } from "react-popper";
 import "./Tooltip.scss";
-import bem from "bem-ts";
 
 type Props = {
   direction?: Placement;
@@ -92,9 +92,6 @@ const Tooltip: React.FC<Props> = ({
       setVisible(false);
     }
   };
-
-  console.log(attributes);
-
   return (
     <>
       <div

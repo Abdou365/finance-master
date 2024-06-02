@@ -1,6 +1,5 @@
 import { Listbox } from "@headlessui/react";
 import { FieldProps } from "@rjsf/utils";
-import React from "react";
 import ReactDatePicker from "react-datepicker";
 
 export const MyCustomWidget = (props: FieldProps) => {

@@ -3,30 +3,30 @@ import React, { HTMLInputTypeAttribute } from "react";
 import ReactDatePicker from "react-datepicker";
 import { useForm } from "react-hook-form";
 import { FaCalendar } from "react-icons/fa";
-import Select from "react-select";
-import { formatOptions } from "../../utils/formatOptions";
 import Textarea from "react-textarea-autosize";
+import CustomSelect from "../../Budget/Items/CompactSelect";
+import Button from "../Button/Button";
 
-// import { Select } from "../Select/Select";
-
-interface FieldType {
+export interface FieldType {
   type: HTMLInputTypeAttribute | "date-range";
   name: string;
-  label: string;
-  options?: { value: string; label: string }[];
+  label?: string;
+  options?: { value: unknown; label: string }[];
   defaultValue?: string;
   format?: string;
   multiple?: boolean;
+  description?: string;
 }
 
 interface FormProps {
   fields: FieldType[];
   data?: any;
   onChange: (props: { name: string; value: any }) => void;
+  onSubmit?: () => void;
 }
 
 const FormComponent: React.FC<FormProps> = (props) => {
-  const { fields, data, onChange } = props;
+  const { fields, data, onChange, onSubmit } = props;
   const { register, watch, setValue } = useForm<{
     [key: string]: string;
   }>({
@@ -35,8 +35,16 @@ const FormComponent: React.FC<FormProps> = (props) => {
   });
 
   const handleChange = (name: string, value: any) => {
+    console.log({ name, value });
+
     setValue(name, value);
     onChange({ name, value });
+  };
+
+  const handleSubmit = () => {
+    if (props.onSubmit) {
+      props.onSubmit();
+    }
   };
 
   const renderFormField = (field: FieldType) => {
@@ -53,7 +61,7 @@ const FormComponent: React.FC<FormProps> = (props) => {
             selected={watch(field.name)}
             dateFormat={field.format || "YYYY-MM-dd"}
             onChange={(date) => {
-              handleChange(field.name, date);
+              handleChange(field.name, date?.toISOString());
             }}
             value={watch(field.name)}
           />
@@ -73,8 +81,8 @@ const FormComponent: React.FC<FormProps> = (props) => {
             dateFormat={"YYYY-MM-dd"}
             onChange={(date) => {
               handleChange(field.name, {
-                to: date[1],
-                from: date[0],
+                to: date[1]?.toISOString(),
+                from: date[0]?.toISOString(),
               });
             }}
           />
@@ -93,27 +101,14 @@ const FormComponent: React.FC<FormProps> = (props) => {
         );
       }
       case "select": {
+        console.log({ field });
+
         return (
-          <Select
-            onChange={(value) => {
-              if (field.multiple) {
-                handleChange(
-                  field.name,
-                  value?.map((v) => v.value)
-                );
-              } else {
-                handleChange(field.name, value.value);
-              }
-            }}
+          <CustomSelect
+            options={field.options!}
+            initialValue={watch(field.name)}
             isMulti={field.multiple}
-            options={formatOptions(field.options)}
-            isClearable
-            isSearchable
-            defaultValue={
-              field.multiple
-                ? data[field.name]?.map((e) => ({ label: e, value: e }))
-                : { value: data[field.name], label: data[field.name] }
-            }
+            onChange={(value) => handleChange(field.name, value)}
           />
         );
       }
@@ -146,15 +141,18 @@ const FormComponent: React.FC<FormProps> = (props) => {
     }
   };
 
+  const FormWrapper = onSubmit ? "form" : "div";
   return (
-    <form>
+    <FormWrapper onSubmit={handleSubmit} className="flex flex-col gap-3">
       {fields.map((field, index) => (
-        <div key={index}>
-          <label>{field.label}</label>
+        <div key={index} className="flex flex-col gap-1">
+          {field.label && <label>{field.label}</label>}
           {renderFormField(field)}
+          {field.description && <p>{field.description}</p>}
         </div>
       ))}
-    </form>
+      {onSubmit && <Button onClick={handleSubmit}>Submit</Button>}
+    </FormWrapper>
   );
 };
 

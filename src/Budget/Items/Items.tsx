@@ -1,25 +1,32 @@
 import bem from "bem-ts";
 import { FaEdit, FaSave, FaTrashAlt } from "react-icons/fa";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { editItemDrawer } from "../../Modal/ItemDrawer";
 import store from "../../store.tsx/store";
 import { useItems } from "../../store.tsx/store.ctx";
+import { useGetItemsCategory } from "../../store.tsx/useItems";
 import { ItemType } from "../../types/item.type";
+import { formatOptions } from "../../utils/formatOptions";
 import "./Items.scss";
 import Table from "./ItemsTable";
+import Pagination from "../../components/Pagination/Pagination";
+import Wait from "../../components/Wait/Wait";
+import Button from "../../components/Button/Button";
 
 export const itemCx = bem("item-group");
 
 const Items = () => {
   const {
     items,
-
+    pageCount,
     updateItems,
     createItems,
     deleteSelectedItems,
     save,
   } = useItems();
   const { accountId } = useParams();
+  const { data: options } = useGetItemsCategory();
+  const [searchParams, setSearchParams] = useSearchParams();
   const handleCreate = () => {
     createItems({
       title: "",
@@ -44,23 +51,28 @@ const Items = () => {
   const handleDelete = () => {
     deleteSelectedItems();
   };
+
+  if (!items) {
+    return <Wait />;
+  }
+
   return (
     <>
       <div className={itemCx("filter")}>
         <div className="ml-auto flex gap-2">
-          <button className="btn-primary btn-small" onClick={handleCreate}>
+          <Button className="btn-primary btn-small" onClick={handleCreate}>
             Ajouter un item
-          </button>
-          <button
-            type="button"
+          </Button>
+          <Button
+            color="red"
             className="btn-red btn-small"
             onClick={handleDelete}
           >
             <FaTrashAlt />
-          </button>
-          <button className="btn-primary btn-small" onClick={save}>
+          </Button>
+          <Button className="btn-primary btn-small" onClick={save}>
             <FaSave />
-          </button>
+          </Button>
         </div>
       </div>
       <div className={`${itemCx()} lk-scroll`}>
@@ -70,9 +82,10 @@ const Items = () => {
               name: "category",
               label: "Caetegory",
               type: "select",
-              options: ["All", "Financement", "Facture", "Prime", "Salaire"],
+              options: formatOptions(options || []),
               dtatype: "string",
               size: 50,
+              creatable: true,
             },
             {
               name: "title",
@@ -89,7 +102,7 @@ const Items = () => {
                 { label: "dépense", value: true },
                 { label: "encaissement", value: false },
               ],
-              size: 40,
+              size: 70,
             },
             {
               name: "date",
@@ -111,7 +124,7 @@ const Items = () => {
               component: (data) => (
                 <button
                   onClick={() => viewItem(data)}
-                  className="bg-gray-200 p-1 rounded"
+                  className="bg-gray-200 dark:bg-primary-600 dark:text-white p-1 rounded"
                 >
                   <FaEdit />
                 </button>
@@ -121,6 +134,15 @@ const Items = () => {
           ]}
           onChange={updateItems}
           tableData={items}
+        />
+      </div>
+      <div className="mb-2">
+        <Pagination
+          currentPage={+(searchParams.get("page") || 0)}
+          totalPages={pageCount}
+          onPageChange={(page) => {
+            setSearchParams({ page: page.toString() });
+          }}
         />
       </div>
     </>

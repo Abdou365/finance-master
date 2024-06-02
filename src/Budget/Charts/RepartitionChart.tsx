@@ -23,19 +23,27 @@ const RepartitionChart = ({ data }: { data?: AccountExpenseRepartition[] }) => {
     return <div>...chargement</div>;
   }
   return (
-    <div className="chart-section flex flex-col bg-white border rounded h-1/2 py-6">
+    <div className="chart-section flex flex-col bg-white dark:bg-primary-900 border dark:border-none rounded h-1/2 py-6">
       <div className=" flex-1  flex flex-col p-2 gap-2">
-        <h3>Réparttion des dépenses</h3>
+        <h3 className="font-bold text-lg">Répartition des dépenses</h3>
 
         <ResponsiveContainer
           height={"100%"}
           width={"100%"}
-          className={"border bg-gray-50 rounded"}
+          className={
+            "border dark:border-none bg-gray-50 dark:bg-primary-950 rounded"
+          }
         >
           <PieChart onMouseEnter={() => {}}>
-            <Pie data={data} innerRadius={40} paddingAngle={5} dataKey="value">
+            <Pie
+              data={data}
+              innerRadius={"50%"}
+              paddingAngle={5}
+              dataKey="value"
+            >
               {data.map((entry, index) => (
                 <Cell
+                  stroke="none"
                   key={`cell-${index}`}
                   fill={COLORS[index % COLORS.length]}
                 />

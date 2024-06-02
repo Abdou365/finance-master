@@ -12,6 +12,8 @@ export type StoreType = {
   items: ItemType[];
   categories: string[];
   filter: StoreFilterType;
+  count: number;
+  pageCount: number;
   updateFilter: (string: string) => void;
   updateItems: (item: ItemType) => void;
   createItems: (item: Omit<ItemType, "id" | "updatedAt" | "createdAt">) => void;
@@ -27,6 +29,8 @@ export const initialState: StoreType = {
   items: [],
   categories: [],
   filter: { view: "All", date: null },
+  count: 0,
+  pageCount: 0,
   updateFilter: function (_string) {},
   updateItems: function (_item: ItemType) {},
   createItems: function (_item: ItemType) {},

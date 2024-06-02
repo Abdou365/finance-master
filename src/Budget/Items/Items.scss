@@ -1,5 +1,5 @@
 .item-group {
-  @apply overflow-auto flex-1 mb-4 border rounded;
+  @apply overflow-auto flex-1  border dark:border-primary-600 rounded bg-white dark:bg-primary-800;
 
   &__filter {
     @apply flex justify-between;

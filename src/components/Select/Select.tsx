@@ -27,7 +27,7 @@ export const Select: React.FC<SelectProps> = (props) => {
       <div className="relative">
         <Listbox>
           <Listbox.Button
-            className={twMerge("max-w-full flex gap-2", props.className)}
+            className={twMerge("max-w-full flex gap-2 ", props.className)}
           >
             {formattedState?.map((s) => {
               return (

@@ -1,23 +1,31 @@
-import { difference, sortBy, uniq } from "lodash";
+import { difference, uniq } from "lodash";
 import { useEffect, useMemo, useState } from "react";
+import { useParams, useSearchParams } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { ItemType } from "../types/item.type";
-import { ItemCtx, useItems } from "./store.ctx";
+import { ItemCtx } from "./store.ctx";
 import { upsertItems, useGetItems } from "./useItems";
-import { useParams } from "react-router-dom";
 
 const ItemsProvider = ({ children }: { children: React.ReactNode }) => {
-  const { accountId } = useParams();
+  const { accountId = "" } = useParams();
+  const [searchParams] = useSearchParams();
+  const page = searchParams.get("page") || "";
 
-  const { data, refetch } = useGetItems(accountId);
+  const { data, refetch } = useGetItems(accountId, +page);
+
   const [items, setItems] = useState<ItemType[]>([]);
   const [filter, setFilter] = useState({ view: "All", date: null });
   const [selectedItem, setSelectedItem] = useState<string[]>([]);
-  const { defaultItem } = useItems();
   const categories = useMemo(
     () => ["All", ...uniq(items?.map((item) => item?.category))],
     [items]
   );
+
+  useEffect(() => {
+    if (data) {
+      setItems(data.items);
+    }
+  }, [data]);
 
   const updateFilter = (view: string) => {
     setFilter((prev) => ({
@@ -71,20 +79,6 @@ const ItemsProvider = ({ children }: { children: React.ReactNode }) => {
     setItems(newItem);
   };
 
-  useEffect(() => {
-    setItems(sortBy(data!, "created_at"));
-  }, [data]);
-
-  const displayedItem = useMemo(() => {
-    if (filter.view === "All") {
-      return items.filter((item) => item.status === "published");
-    }
-
-    return items.filter(
-      (item) => item.status === "published" && item.category === filter.view
-    );
-  }, [filter.view, items]);
-
   const save = async () => {
     const editedItems = difference(items, data!);
     const res = await upsertItems(editedItems);
@@ -104,11 +98,12 @@ const ItemsProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <ItemCtx.Provider
       value={{
-        items: displayedItem || [],
-        defaultItem: data || [],
+        items,
         categories,
         filter,
         selectedItem,
+        count: data?.count || 0,
+        pageCount: data?.pageCount || 0,
         selectItem,
         updateFilter,
         updateItems,

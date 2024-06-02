@@ -7,7 +7,7 @@ import { TableColumnType } from "./ItemsTable";
 // import { format } from "date-fns";
 import { format } from "date-fns";
 import DatePicker from "../../components/DatePicker/DatePicker";
-import { Select } from "../../components/Select/Select";
+import CustomSelect from "./CompactSelect";
 
 interface Props extends CellContext<any, string> {
   onChange: (item: any) => void;
@@ -26,7 +26,8 @@ const EditableCells: React.FC<Props> = (props) => {
   if (props.columnOptions.type === "date") {
     return (
       <DatePicker
-        className="outline-none text-right w-full"
+        className="outline-none w-full bg-transparent dark:text-primary-50"
+        clearButtonTitle="Effacer"
         name={props.column.id}
         dateFormat={"YYYY-MM-dd"}
         value={format(props.cell.getValue(), "yyyy-MM-dd")}
@@ -45,7 +46,7 @@ const EditableCells: React.FC<Props> = (props) => {
   if (props.columnOptions.type === "number") {
     return (
       <input
-        className="outline-none text-right w-full"
+        className="outline-none text-right w-full bg-transparent dark:text-primary-50"
         name={props.column.id}
         style={{ resize: "none" }}
         defaultValue={inputState}
@@ -58,22 +59,77 @@ const EditableCells: React.FC<Props> = (props) => {
 
   if (props.columnOptions.type === "select" && props.columnOptions.options) {
     return (
-      <Select
-        state={inputState}
-        options={props.columnOptions.options}
-        onChange={(data) => {
+      // <Select
+      //   state={inputState}
+      //   options={props.columnOptions.options}
+      //   onChange={(data) => {
+      //     props.onChange({
+      //       ...props.row.original,
+      //       [props.column.id]: data,
+      //     });
+      //   }}
+      // />
+      <CustomSelect
+        initialValue={inputState}
+        onChange={(value) =>
           props.onChange({
             ...props.row.original,
-            [props.column.id]: data,
-          });
-        }}
+            [props.column.id]: value,
+          })
+        }
+        compact
+        options={props.columnOptions.options}
+        creatable={props.columnOptions.creatable}
       />
+      // <Select
+      //   defaultValue={{ value: inputState, label: inputState }}
+      //   unstyled
+      //   onCreateOption={(value) =>
+      //     props.onChange({
+      //       ...props.row.original,
+      //       [props.column.id]: value,
+      //     })
+      //   }
+      //   classNames={{
+      //     control() {
+      //       return `dark:bg-primary-700 bg-white `;
+      //     },
+      //     menu() {
+      //       return "bg-white dark:bg-primary-700 border dark:border-primary-600 rounded mt-1 shadow-lg dark:shadow-primary-500";
+      //     },
+      //     option(props) {
+      //       return ` px-1 py- cursor-pointer ${
+      //         props.isSelected ? "bg-primary-500 text-white" : ""
+      //       } ${
+      //         props.isFocused && !props.isSelected
+      //           ? "bg-gray-200 dark:bg-primary-800"
+      //           : ""
+      //       }`;
+      //     },
+      //     multiValue() {
+      //       return "bg-primary-100 dark:bg-primary-600 m-1  text-primary-700 dark:text-primary-100 rounded px-2";
+      //     },
+      //     multiValueLabel() {
+      //       return "text-primary-700 dark:text-primary-100";
+      //     },
+      //     multiValueRemove() {
+      //       return "cursor-pointer hover:bg-primary-500 hover:text-white rounded";
+      //     },
+      //   }}
+      //   options={formatOptions(props.columnOptions.options)}
+      //   onChange={(value) =>
+      //     props.onChange({
+      //       ...props.row.original,
+      //       [props.column.id]: value.value,
+      //     })
+      //   }
+      // />
     );
   }
 
   return (
     <TextareaAutosize
-      className="outline-none appearance-none w-full"
+      className="outline-none appearance-none w-full bg-transparent dark:text-primary-50"
       name={props.column.id}
       style={{ resize: "none" }}
       defaultValue={inputState}

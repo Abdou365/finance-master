@@ -1,66 +1,55 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import Form from "@rjsf/core";
-import { RJSFSchema } from "@rjsf/utils";
-import validator from "@rjsf/validator-ajv8";
 import { pick } from "lodash";
 import React, { useState } from "react";
+import FormComponent, { FieldType } from "../components/Form/Form";
+import { useGetItemsCategory } from "../store.tsx/useItems";
 import { ItemType } from "../types/item.type";
-import Drawer from "./Drawer";
-import { MyCustomWidget } from "./MyCustomWidget";
+import Modal from "./Drawer";
 import { ModalLegacyProps, openModal } from "./modal.ctx";
 
 interface ItemDrawerProps extends ModalLegacyProps, ItemType {}
 
-const useSchema = (): RJSFSchema => {
-  return {
-    type: "object",
-    required: [
-      "id",
-      "title",
-      "description",
-      "effect_date",
-      "value",
-      "category",
-      "isExpense",
-      "status",
-    ],
-    properties: {
-      title: {
-        type: "string",
-        title: "Non de l'entré",
-        description: "The title of the form entry.",
-      },
-      description: {
-        type: "string",
-        format: "textarea",
-        description: "A detailed description of the form entry.",
-      },
-      date: {
-        title: "Date",
-        type: "string",
-        format: "date",
-      },
-      value: {
-        type: "number",
-        description: "The numeric value associated with the form entry.",
-      },
-      category: {
-        type: "string",
-        enum: [],
-        description: "The category of the form entry.",
-      },
-      isExpense: {
-        type: "boolean",
-        description:
-          "A boolean flag indicating whether the form entry is an expense.",
-      },
-      status: {
-        type: "string",
-        enum: ["published", "deleted"],
-        description: "The publication status of the form entry.",
-      },
+const useSchema = (): FieldType[] => {
+  const { data: options } = useGetItemsCategory();
+  return [
+    {
+      type: "text",
+      name: "title",
+      label: "Non de l'entrée",
     },
-  };
+    {
+      type: "textarea",
+      name: "description",
+      label: "Description",
+      format: "textarea",
+    },
+    {
+      type: "date",
+      name: "effect_date",
+      label: "Date d'effet",
+      format: "date",
+    },
+    {
+      type: "number",
+      name: "value",
+      label: "Valeur",
+    },
+    {
+      type: "select",
+      name: "category",
+      label: "Catégorie",
+      options, // Options should be populated as needed
+    },
+    {
+      type: "select",
+      name: "isExpense",
+      label: "Type d'entrée",
+      options: [
+        { value: true, label: "Dépense" },
+        { value: false, label: "Revenu" },
+      ],
+    },
+  ];
 };
 
 const ItemDrawer: React.FC<ItemDrawerProps> = (props) => {
@@ -85,20 +74,18 @@ const ItemDrawer: React.FC<ItemDrawerProps> = (props) => {
   const [formState, setFormState] = useState(initialData);
 
   return (
-    <Drawer
+    <Modal
       onClose={onClose}
       title={props.title}
+      as="drawer"
+      size="medium"
       body={
-        <Form
-          schema={schema}
-          validator={validator}
-          fields={{ StringField: MyCustomWidget }}
-          className="itemFormular"
-          onChange={(e) => {
-            setFormState(e.formData);
+        <FormComponent
+          fields={schema}
+          data={formState}
+          onChange={({ name, value }) => {
+            setFormState((obj) => ({ ...obj, [name]: value }));
           }}
-          formData={formState}
-          children={null}
         />
       }
       footer={
@@ -117,6 +104,11 @@ const ItemDrawer: React.FC<ItemDrawerProps> = (props) => {
 
 export default ItemDrawer;
 
+/**
+ * Opens the item drawer modal for editing an item.
+ * @param props The item properties to be passed to the modal.
+ * @returns A promise that resolves when the modal is closed.
+ */
 export const editItemDrawer = async (props: ItemType) => {
   return await openModal(ItemDrawer, props);
 };

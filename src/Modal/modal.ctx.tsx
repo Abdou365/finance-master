@@ -9,7 +9,7 @@ export const modalPromise = {
   },
 };
 
-export const openModal = async (modal: any, props: any) => {
+export const openModal: Promise<any> = async (modal: any, props: any) => {
   return await modalPromise.current({ ...props, modal });
 };
 

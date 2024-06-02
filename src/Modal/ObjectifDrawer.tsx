@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { ObjectifType } from "../types/objectif.type";
-import Drawer from "./Drawer";
-import { ModalLegacyProps, openModal } from "./modal.ctx";
+import { useParams } from "react-router-dom";
 import FormComponent from "../components/Form/Form";
 import { useGetItemsCategory } from "../store.tsx/useItems";
-import { useParams } from "react-router-dom";
+import { ObjectifType } from "../types/objectif.type";
+import Modal from "./Drawer";
+import { ModalLegacyProps, openModal } from "./modal.ctx";
 
 const useObjectifField = () => {
   const { accountId } = useParams();
@@ -62,11 +62,13 @@ export const ObjectifDrawer: React.FC<Props> = (props) => {
   const [formState, setFormState] = useState({});
   const fields = useObjectifField();
 
+  console.log(formState);
+
   const onClose = () => {
     onCancel();
   };
   return (
-    <Drawer
+    <Modal
       title={props.title || "Créer un objectif"}
       onClose={onClose}
       body={

@@ -1,10 +1,10 @@
 // ObjectifCard.module.scss
 
 .objectifCard {
-  @apply bg-white p-3 rounded border;
+  @apply bg-white dark:bg-primary-900 p-3 rounded border dark:border-primary-600;
 
   &:has(input:checked) {
-    @apply border-primary-500 text-primary-500 bg-primary-50;
+    @apply border-primary-500 text-primary-500 dark:text-primary-200 bg-primary-50 dark:bg-primary-800;
   }
 
   &__header {

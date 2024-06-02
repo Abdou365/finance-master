@@ -1,4 +1,6 @@
-import { partition, sumBy, uniq } from "lodash";
+import partition from "lodash/partition";
+import sumBy from "lodash/sumBy";
+import uniq from "lodash/uniq";
 
 export const filterByDate = ({
   name,

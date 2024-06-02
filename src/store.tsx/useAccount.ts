@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { AccountDashboard, AccountType } from "../types/account.type.ts";
 import store from "./store.ts";
+import { DBResponseType } from "../types/fetch.type.ts";
 
 export const useAccount = () => {
   const response = useQuery({
@@ -52,8 +53,13 @@ export const upsertAcount = async (params: {
   title?: string;
   description?: string;
 }) => {
-  return await axios.post("http://localhost:3000/account", {
-    ...params,
-    userId: store.user()?.id,
-  });
+  const res = await axios.post<DBResponseType<any>>(
+    "http://localhost:3000/account",
+    {
+      ...params,
+      userId: store.user()?.id,
+    }
+  );
+
+  return res.data;
 };

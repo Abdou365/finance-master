@@ -37,7 +37,7 @@ const Sidebar = () => {
     },
   ];
   return (
-    <div className="h-screen  flex justify-between   flex-col items-center    border-r">
+    <div className="h-screen  flex justify-between   flex-col items-center    border-r dark:border-none bg-white dark:bg-primary-600">
       <div className="space-y-48 rounded-md">
         <ul className=" flex flex-col ">
           {routes.map((route) => (
@@ -46,7 +46,9 @@ const Sidebar = () => {
               as="Legend"
               trigger={
                 <Link to={route.link}>
-                  <li className=" border h-12 w-12 flex">{route.icon}</li>
+                  <li className=" border dark:border-none h-12 w-12 flex">
+                    {route.icon}
+                  </li>
                 </Link>
               }
             >
