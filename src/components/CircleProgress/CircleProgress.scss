@@ -22,3 +22,21 @@
     @apply fill-gray-600 dark:fill-primary-300 text-3xl font-bold;
   }
 }
+
+.circle-progress {
+  &.success {
+    .circle-progress-progress {
+      @apply stroke-green-500;
+    }
+  }
+  &.warning {
+    .circle-progress-progress {
+      @apply stroke-yellow-500;
+    }
+  }
+  &.danger {
+    .circle-progress-progress {
+      @apply stroke-red-500;
+    }
+  }
+}

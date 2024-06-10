@@ -2,7 +2,7 @@
   @apply z-10 rounded;
   box-shadow: 0 0px 0px 1px theme("colors.gray.300");
   &-content {
-    @apply bg-white rounded  p-2;
+    @apply bg-white dark:bg-primary-800 rounded  p-2;
   }
   &[data-popper-placement="top"] {
     .Tooltip-arrow {
@@ -30,6 +30,17 @@
   }
   &-arrow {
     @apply p-[.25rem] bg-gray-300;
+    filter: drop-shadow(0 0 0px 10px black);
+  }
+}
+
+html[data-theme="dark"] .Tooltip {
+  box-shadow: 0 0px 0px 0px theme("colors.primary.300");
+  &-content {
+    @apply bg-primary-700;
+  }
+  &-arrow {
+    @apply bg-primary-700;
     filter: drop-shadow(0 0 0px 10px black);
   }
 }

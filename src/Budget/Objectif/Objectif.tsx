@@ -12,6 +12,7 @@ import { ObjectifType } from "../../types/objectif.type";
 import "./Objectif.scss";
 import { ObjectifCard } from "./ObjectifCard";
 import { ObjectifInfo } from "./ObjectifInfo";
+import Empty from "../../components/Empty/Empty";
 
 const Objectif: React.FC = () => {
   const { accountId } = useParams();
@@ -138,10 +139,11 @@ const Objectif: React.FC = () => {
             </Button>
           </div>
         </div>
-        <div className="objectif__content">
-          <div className="objectif__list">
-            {objectifs ? (
-              objectifs.map((objectif, index) => (
+        {!objectifs && <Empty />}
+        {objectifs && (
+          <div className="objectif__content">
+            <div className="objectif__list">
+              {objectifs.map((objectif, index) => (
                 <ObjectifCard
                   key={index}
                   objectif={objectif}
@@ -149,17 +151,15 @@ const Objectif: React.FC = () => {
                   onEdit={handleEdit}
                   onDelete={handleDelete}
                 />
-              ))
-            ) : (
-              <div> Aucun objectifs pour le momment, créez en un ! </div>
-            )}
+              ))}
+            </div>
+            <ObjectifInfo
+              completed={summary?.completed}
+              length={summary?.total}
+              progress={summary?.progress}
+            />
           </div>
-          <ObjectifInfo
-            completed={summary?.completed}
-            length={summary?.total}
-            progress={summary?.progress}
-          />
-        </div>
+        )}
       </div>
     </section>
   );

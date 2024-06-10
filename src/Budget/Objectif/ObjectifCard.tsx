@@ -1,10 +1,35 @@
+import { format } from "date-fns";
 import { FaCalendarDay, FaEllipsisV } from "react-icons/fa";
 import { twMerge } from "tailwind-merge";
+import Badge from "../../components/Badge/Badge";
 import Button from "../../components/Button/Button";
-import DatePicker from "../../components/DatePicker/DatePicker";
+import Tooltip from "../../components/Tooltip/Tooltip";
 import { ObjectifType } from "../../types/objectif.type";
 import "./ObjectifCard.scss";
-import Tooltip from "../../components/Tooltip/Tooltip";
+
+const ObjecttifDate: React.FC<{ objectif: ObjectifType }> = ({ objectif }) => {
+  if (objectif.isRecurrent) {
+    return (
+      <Badge type="info" icon={FaCalendarDay}>
+        Recurrent
+      </Badge>
+    );
+  }
+  return (
+    <>
+      {objectif.from && (
+        <Badge type="info" icon={FaCalendarDay}>
+          {format(objectif.from, "dd MMM yy")}
+        </Badge>
+      )}
+      {objectif.to && (
+        <Badge type="info" icon={FaCalendarDay}>
+          {format(objectif.to, "dd MMM yy")}
+        </Badge>
+      )}
+    </>
+  );
+};
 
 export const ObjectifCard: React.FC<{
   objectif: ObjectifType;
@@ -24,23 +49,8 @@ export const ObjectifCard: React.FC<{
             />
             <h5 className="font-bold line-clamp-1">{objectif.title}</h5>
           </div>
-          <div className="flex">
-            <DatePicker
-              className=" text-xs bg-transparent font-semibold cursor-pointer w-full"
-              showIcon
-              calendarIconClassname=" text-xs"
-              dateFormat={"YYYY-MM-DD"}
-              icon={<FaCalendarDay />}
-              value={objectif.from}
-            />
-            <DatePicker
-              className="w-full bg-transparent text-xs font-semibold cursor-pointer"
-              showIcon
-              calendarIconClassname=" text-xs"
-              dateFormat={"YYYY-MM-DD"}
-              icon={<FaCalendarDay />}
-              value={objectif.to}
-            />
+          <div className="flex gap-2">
+            <ObjecttifDate objectif={objectif} />
           </div>
         </div>
 
@@ -53,16 +63,19 @@ export const ObjectifCard: React.FC<{
             }
           >
             <>
-              <Button onClick={() => onEdit(objectif)} variant="link">
+              <div
+                onClick={() => onEdit(objectif)}
+                className=" cursor-pointer hover:bg-gray-100 dark:hover:bg-primary-800 p-2 rounded w-40"
+              >
                 Edit
-              </Button>
-              <Button
+              </div>
+              <div
+                className="cursor-pointer hover:bg-gray-100 dark:hover:bg-primary-800 p-2 rounded w-40"
                 onClick={() => onDelete(objectif)}
                 color="red"
-                variant="link"
               >
                 Delete
-              </Button>
+              </div>
             </>
           </Tooltip>
         </div>

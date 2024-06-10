@@ -29,6 +29,7 @@ const RepartitionChart = ({ data }: { data?: AccountExpenseRepartition[] }) => {
 
         <ResponsiveContainer
           height={"100%"}
+          minHeight={500}
           width={"100%"}
           className={
             "border dark:border-none bg-gray-50 dark:bg-primary-950 rounded"

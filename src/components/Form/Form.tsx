@@ -6,6 +6,7 @@ import { FaCalendar } from "react-icons/fa";
 import Textarea from "react-textarea-autosize";
 import CustomSelect from "../../Budget/Items/CompactSelect";
 import Button from "../Button/Button";
+import "./FormComponent.scss";
 
 export interface FieldType {
   type: HTMLInputTypeAttribute | "date-range";
@@ -16,6 +17,7 @@ export interface FieldType {
   format?: string;
   multiple?: boolean;
   description?: string;
+  condition?: (data: Record<string, any>) => boolean;
 }
 
 interface FormProps {
@@ -41,7 +43,9 @@ const FormComponent: React.FC<FormProps> = (props) => {
     onChange({ name, value });
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (props.onSubmit) {
       props.onSubmit();
     }
@@ -101,8 +105,6 @@ const FormComponent: React.FC<FormProps> = (props) => {
         );
       }
       case "select": {
-        console.log({ field });
-
         return (
           <CustomSelect
             options={field.options!}
@@ -142,15 +144,26 @@ const FormComponent: React.FC<FormProps> = (props) => {
   };
 
   const FormWrapper = onSubmit ? "form" : "div";
+
   return (
-    <FormWrapper onSubmit={handleSubmit} className="flex flex-col gap-3">
-      {fields.map((field, index) => (
-        <div key={index} className="flex flex-col gap-1">
-          {field.label && <label>{field.label}</label>}
-          {renderFormField(field)}
-          {field.description && <p>{field.description}</p>}
-        </div>
-      ))}
+    <FormWrapper onSubmit={handleSubmit} className="lk--form">
+      {fields
+        .filter((field) => {
+          return field.condition ? !!field.condition(watch()) : true;
+        })
+        .map((field, index) => {
+          return (
+            <div key={index} className="flex flex-col gap-1 lk--form--item">
+              {field.label && (
+                <label className=" lk--form--label">{field.label}</label>
+              )}
+              {field.description && (
+                <p className=" lk--form--description">{field.description}</p>
+              )}
+              {renderFormField(field)}
+            </div>
+          );
+        })}
       {onSubmit && <Button onClick={handleSubmit}>Submit</Button>}
     </FormWrapper>
   );

@@ -6,7 +6,7 @@ import {
   defaultSelectStyles,
 } from "../../components/Form/selectClassNames";
 import { formatOptions } from "../../utils/formatOptions";
-import { TableColumnType } from "./ItemsTable";
+import { TableColumnType } from "./";
 
 type Props = {
   initialValue: string;
@@ -32,7 +32,6 @@ function computeInitialValue(props: Props, options: Option[]) {
     const val = options?.filter((option) =>
       props.initialValue?.includes(option.value.toString())
     );
-    console.log({ val });
 
     return val;
   }
@@ -91,8 +90,6 @@ const CustomSelect: React.FC<Props> = (props) => {
         if (props.isMulti) {
           props.onChange(newValue.map((option: Option) => option.value));
         } else {
-          console.log(newValue.value);
-
           props.onChange(newValue.value);
         }
       }}

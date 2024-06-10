@@ -1,0 +1,9 @@
+.lk--form {
+  @apply space-y-5;
+  &--label {
+    @apply font-semibold;
+  }
+  &--description {
+    @apply text-gray-500 dark:text-primary-300 text-sm;
+  }
+}

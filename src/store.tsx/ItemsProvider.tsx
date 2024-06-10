@@ -1,10 +1,16 @@
-import { difference, uniq } from "lodash";
-import { useEffect, useMemo, useState } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { difference } from "lodash";
+import { useEffect, useState } from "react";
+import {
+  useBeforeUnload,
+  useParams,
+  useSearchParams,
+  useBlocker,
+} from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { ItemType } from "../types/item.type";
 import { ItemCtx } from "./store.ctx";
 import { upsertItems, useGetItems } from "./useItems";
+import store from "./store";
 
 const ItemsProvider = ({ children }: { children: React.ReactNode }) => {
   const { accountId = "" } = useParams();
@@ -14,25 +20,12 @@ const ItemsProvider = ({ children }: { children: React.ReactNode }) => {
   const { data, refetch } = useGetItems(accountId, +page);
 
   const [items, setItems] = useState<ItemType[]>([]);
-  const [filter, setFilter] = useState({ view: "All", date: null });
-  const [selectedItem, setSelectedItem] = useState<string[]>([]);
-  const categories = useMemo(
-    () => ["All", ...uniq(items?.map((item) => item?.category))],
-    [items]
-  );
 
   useEffect(() => {
     if (data) {
       setItems(data.items);
     }
   }, [data]);
-
-  const updateFilter = (view: string) => {
-    setFilter((prev) => ({
-      ...prev,
-      view,
-    }));
-  };
 
   const updateItems = (item: ItemType) => {
     const newItem = items.map((i) => {
@@ -51,66 +44,76 @@ const ItemsProvider = ({ children }: { children: React.ReactNode }) => {
     >
   ) => {
     setItems((prev) => [
-      { ...item, id: uuidv4(), category: filter.view },
+      {
+        ...item,
+        id: uuidv4(),
+        category: "",
+        status: "published",
+        createdAt: new Date().toISOString(),
+        userId: store.user()?.id ?? "",
+        accountId,
+      },
       ...prev,
     ]);
   };
 
-  const deleteItem = (id: string) => {
-    const newItem = items
-      .map((i) => {
-        if (i.id === id) {
-          return { ...i, status: "deleted" } as ItemType;
-        }
-        return i;
-      })
-      .filter((item) => item.status === "published");
-    setItems(newItem);
-  };
-  const deleteSelectedItems = () => {
-    const newItem = items
-      .map((i) => {
-        if (selectedItem.includes(i.id)) {
-          return { ...i, status: "deleted" } as ItemType;
-        }
-        return i;
-      })
-      .filter((item) => item.status === "published");
-    setItems(newItem);
-  };
-
   const save = async () => {
-    const editedItems = difference(items, data!);
+    const editedItems = difference(items, data?.items);
+
     const res = await upsertItems(editedItems);
-    if (res.status === 200) {
+    if (res.status === 201) {
       refetch();
     }
   };
 
-  const selectItem = (id: string) => {
-    if (selectedItem.includes(id)) {
-      setSelectedItem((prev) => [...prev.filter((p) => p !== id)]);
-    } else {
-      setSelectedItem((prev) => [id, ...prev]);
-    }
+  const bulkDelete = (ids: string[]) => {
+    const newItem = items.map((i) => {
+      if (ids.includes(i.id)) {
+        return { ...i, status: "deleted" } as ItemType;
+      }
+      return i;
+    });
+
+    setItems(newItem);
   };
+
+  const deleteItem = (id: string) => {
+    const newItem = items.map((i) => {
+      if (i.id === id) {
+        return { ...i, status: "deleted" } as ItemType;
+      }
+      return i;
+    });
+    setItems(newItem);
+  };
+
+  useBeforeUnload(() => {
+    const editedItems = difference(items, data?.items);
+    if (editedItems.length > 0) {
+      save();
+    }
+  });
+
+  useBlocker(() => {
+    const editedItems = difference(items, data?.items);
+    console.log(editedItems);
+    if (editedItems.length > 0) {
+      save();
+    }
+  });
 
   return (
     <ItemCtx.Provider
       value={{
-        items,
-        categories,
-        filter,
-        selectedItem,
+        items: items.filter((item) => item.status === "published"),
         count: data?.count || 0,
         pageCount: data?.pageCount || 0,
-        selectItem,
-        updateFilter,
         updateItems,
         createItems,
-        deleteSelectedItems,
-        deleteItem,
+        refetch,
+        bulkDelete,
         save,
+        deleteItem,
       }}
     >
       {children}

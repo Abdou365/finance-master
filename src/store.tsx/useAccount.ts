@@ -1,15 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import { api } from "../api/axios.ts";
 import { AccountDashboard, AccountType } from "../types/account.type.ts";
-import store from "./store.ts";
 import { DBResponseType } from "../types/fetch.type.ts";
+import store from "./store.ts";
 
 export const useAccount = () => {
   const response = useQuery({
-    queryKey: ["account"],
+    queryKey: ["account", store.user()?.id],
     queryFn: async () => {
-      const res = await axios.get<AccountType[]>(
-        "http://localhost:3000/account"
+      const res = await api.get<AccountType[]>(
+        `/account/all/${store.user()?.id}`
       );
       return res.data;
     },
@@ -21,10 +21,10 @@ export const useAccount = () => {
 };
 export const useAccountNav = () => {
   const response = useQuery({
-    queryKey: ["account-nav"],
+    queryKey: ["account-nav", store.user()?.id],
     queryFn: async () => {
-      const res = await axios.get<{ id: string; title: string }[]>(
-        "http://localhost:3000/account/title"
+      const res = await api.get<{ id: string; title: string }[]>(
+        `/account/title/${store.user()?.id}`
       );
       return res.data;
     },
@@ -34,11 +34,9 @@ export const useAccountNav = () => {
 };
 export const useAccountDashboard = (id?: string) => {
   const response = useQuery({
-    queryKey: ["account-dashboard"],
+    queryKey: ["account-dashboard", id],
     queryFn: async () => {
-      const res = await axios.get<AccountDashboard>(
-        `http://localhost:3000/account/dashboard/${id}`
-      );
+      const res = await api.get<AccountDashboard>(`/account/dashboard/${id}`);
       return res.data;
     },
   });
@@ -53,13 +51,10 @@ export const upsertAcount = async (params: {
   title?: string;
   description?: string;
 }) => {
-  const res = await axios.post<DBResponseType<any>>(
-    "http://localhost:3000/account",
-    {
-      ...params,
-      userId: store.user()?.id,
-    }
-  );
+  const res = await api.post<DBResponseType<any>>("/account", {
+    ...params,
+    userId: store.user()?.id,
+  });
 
   return res.data;
 };

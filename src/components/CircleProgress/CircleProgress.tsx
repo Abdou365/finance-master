@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./CircleProgress.scss";
+import { twMerge } from "tailwind-merge";
 
 interface CircleProgressProps {
   size: number;
@@ -23,7 +24,13 @@ const CircleProgress: React.FC<CircleProgressProps> = ({
 
   return (
     <svg
-      className="circle-progress"
+      className={twMerge(
+        "circle-progress",
+        progress < 25 && "danger",
+        progress < 50 && "warning",
+        progress < 75 && "info",
+        progress >= 75 && "success"
+      )}
       width={size}
       height={size}
       viewBox={`0 0 ${size} ${size}`}

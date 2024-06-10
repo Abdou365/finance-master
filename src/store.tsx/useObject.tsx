@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { useParams } from "react-router-dom";
+import { api } from "../api/axios";
 import { SummaryObjectType } from "../types/account.type";
 import { DBResponseType } from "../types/fetch.type";
 import { ObjectifType } from "../types/objectif.type";
@@ -18,12 +18,12 @@ export const useGetAllObjectif = () => {
   } = useQuery({
     queryKey: ["getAllObjectif"],
     queryFn: async () => {
-      const res = await axios.get<
+      const res = await api.get<
         DBResponseType<{
           objectifs: ObjectifType[];
           summary: SummaryObjectType;
         }>
-      >("http://localhost:3000/objectif/all/" + user()?.id + "/" + accountId);
+      >("/objectif/all/" + user()?.id + "/" + accountId);
       if (res) {
         return res.data.data;
       }
@@ -32,8 +32,8 @@ export const useGetAllObjectif = () => {
   return { data, refetch };
 };
 export const upsertObjectif = async (data: Partial<ObjectifType>) => {
-  const res = await axios.post<DBResponseType<{ objetif: ObjectifType }>>(
-    "http://localhost:3000/objectif",
+  const res = await api.post<DBResponseType<{ objetif: ObjectifType }>>(
+    "/objectif",
     data
   );
   if (res) {

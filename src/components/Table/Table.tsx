@@ -10,8 +10,9 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import React, { useEffect, useMemo } from "react";
-import EditableCells from "./EditableCells";
+import EditableCells from "../../Budget/Items/EditableCells";
 import { compact } from "lodash";
+import { twMerge } from "tailwind-merge";
 
 // Define a type for possible input types
 export type TableColumnInputType =
@@ -30,7 +31,7 @@ export type TableDataType = Record<string, unknown>;
 
 export type TableColumnOptionsType = {
   label: string;
-  value: string | number;
+  value: string | number | boolean;
 }[];
 
 // Define a type for a form field
@@ -136,10 +137,15 @@ function Filter({ column }: { column: Column<string | number, unknown> }) {
   );
 }
 
-type Props = {
+type TableComponentProps = {
   tableData: TableDataType[];
   onChange: (data: any) => void;
-  onSelect?: (data: any) => void;
+  rowSelection?: boolean extends TableComponentProps["selectable"]
+    ? Record<number, boolean>
+    : undefined;
+  setRowSelection?: boolean extends TableComponentProps["selectable"]
+    ? (data: Record<number, boolean>) => void
+    : undefined;
   selectable?: boolean;
   columns: TableColumnType[];
   actions: TableAcion[];
@@ -147,16 +153,17 @@ type Props = {
 
 // Give our default column cell renderer editing superpowers!
 
-const Table: React.FC<Props> = ({
+const Table: React.FC<TableComponentProps> = ({
   tableData: items,
   onChange,
-  onSelect,
   selectable,
   columns,
   actions,
+  rowSelection,
+  setRowSelection,
 }) => {
   const [data, setData] = React.useState<TableDataType[]>([]);
-  const [rowSelection, setRowSelection] = React.useState({});
+  // const [rowSelection, setRowSelection] = React.useState({});
 
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -170,10 +177,6 @@ const Table: React.FC<Props> = ({
   useEffect(() => {
     setData(items);
   }, [items]);
-
-  useEffect(() => {
-    onSelect && onSelect(rowSelection);
-  });
 
   const tableColumns = useMemo(
     () => [
@@ -239,7 +242,7 @@ const Table: React.FC<Props> = ({
     filterFns: {},
     state: {
       columnFilters,
-      rowSelection,
+      rowSelection: selectable ? rowSelection : {},
     },
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
@@ -249,7 +252,7 @@ const Table: React.FC<Props> = ({
     debugTable: true,
     debugHeaders: true,
     debugColumns: false,
-    onRowSelectionChange: setRowSelection,
+    onRowSelectionChange: selectable ? setRowSelection : function () {},
 
     meta: {
       updateData: (rowIndex: number, columnId: any, value: any) => {
@@ -323,9 +326,13 @@ const Table: React.FC<Props> = ({
           ))}
         </thead>
         <tbody>
-          {table.getRowModel().rows.map((row) => (
+          {table.getRowModel().rows.map((row, index) => (
             <tr
-              className="g-white border-b dark:bg-primary-900 dark:border-primary-600"
+              className={twMerge(
+                "g-white border-b dark:bg-primary-900 dark:border-primary-600",
+                table.getState().rowSelection[index] &&
+                  "bg-primary-100 dark:bg-primary-700"
+              )}
               key={row.id}
             >
               {row.getVisibleCells().map((cell) => {

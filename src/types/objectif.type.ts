@@ -12,6 +12,8 @@ export interface ObjectifType {
   targetAmount: number;
   categories: [];
   recurrence: null | string;
+  recurrenceInterval: null | number;
+  isRecurrent: boolean;
   customRecurrence: null | string;
   isCompleted: false;
   type: "savings" | "income";

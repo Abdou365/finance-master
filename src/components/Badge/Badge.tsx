@@ -1,7 +1,9 @@
 import React from "react";
+import { IconBaseProps, IconType } from "react-icons/lib";
+import { twMerge } from "tailwind-merge";
 
 interface BadgeProps {
-  type:
+  type?:
     | "primary"
     | "secondary"
     | "success"
@@ -11,11 +13,12 @@ interface BadgeProps {
     | "light"
     | "dark";
   children: React.ReactNode;
+  icon?: IconType;
 }
 
 const badgeClasses: { [key: string]: string } = {
   primary:
-    "bg-primary-100 text-primary-700 dark:bg-slate-900 dark:text-primary-500",
+    "bg-primary-100 text-primary-700 dark:bg-primary-700 dark:text-primary-200",
   secondary:
     "bg-secondary-100 text-secondary-800 dark:bg-[#202124] dark:text-secondary-400",
   success:
@@ -29,11 +32,15 @@ const badgeClasses: { [key: string]: string } = {
   dark: "bg-neutral-800 text-zinc-100 dark:bg-neutral-800",
 };
 
-const Badge: React.FC<BadgeProps> = ({ type, children }) => {
+const Badge: React.FC<BadgeProps> = ({ type = "primary", children, icon }) => {
+  const Icon = icon ? (props: IconBaseProps) => icon(props) : null;
   return (
     <span
-      className={`inline-block whitespace-nowrap rounded-[0.27rem] px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none ${badgeClasses[type]}`}
+      className={twMerge(
+        `inline-flex gap-1 whitespace-nowrap rounded-[0.27rem] px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none ${badgeClasses[type]}`
+      )}
     >
+      {icon && <Icon />}
       {children}
     </span>
   );

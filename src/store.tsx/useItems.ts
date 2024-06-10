@@ -1,17 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import { ItemType } from "../types/item.type";
 import { useParams } from "react-router-dom";
+import { api } from "../api/axios";
 import { DBResponseType } from "../types/fetch.type";
+import { ItemType } from "../types/item.type";
 
 export const useGetItems = (accountId: string, page: number) => {
   const query = useQuery({
     queryKey: ["getAllItems", accountId, page],
-    staleTime: 60 * 60 * 10,
     queryFn: async () => {
-      const { data } = await axios.get<
+      const { data } = await api.get<
         DBResponseType<{ items: ItemType[]; count: number; pageCount: number }>
-      >(`http://localhost:3000/item/all/${accountId}?page=${page}&limit=24`);
+      >(`/item/all/${accountId}?page=${page}&limit=48`);
       return data.data;
     },
   });
@@ -19,8 +18,7 @@ export const useGetItems = (accountId: string, page: number) => {
 };
 
 export const upsertItems = async (items: ItemType[]) => {
-  const query = await axios.post("http://localhost:3000/item", items);
-
+  const query = await api.post("/item", items);
   return query;
 };
 
@@ -30,9 +28,7 @@ export const useGetItemsCategory = () => {
     queryKey: ["getAllItems"],
     staleTime: 60 * 60 * 10,
     queryFn: async () => {
-      const { data: item } = await axios.get(
-        `http://localhost:3000/item/category/${accountId}`
-      );
+      const { data: item } = await api.get(`/item/category/${accountId}`);
       return item;
     },
   });

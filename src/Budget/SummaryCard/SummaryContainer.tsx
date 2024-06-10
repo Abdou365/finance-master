@@ -32,7 +32,7 @@ const SummaryContainer = ({ account }: { account?: AccountSummarize }) => {
     },
   ];
   return (
-    <div className=" flex justify-around gap-2 bg-white dark:bg-primary-800 rounded border dark:border-none items-center container">
+    <div className=" flex flex-wrap justify-around gap-2 bg-white dark:bg-primary-800 rounded border dark:border-none items-center container">
       {result.map((r, key) => {
         return (
           <>

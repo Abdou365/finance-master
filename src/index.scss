@@ -13,7 +13,7 @@ body {
 }
 
 body {
-  @apply bg-gray-100 text-slate-700 dark:bg-primary-950 dark:text-primary-50;
+  @apply bg-gray-50 text-slate-700 dark:bg-primary-950 dark:text-primary-50;
 }
 
 // Définir le mixin pour le bouton
@@ -129,14 +129,14 @@ $buttonVariants: ("solid", "outlined", "ghost", "soft", "white", "link");
 }
 
 .lk-input--select {
-  @apply appearance-none bg-slate-500 dark:bg-primary-800 py-2 px-4 border dark:border-primary-700 rounded;
+  @apply appearance-none bg-slate-500 dark:bg-primary-800 py-2 px-4 border dark:border-primary-700 rounded cursor-pointer;
   option {
     @apply p-4 mb-1 appearance-none h-24;
   }
 }
 
 .lk-input--checkbox {
-  @apply appearance-none border border-slate-500 rounded h-4 w-4 relative inline-flex justify-center align-middle p-[2px];
+  @apply appearance-none border border-slate-500 rounded h-4 w-4 relative inline-flex justify-center align-middle p-[2px] cursor-pointer active:ring-2 ring-primary-300;
   &:checked {
     @apply bg-primary-500 border-primary-500;
     &::before {

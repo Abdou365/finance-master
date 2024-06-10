@@ -3,7 +3,7 @@ import { CellContext } from "@tanstack/react-table";
 import TextareaAutosize from "react-textarea-autosize";
 
 import React, { useState } from "react";
-import { TableColumnType } from "./ItemsTable";
+import { TableColumnType } from "./";
 // import { format } from "date-fns";
 import { format } from "date-fns";
 import DatePicker from "../../components/DatePicker/DatePicker";

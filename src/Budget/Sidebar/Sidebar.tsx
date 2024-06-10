@@ -10,6 +10,8 @@ import { Link, useParams } from "react-router-dom";
 import { useAuth } from "../../Login/useLogin";
 import Tooltip from "../../components/Tooltip/Tooltip";
 
+const sidebarItemStyle =
+  " border dark:border-none h-12 w-12 flex hover:bg-primary-100 dark:hover:bg-primary-700 cursor-pointer justify-center items-center active:bg-primary-200 dark:active:bg-primary-800 transition-all duration-200 ease-in-out";
 const Sidebar = () => {
   const { logout } = useAuth();
   const { accountId } = useParams();
@@ -46,9 +48,7 @@ const Sidebar = () => {
               as="Legend"
               trigger={
                 <Link to={route.link}>
-                  <li className=" border dark:border-none h-12 w-12 flex">
-                    {route.icon}
-                  </li>
+                  <li className={sidebarItemStyle}>{route.icon}</li>
                 </Link>
               }
             >
@@ -58,9 +58,11 @@ const Sidebar = () => {
         </ul>
       </div>
       <div>
-        <div onClick={() => logout()}>
-          <FaClosedCaptioning />
-        </div>
+        <ul className=" flex flex-col ">
+          <li className={sidebarItemStyle} onClick={() => logout()}>
+            <FaClosedCaptioning className="m-auto text-red-600" />
+          </li>
+        </ul>
       </div>
     </div>
   );
