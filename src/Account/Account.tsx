@@ -3,7 +3,6 @@ import { useState } from "react";
 import { FaPlusCircle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
-import { accountModal } from "../Modal/AccountModal";
 import Button from "../components/Button/Button";
 import NavBar from "../components/NavBar/NavBar";
 import Pagination from "../components/Pagination/Pagination";
@@ -11,6 +10,22 @@ import store from "../store.tsx/store";
 import { upsertAcount, useAccount } from "../store.tsx/useAccount";
 import { formatNumber } from "../utils/rounding";
 import { AccountCard } from "./AccountCard";
+import { formModal } from "../Modal/FormModal";
+
+const fields = [
+  {
+    type: "string",
+    name: "title",
+    label: "Non de l'entré",
+    description: "The title of the form entry.",
+  },
+  {
+    type: "string",
+    format: "textarea",
+    name: "description",
+    label: "A detailed description of the form entry.",
+  },
+];
 
 const Account = () => {
   const data = useAccount();
@@ -18,7 +33,7 @@ const Account = () => {
   const navigate = useNavigate();
 
   const createAccountModal = async () => {
-    const res = (await accountModal()) as unknown;
+    const res = (await formModal({ fields })) as unknown;
     if (res) {
       const upsert = await upsertAcount({ ...res, id: uuidv4() });
 

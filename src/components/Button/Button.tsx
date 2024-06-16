@@ -1,4 +1,5 @@
 import React, { ReactNode } from "react";
+import { twMerge } from "tailwind-merge";
 
 interface ButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
   color?:
@@ -31,7 +32,7 @@ const Button: React.FC<ButtonProps> = ({
   const classes = `btn-${color} btn-${color}-${variant} btn-${size} flex items-center justify-center gap-2 px-4 py-2  font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-${color}-500`;
 
   return (
-    <button {...props} className={classes}>
+    <button {...props} className={twMerge(classes, props.className)}>
       {children}
     </button>
   );

@@ -1,16 +1,12 @@
 import React from "react";
+import { editItemDrawer } from "../../Modal/ItemDrawer";
 import { useItems } from "../../store.tsx/store.ctx";
 import { ItemType } from "../../types/item.type";
-import { itemCx } from "./Items";
 import ItemInput from "./ItemInput";
-import { editItemDrawer } from "../../Modal/ItemDrawer";
+import { itemCx } from "./Items";
 
 export const Item: React.FC<ItemType> = (props) => {
-  const { updateItems, selectedItem, selectItem } = useItems();
-
-  const handleChecked = () => {
-    selectItem(props.id);
-  };
+  const { updateItems } = useItems();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const value = e.target.name === "value" ? +e.target.value : e.target.value;

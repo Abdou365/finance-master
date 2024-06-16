@@ -71,19 +71,33 @@ const CustomSelect: React.FC<Props> = (props) => {
   return (
     <SelectComponent
       defaultValue={value}
-      unstyled
       styles={{
-        control: (styles) => ({
-          ...styles,
-          minHeight: compact ? "1.5rem" : undefined,
-        }),
+        menu(base) {
+          if (compact) {
+            return {
+              ...base,
+              zIndex: 9999,
+              width: "fit-content",
+              maxWidth: "300px",
+            };
+          }
+          return base;
+        },
       }}
+      unstyled
+      // styles={{
+      //   control: (styles) => ({
+      //     ...styles,
+      //     minHeight: compact ? "1.5rem" : undefined,
+      //   }),
+      // }}
       onCreateOption={handleCreate}
       classNames={compact ? compactSelectStyles : defaultSelectStyles}
       isDisabled={isLoading}
       isLoading={isLoading}
       options={options}
       value={value}
+      menuPortalTarget={compact && document.body}
       isMulti={props.isMulti}
       onChange={(newValue) => {
         setValue(newValue);

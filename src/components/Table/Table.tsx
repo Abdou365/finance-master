@@ -13,6 +13,7 @@ import React, { useEffect, useMemo } from "react";
 import EditableCells from "../../Budget/Items/EditableCells";
 import { compact } from "lodash";
 import { twMerge } from "tailwind-merge";
+import { useVirtualizer } from "@tanstack/react-virtual";
 
 // Define a type for possible input types
 export type TableColumnInputType =
@@ -163,12 +164,11 @@ const Table: React.FC<TableComponentProps> = ({
   setRowSelection,
 }) => {
   const [data, setData] = React.useState<TableDataType[]>([]);
-  // const [rowSelection, setRowSelection] = React.useState({});
-
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
   const columnHelper = createColumnHelper<TableDataType>();
+  const tableContainerRef = React.useRef<HTMLDivElement>(null);
 
   const updateData = (item: TableDataType) => {
     onChange(item);
@@ -256,8 +256,6 @@ const Table: React.FC<TableComponentProps> = ({
 
     meta: {
       updateData: (rowIndex: number, columnId: any, value: any) => {
-        // Skip page index reset until after next rerender
-        // skipAutoResetPageIndex()
         setData((old) =>
           old.map((row, index) => {
             if (index === rowIndex) {
@@ -273,119 +271,121 @@ const Table: React.FC<TableComponentProps> = ({
     },
   });
 
+  const { rows } = table.getRowModel();
+
+  const rowVirtualizer = useVirtualizer({
+    getScrollElement: () => tableContainerRef.current!,
+    count: rows.length,
+    overscan: 32,
+    estimateSize: () => 50,
+    measureElement:
+      typeof window !== "undefined" &&
+      navigator.userAgent.indexOf("Firefox") === -1
+        ? (element) => element?.getBoundingClientRect().height
+        : undefined,
+  });
+
   return (
-    <div>
-      <table className="bg-white w-full text-sm text-left text-gray-500 dark:text-gray-400">
-        <thead
-          style={{ zIndex: 1 }}
-          className="text-xs text-gray-700 border-b dark:border-b-primary-600 uppercase bg-gray-50 dark:bg-primary-800 dark:text-primary-200 sticky  top-0"
-        >
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
-                return (
-                  <th
-                    style={{
-                      maxWidth: header.column.getSize(),
-                      width: header.column.getSize(),
-                    }}
-                    className="px-2 py-2"
-                    key={header.id}
-                    colSpan={header.colSpan}
-                  >
-                    {header.isPlaceholder ? null : (
-                      <>
-                        <div
-                          {...{
-                            className: header.column.getCanSort()
-                              ? "cursor-pointer select-none"
-                              : "",
-                            onClick: header.column.getToggleSortingHandler(),
-                          }}
-                        >
-                          {flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                          {{
-                            asc: " 🔼",
-                            desc: " 🔽",
-                          }[header.column.getIsSorted() as string] ?? null}
-                        </div>
-                        {header.column.getCanFilter() ? (
-                          <div>
-                            <Filter column={header.column} />
+    <>
+      <div ref={tableContainerRef} className="">
+        <table className="w-full bg-gray-50 dark:bg-primary-950 text-sm text-left">
+          <thead className="text-xs  border-b dark:border-b-primary-600 uppercase  dark:text-primary-200">
+            {table.getHeaderGroups().map((headerGroup) => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
+                  return (
+                    <th
+                      style={{
+                        maxWidth: header.column.getSize(),
+                        width: header.column.getSize(),
+                      }}
+                      className="px-2 py-2"
+                      key={header.id}
+                      colSpan={header.colSpan}
+                    >
+                      {header.isPlaceholder ? null : (
+                        <>
+                          <div
+                            {...{
+                              className: header.column.getCanSort()
+                                ? "cursor-pointer select-none"
+                                : "",
+                              onClick: header.column.getToggleSortingHandler(),
+                            }}
+                          >
+                            {flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                            {{
+                              asc: " 🔼",
+                              desc: " 🔽",
+                            }[header.column.getIsSorted() as string] ?? null}
                           </div>
-                        ) : null}
-                      </>
-                    )}
-                  </th>
-                );
-              })}
-            </tr>
-          ))}
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.map((row, index) => (
-            <tr
-              className={twMerge(
-                "g-white border-b dark:bg-primary-900 dark:border-primary-600",
-                table.getState().rowSelection[index] &&
-                  "bg-primary-100 dark:bg-primary-700"
-              )}
-              key={row.id}
-            >
-              {row.getVisibleCells().map((cell) => {
-                return (
-                  <td
-                    className=" py-2 px-2 font-medium"
-                    style={{
-                      maxWidth: cell.column.getSize(),
-                      width: cell.column.getSize(),
-                    }}
-                    key={cell.id}
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                );
-              })}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+                          {header.column.getCanFilter() ? (
+                            <div>
+                              <Filter column={header.column} />
+                            </div>
+                          ) : null}
+                        </>
+                      )}
+                    </th>
+                  );
+                })}
+              </tr>
+            ))}
+          </thead>
+        </table>
+      </div>
+      <div ref={tableContainerRef} className="overflow-auto flex-1  ">
+        <table className="w-full text-sm text-left">
+          <tbody>
+            {rowVirtualizer.getVirtualItems().map((virtualRow, index) => {
+              const row = rows[virtualRow.index];
+              return (
+                <tr
+                  className={twMerge(
+                    "g-white",
+                    table.getState().rowSelection[index] &&
+                      "bg-primary-100 dark:bg-primary-700"
+                  )}
+                  style={{
+                    height: `${virtualRow.size}px`,
+                    transform: `translateY(${
+                      virtualRow.start - index * virtualRow.size
+                    }px)`,
+                  }}
+                  key={row.id}
+                >
+                  {row.getVisibleCells().map((cell) => {
+                    return (
+                      <td
+                        className={twMerge(
+                          " dark:bg-primary-950 bg-gray-50  border dark:border-primary-600 py-1 px-2 font-medium",
+                          table.getState().rowSelection[index] &&
+                            "text-primary-500"
+                        )}
+                        style={{
+                          maxWidth: cell.column.getSize(),
+                          width: cell.column.getSize(),
+                        }}
+                        key={cell.id}
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </>
   );
 };
 
 export default Table;
-
-// columnHelper.accessor("category", {
-//   cell: (info) => (
-//     <EditableCells options={categories} onChange={updateData} {...info} />
-//   ),
-// }),
-// columnHelper.accessor("created_at", {
-//   cell: (info) => info.getValue(),
-// }),
-// columnHelper.accessor("description", {
-//   cell: (info) => <EditableCells onChange={updateData} {...info} />,
-// }),
-// columnHelper.accessor("isExpense", {
-//   cell: (info) => (
-//     // <div className="w-full text-center">
-//     <input
-//       className="lk-input--switch"
-//       type="checkbox"
-//       name=""
-//       id=""
-//       checked={info.getValue()}
-//     />
-//     // </div>
-//   ),
-// }),
-// columnHelper.accessor("value", {
-//   cell: (info) => info.getValue(),
-// }),
-// columnHelper.accessor("title", {
-//   cell: (info) => <EditableCells onChange={updateData} {...info} />,
-// }),

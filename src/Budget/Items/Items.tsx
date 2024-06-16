@@ -1,39 +1,37 @@
 import bem from "bem-ts";
-import { isEmpty } from "lodash";
+import { compact } from "lodash";
 import { useState } from "react";
 import { FaEdit, FaSave, FaTimes, FaTrashAlt } from "react-icons/fa";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { openConfirmModal } from "../../Modal/ConfirModal";
 import { editItemDrawer } from "../../Modal/ItemDrawer";
 import Button from "../../components/Button/Button";
-import Pagination from "../../components/Pagination/Pagination";
-import Table, { TableColumnType } from "../../components/Table/Table";
-import Wait from "../../components/Wait/Wait";
+import Empty from "../../components/Empty/Empty";
+import Table from "../../components/Table/Table";
 import store from "../../store.tsx/store";
 import { useItems } from "../../store.tsx/store.ctx";
-import { useGetItemsCategory } from "../../store.tsx/useItems";
 import { ItemType } from "../../types/item.type";
-import { formatOptions } from "../../utils/formatOptions";
+import ItemToolbar from "./ItemToolbar";
 import "./Items.scss";
-import Empty from "../../components/Empty/Empty";
+import { useItemsTable } from "./useItemsTable";
 
 export const itemCx = bem("item-group");
 
 const Items = () => {
-  const {
-    items,
-    pageCount,
-    updateItems,
-    createItems,
-    save,
-    bulkDelete,
-    deleteItem,
-  } = useItems();
+  const { items, updateItems, createItems, save, bulkDelete, deleteItem } =
+    useItems();
   const { accountId } = useParams();
-  const { data: options } = useGetItemsCategory();
   const [rowSelection, setRowSelection] = useState<Record<number, boolean>>({});
-  const [searchParams, setSearchParams] = useSearchParams();
+  const { columns: tableColumns } = useItemsTable();
+  const isFreeUser = store.isFreeUser();
   const handleCreate = () => {
+    if (isFreeUser && items.length >= 100) {
+      openConfirmModal({
+        message:
+          "You have reached the maximum number of items for the free plan",
+      });
+      return;
+    }
     createItems({
       title: "",
       description: "",
@@ -83,54 +81,18 @@ const Items = () => {
     }
   };
 
-  if (!items) {
-    return <Wait />;
+  if (items.length === 0) {
+    return (
+      <Empty
+        title="No items found"
+        description="Create a new item by clicking on the create button"
+        action={<Button onClick={handleCreate}>Ajouter un mouvement</Button>}
+      />
+    );
   }
-
   const tableActionButtonStyles =
     "bg-gray-200 dark:bg-primary-600 dark:text-white p-1 rounded";
-  const tableColumns: TableColumnType[] = [
-    {
-      name: "category",
-      label: "Caetegory",
-      type: "select",
-      options: formatOptions(options || []),
-      dtatype: "string",
-      size: 50,
-      creatable: true,
-    },
-    {
-      name: "title",
-      label: "Titre",
-      type: "text",
-      dtatype: "string",
-    },
-    {
-      name: "isExpense",
-      label: "nature",
-      type: "select",
-      dtatype: "boolean",
-      options: [
-        { label: "dépense", value: true },
-        { label: "encaissement", value: false },
-      ],
-      size: 70,
-    },
-    {
-      name: "date",
-      label: "Date de mise En effet",
-      type: "date",
-      dtatype: "date",
-      size: 60,
-    },
-    {
-      name: "value",
-      label: "Montant",
-      type: "number",
-      dtatype: "integer",
-      size: 40,
-    },
-  ];
+
   const tableActions: import("../../components/Table/Table").TableAcion[] = [
     {
       component: (data) => (
@@ -156,53 +118,43 @@ const Items = () => {
   return (
     <>
       <div className={itemCx("filter")}>
-        <div className="ml-auto flex gap-2">
-          <Button className="btn-primary btn-small" onClick={handleCreate}>
-            Ajouter un item
-          </Button>
-          {!isEmpty(rowSelection) && (
-            <Button
-              color="red"
-              className="btn-red btn-small"
-              onClick={handleDeleteSelectedItems}
-            >
-              <FaTrashAlt />
-            </Button>
-          )}
-          <Button className="btn-primary btn-small" onClick={save}>
-            <FaSave />
-          </Button>
+        <div className=" w-full flex gap-2 ">
+          <ItemToolbar
+            classNames=" flex-1 justify-end"
+            items={compact([
+              {
+                label: `${items.length} / 100`,
+              },
+              {
+                label: "Sauvegarder",
+                icon: FaSave,
+                onClick: save,
+              },
+              {
+                label: "Créer",
+                icon: FaEdit,
+                onClick: handleCreate,
+              },
+              {
+                label: "Supprimer",
+                icon: FaTrashAlt,
+                onClick: handleDeleteSelectedItems,
+              },
+            ])}
+          />
         </div>
       </div>
-      {items.length > 0 ? (
-        <>
-          <div className={`${itemCx()} lk-scroll`}>
-            <Table
-              selectable
-              rowSelection={rowSelection}
-              setRowSelection={setRowSelection}
-              columns={tableColumns}
-              actions={tableActions}
-              onChange={updateItems}
-              tableData={items}
-            />
-          </div>
-          <div className="mb-2">
-            <Pagination
-              currentPage={+(searchParams.get("page") || 0)}
-              totalPages={pageCount}
-              onPageChange={(page) => {
-                setSearchParams({ page: page.toString() });
-                setRowSelection({});
-              }}
-            />
-          </div>
-        </>
-      ) : (
-        <div className=" flex-1 pb-4">
-          <Empty />
-        </div>
-      )}
+      <div className="flex flex-col flex-1 overflow-hidden dark:bg-primary-600 bg-gray-200 ">
+        <Table
+          selectable
+          rowSelection={rowSelection}
+          setRowSelection={setRowSelection}
+          columns={tableColumns}
+          actions={tableActions}
+          onChange={updateItems}
+          tableData={items}
+        />
+      </div>
     </>
   );
 };

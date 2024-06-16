@@ -45,7 +45,7 @@ const Modal: React.FC<ModalProps> = (props) => {
   return (
     <Dialog
       open
-      className="z-50 h-full w-full bg-primary-950 bg-opacity-50  top-0 right-0 absolute "
+      className="z-50 h-full w-full bg-black bg-opacity-80 top-0 right-0 absolute "
       onClose={async () => {
         setIsShowing(false);
         setTimeout(() => {}, 300);
@@ -65,7 +65,7 @@ const Modal: React.FC<ModalProps> = (props) => {
         >
           <Dialog.Panel
             className={twMerge(
-              "bg-white dark:bg-primary-900  shadow-lg h-full w-full flex flex-col",
+              "bg-white dark:bg-primary-950  shadow-lg h-full w-full flex flex-col",
               as === "modal" && "rounded"
             )}
           >
@@ -81,7 +81,7 @@ const Modal: React.FC<ModalProps> = (props) => {
             <Dialog.Description
               as="div"
               className={
-                "flex-1 bg-gray-50 dark:bg-primary-800 overflow-auto p-3"
+                "flex-1 bg-gray-50 dark:bg-primary-900 overflow-auto p-3"
               }
             >
               {body}

@@ -11,15 +11,19 @@ import { ItemType } from "../types/item.type";
 import { ItemCtx } from "./store.ctx";
 import { upsertItems, useGetItems } from "./useItems";
 import store from "./store";
+import { toast } from "react-toastify";
 
 const ItemsProvider = ({ children }: { children: React.ReactNode }) => {
   const { accountId = "" } = useParams();
   const [searchParams] = useSearchParams();
   const page = searchParams.get("page") || "";
+  const isFreeUser = store.isFreeUser();
 
   const { data, refetch } = useGetItems(accountId, +page);
 
   const [items, setItems] = useState<ItemType[]>([]);
+
+  const publishedItems = items.filter((item) => item.status === "published");
 
   useEffect(() => {
     if (data) {
@@ -58,12 +62,14 @@ const ItemsProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const save = async () => {
-    const editedItems = difference(items, data?.items);
-
-    const res = await upsertItems(editedItems);
-    if (res.status === 201) {
-      refetch();
+    if (isFreeUser && items.length > 100) {
+      toast.error(
+        "You have reached the maximum number of items for the free plan"
+      );
+      return;
     }
+    const editedItems = difference(items, data?.items);
+    await upsertItems(editedItems, publishedItems.length);
   };
 
   const bulkDelete = (ids: string[]) => {
@@ -105,7 +111,7 @@ const ItemsProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <ItemCtx.Provider
       value={{
-        items: items.filter((item) => item.status === "published"),
+        items: publishedItems,
         count: data?.count || 0,
         pageCount: data?.pageCount || 0,
         updateItems,

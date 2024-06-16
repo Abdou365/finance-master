@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // import { format } from "date-fns";
 import React, { HTMLInputTypeAttribute } from "react";
 import ReactDatePicker from "react-datepicker";
@@ -23,15 +24,20 @@ export interface FieldType {
 interface FormProps {
   fields: FieldType[];
   data?: any;
-  onChange: (props: { name: string; value: any }) => void;
-  onSubmit?: () => void;
+  onChange?: (props: { name: string; value: any }) => void;
+  onSubmit?: (data: Record<string, any>) => void;
+  submitButtonText?: string;
 }
 
 const FormComponent: React.FC<FormProps> = (props) => {
-  const { fields, data, onChange, onSubmit } = props;
-  const { register, watch, setValue } = useForm<{
-    [key: string]: string;
-  }>({
+  const {
+    fields,
+    data,
+    onChange,
+    onSubmit,
+    submitButtonText = "Valider",
+  } = props;
+  const { register, watch, setValue } = useForm<typeof data>({
     defaultValues: data,
     mode: "onChange",
   });
@@ -40,14 +46,14 @@ const FormComponent: React.FC<FormProps> = (props) => {
     console.log({ name, value });
 
     setValue(name, value);
-    onChange({ name, value });
+    if (onChange) onChange({ name, value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     e.stopPropagation();
     if (props.onSubmit) {
-      props.onSubmit();
+      props.onSubmit(watch());
     }
   };
 
@@ -123,6 +129,7 @@ const FormComponent: React.FC<FormProps> = (props) => {
               onChange: (event) => {
                 handleChange(field.name, +event.target.value);
               },
+              valueAsNumber: true,
             })}
           />
         );
@@ -164,7 +171,11 @@ const FormComponent: React.FC<FormProps> = (props) => {
             </div>
           );
         })}
-      {onSubmit && <Button onClick={handleSubmit}>Submit</Button>}
+      {onSubmit && (
+        <Button className="w-full" onClick={handleSubmit}>
+          {submitButtonText}
+        </Button>
+      )}
     </FormWrapper>
   );
 };

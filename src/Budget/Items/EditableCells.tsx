@@ -1,10 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { CellContext } from "@tanstack/react-table";
 import TextareaAutosize from "react-textarea-autosize";
-
 import React, { useState } from "react";
 import { TableColumnType } from "./";
-// import { format } from "date-fns";
 import { format } from "date-fns";
 import DatePicker from "../../components/DatePicker/DatePicker";
 import CustomSelect from "./CompactSelect";
@@ -30,6 +28,8 @@ const EditableCells: React.FC<Props> = (props) => {
         clearButtonTitle="Effacer"
         name={props.column.id}
         dateFormat={"YYYY-MM-dd"}
+        withPortal
+        portalId="root-portal"
         value={format(props.cell.getValue(), "yyyy-MM-dd")}
         selected={inputState}
         onSelect={(date) => {

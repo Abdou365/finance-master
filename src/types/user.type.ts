@@ -32,7 +32,7 @@ interface Identity {
 export interface UserType {
   id: string;
   aud: string;
-  role: string;
+  role: "user" | "admin" | "superadmin" | "premium" | "free";
   email: string;
   email_confirmed_at: string;
   phone: string;
