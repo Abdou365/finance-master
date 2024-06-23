@@ -1,11 +1,26 @@
-.list-container {
-  @apply container mx-auto p-4;
+.lk--list {
+  &-title {
+    @apply text-lg font-semibold text-primary-900 dark:text-primary-200;
+  }
+  &-container {
+    @apply container mx-auto p-4;
+
+
+    &-celled {
+      @apply border-gray-200 dark:border-primary-600 rounded;
+
+      .lk--list-title {
+        @apply border-b border-gray-200 dark:border-primary-600 p-2 flex flex-row justify-between;
+      }
+
+      .lk--list-item {
+        @apply border-b border-gray-200 dark:border-primary-600 p-2 flex flex-row justify-between;
+      }
+
+      .lk--list-item:last-child {
+        @apply border-b-0;
+      }
+    }
+  }
 }
 
-.list-title {
-  @apply text-2xl font-bold mb-4;
-}
-
-.list-item {
-  @apply border-b  p-4 flex flex-row justify-between;
-}

@@ -2,6 +2,7 @@ import { FaAngleDoubleDown, FaAngleDoubleUp } from "react-icons/fa";
 import { AccountSummarize } from "../../types/account.type";
 import { intelligentRound } from "../../utils/rounding";
 import SummaryCard from "./SummaryCard";
+import BoxComponent from "../../components/Box/BoxComponent";
 
 const SummaryContainer = ({ account }: { account?: AccountSummarize }) => {
   if (!account) {
@@ -32,7 +33,7 @@ const SummaryContainer = ({ account }: { account?: AccountSummarize }) => {
     },
   ];
   return (
-    <div className=" flex flex-wrap justify-around gap-2 bg-white dark:bg-primary-800 rounded border dark:border-none items-center container">
+    <BoxComponent className=" flex flex-wrap justify-around gap-2 items-center container">
       {result.map((r, key) => {
         return (
           <>
@@ -52,7 +53,7 @@ const SummaryContainer = ({ account }: { account?: AccountSummarize }) => {
           </>
         );
       })}
-    </div>
+    </BoxComponent>
   );
 };
 

@@ -42,7 +42,7 @@ export interface UserType {
   app_metadata: AppMetadata;
   user_metadata: UserMetadata;
   identities: Identity[];
-  created_at: string;
+  createdAt: string;
   updated_at: string;
   is_anonymous: boolean;
 }

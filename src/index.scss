@@ -94,7 +94,7 @@ $buttonVariants: ("solid", "outlined", "ghost", "soft", "white", "link");
 }
 
 .input {
-  @apply dark:bg-primary-800 min-h-[37.33px] bg-white border dark:border-primary-600 rounded outline-primary-500;
+  @apply min-h-[37.33px] bg-white bg-opacity-10 border dark:border-primary-600 rounded outline-primary-500;
   @include padding("medium");
 }
 
@@ -170,6 +170,8 @@ $buttonVariants: ("solid", "outlined", "ghost", "soft", "white", "link");
     font-size: 0.8em;
   }
 }
+
+
 .form {
   input[type="text"],
   input[type="number"],
@@ -210,7 +212,7 @@ $buttonVariants: ("solid", "outlined", "ghost", "soft", "white", "link");
   input[type="datetime-local"],
   select,
   textarea {
-    @apply appearance-none bg-white px-2 py-1 w-full border border-primary-200 rounded outline-primary-500;
+    @apply appearance-none bg-white  px-2 py-1 w-full border border-primary-200 rounded outline-primary-500;
   }
   .field-description {
     @apply text-xs;

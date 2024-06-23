@@ -2,6 +2,7 @@ import axios from "axios";
 import { api } from "../api/axios.ts";
 import store from "../store.tsx/store.ts";
 import { DBResponseType } from "../types/fetch.type.ts";
+import { toast } from "react-toastify";
 
 export function useAuth() {
   const login = async (email: string, password: string) => {
@@ -22,10 +23,14 @@ export function useAuth() {
       password,
     });
 
-    console.log(res.data);
-
     if (res.data.data) {
       localStorage.setItem("user", JSON.stringify(res.data.data));
+      toast.success("Mail de confirmation envoyé");
+    }
+    if (res.data.statusCode === 401) {
+      {
+        toast.error("Email ou mot de passe incorrect");
+      }
     }
 
     return res.data;
@@ -59,12 +64,6 @@ export function useAuth() {
     });
 
     return res.data;
-
-    if (res.data.data) {
-      // localStorage.setItem("user", JSON.stringify(res.data.data));
-      // localStorage.setItem("login", "login");
-      // window.location.replace("/");
-    }
   };
 
   const confirmRegistration = async (token: string, code: number) => {

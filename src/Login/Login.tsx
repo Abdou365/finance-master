@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import logo from "../assets/logo.svg";
+import BoxComponent from "../components/Box/BoxComponent.tsx";
 import Button from "../components/Button/Button.tsx";
-import FormComponent, { FieldType } from "../components/Form/Form.tsx";
+import FormComponent, { FieldType } from "../components/Form/FormComponent.tsx";
 import { useAuth } from "./useLogin.tsx";
 
 const schema: FieldType[] = [
@@ -22,21 +23,27 @@ const schema: FieldType[] = [
   },
 ];
 
+const loginContainer = "flex flex-col m-auto max-w-96 w-full gap-4";
+
 const Login = () => {
   const { login, register } = useAuth();
-  const [params, setParams] = useSearchParams();
+  const [params, setParams] = useSearchParams({});
   const [formState, setFormState] = useState({ email: "", password: "" });
 
-  const step = params.get("step");
+  // step = login, register, confirm, confirm-login, confirm-register, confirm-recover, recover, send
+  // default step is login
+  const step = params.get("step") || "login";
   const token = params.get("token");
   const isLogin = step === "login";
   const isRegister = step === "register";
+
+  console.log(step, token);
 
   const render = () => {
     switch (true) {
       case step === "confirm" && typeof token === "string":
       case step === "confirm-login" && typeof token === "string":
-      case step === "confirm-registration" && typeof token === "string":
+      case step === "confirm-register" && typeof token === "string":
         return <ConfirmAuth token={token} />;
       case step === "confirm-recover" && typeof token === "string":
         return <ConfirmRecover token={token} />;
@@ -46,7 +53,7 @@ const Login = () => {
         return <ConfirmSend email={formState.email} />;
       default:
         return (
-          <div className="flex flex-col m-auto w-96 gap-4 ">
+          <BoxComponent size="medium" className={loginContainer}>
             <img src={logo} className="h-6" alt="logo" />
             <FormComponent
               fields={schema}
@@ -55,7 +62,7 @@ const Login = () => {
                 setFormState((obj) => ({ ...obj, [name]: value }));
               }}
               onSubmit={async () => {
-                if (!step || isLogin) {
+                if (isLogin) {
                   const loginResponse = await login(
                     formState.email,
                     formState.password
@@ -63,13 +70,14 @@ const Login = () => {
                   if (loginResponse.statusCode === 201) {
                     setParams({ step: "send" });
                   }
-                } else if (isRegister) {
-                  register(formState.email, formState.password);
-                  setParams({ step: "send" });
                 }
+                // else if (isRegister) {
+                //   register(formState.email, formState.password);
+                //   setParams({ step: "send" });
+                // }
               }}
             />
-            <Button
+            {/* <Button
               onClick={() => {
                 setParams({ step: "recover" });
               }}
@@ -77,8 +85,8 @@ const Login = () => {
               color="gray"
             >
               Mot de passe oublier
-            </Button>
-            <p>
+            </Button> */}
+            {/* <p>
               {isLogin ? "Tu es nouveau," : "Tu as déjà un compte,"}
               <a
                 onClick={() => {
@@ -89,52 +97,21 @@ const Login = () => {
               >
                 {isLogin ? "inscris-toi" : "connecte-toi"}
               </a>
-            </p>
-          </div>
+            </p> */}
+          </BoxComponent>
         );
     }
   };
 
   return (
     <main className="flex h-screen p-5  bg-gradient-to-tr from-primary-300 dark:from-primary-800 from-0% via-white dark:via-primary-950 via-50% to-white dark:to-primary-950 to-100%  ">
-      <div className=" rounded-xl flex-1  ">
+      <div className="rounded-xl flex-1 hidden md:block">
         <img
           src="src\assets\create-a-vibrant-and-engaging-digital-illustration.png"
           className="h-full object-cover w-full rounded-xl "
         />
       </div>
       <div className=" flex-1 flex content-center align-middle justify-center">
-        {/* {step === "confirm" && typeof token === "string" ? (
-          <ConfirmAuth token={token} />
-        ) : (
-          <div className="flex flex-col m-auto w-96 gap-4 ">
-            <img src={logo} className="h-6" alt="logo" />
-            <FormComponent
-              fields={schema}
-              data={formState}
-              onChange={({ name, value }) => {
-                setFormState((obj) => ({ ...obj, [name]: value }));
-              }}
-              onSubmit={() => {
-                if (isLogin) {
-                  login(formState.email, formState.password);
-                } else {
-                  register(formState.email, formState.password);
-                }
-                login(formState.email, formState.password);
-              }}
-            />
-            <p>
-              Tu es nouveau,{" "}
-              <a
-                onClick={() => setIsLogin(!isLogin)}
-                className=" text-primary-500 cursor-pointer hover:bg-gray-100 rounded dark:hover:bg-primary-900 p-2"
-              >
-                {isLogin ? "inscris-toi" : "connecte-toi"}
-              </a>
-            </p>
-          </div>
-        )} */}
         {render()}
       </div>
     </main>
@@ -163,7 +140,7 @@ const ConfirmAuth: React.FC<{ token: string }> = (props) => {
   };
 
   return (
-    <div className="flex flex-col m-auto w-96 gap-4 border p-4 rounded dark:border-primary-600">
+    <BoxComponent className={loginContainer}>
       <FormComponent
         fields={[
           {
@@ -178,13 +155,13 @@ const ConfirmAuth: React.FC<{ token: string }> = (props) => {
           await handleSubmit(data);
         }}
       />
-    </div>
+    </BoxComponent>
   );
 };
 
 const ConfirmSend: React.FC<{ email: string }> = (props) => {
   return (
-    <div className="flex flex-col m-auto w-96 gap-4 border p-4 rounded dark:border-primary-600">
+    <div className={loginContainer}>
       <p>
         Un email de confirmation a été envoyé à {props.email}. Veuillez vérifier
         votre boîte de réception.
@@ -200,7 +177,7 @@ const RecoverPassword: React.FC = () => {
   const [formState, setFormState] = useState({ email: "" });
 
   return (
-    <div className="flex flex-col m-auto w-96 gap-4 border p-4 rounded dark:border-primary-600">
+    <BoxComponent className="flex flex-col m-auto w-96 max-w-full gap-4">
       <FormComponent
         fields={[
           {
@@ -220,7 +197,7 @@ const RecoverPassword: React.FC = () => {
           setParams({ step: "send" });
         }}
       />
-    </div>
+    </BoxComponent>
   );
 };
 
@@ -240,7 +217,7 @@ const ConfirmRecover: React.FC<{ token: string }> = ({ token }) => {
   };
 
   return (
-    <div className="flex flex-col m-auto w-96 gap-4 border p-4 rounded dark:border-primary-600">
+    <div className={loginContainer}>
       <FormComponent
         fields={[
           {

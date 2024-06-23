@@ -10,6 +10,7 @@ import tailwindConfig from "../../../tailwind.config";
 import { AccountExpenseRepartition } from "../../types/account.type";
 import { CustomTooltip } from "./CustomTooltip";
 import { CustomDetailLegend, CustomLegend } from "./CustomLegend";
+import BoxComponent from "../../components/Box/BoxComponent";
 
 const COLORS = [
   tailwindConfig.theme.extend.colors.primary[300],
@@ -23,7 +24,7 @@ const RepartitionChart = ({ data }: { data?: AccountExpenseRepartition[] }) => {
     return <div>...chargement</div>;
   }
   return (
-    <div className="chart-section flex flex-col bg-white dark:bg-primary-900 border dark:border-none rounded h-1/2 py-6">
+    <BoxComponent className="chart-section flex flex-col h-1/2">
       <div className=" flex-1  flex flex-col p-2 gap-2">
         <h3 className="font-bold text-lg">Répartition des dépenses</h3>
 
@@ -55,7 +56,7 @@ const RepartitionChart = ({ data }: { data?: AccountExpenseRepartition[] }) => {
           </PieChart>
         </ResponsiveContainer>
       </div>
-    </div>
+    </BoxComponent>
   );
 };
 

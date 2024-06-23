@@ -1,6 +1,6 @@
 import { omit } from "lodash";
 import React, { useState } from "react";
-import FormComponent, { FieldType } from "../components/Form/Form";
+import FormComponent, { FieldType } from "../components/Form/FormComponent";
 import { useGetItemsCategory } from "../store.tsx/useItems";
 import { ObjectifType } from "../types/objectif.type";
 import Modal from "./Drawer";

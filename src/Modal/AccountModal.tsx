@@ -2,7 +2,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { RJSFSchema } from "@rjsf/utils";
 import React, { Fragment, useEffect, useState } from "react";
 import { FaTimes } from "react-icons/fa";
-import FormComponent from "../components/Form/Form";
+import FormComponent from "../components/Form/FormComponent";
 import { ModalLegacyProps, openModal } from "./modal.ctx";
 import Modal from "./Drawer";
 

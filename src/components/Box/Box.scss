@@ -1,0 +1,62 @@
+
+$colors: (
+  black: theme("colors.black"),
+  white: theme("colors.white"),
+  gray: theme("colors.gray.500"),
+  red: theme("colors.red.500"),
+  orange: theme("colors.orange.500"),
+  yellow: theme("colors.yellow.500"),
+  green: theme("colors.green.500"),
+  teal: theme("colors.teal.500"),
+  sky: theme("colors.sky.500"),
+  blue: theme("colors.blue.500"),
+  indigo: theme("colors.indigo.500"),
+  purple: theme("colors.purple.500"),
+  primary: theme("colors.primary.500"),
+  secondary: theme("colors.secondary.500"),
+  pink: theme("colors.pink.500")
+);
+
+$sizes: (
+    small: theme("padding.2"),
+    medium: theme("padding.4"),
+    large: theme("padding.8")
+);
+
+.lk--box {
+    @apply border p-2 rounded dark:border-primary-600 bg-white dark:bg-primary-900;
+    &-simple{
+        @each $size, $padding in $sizes {
+            &-#{$size} {
+                padding: $padding;
+            }
+        }
+    }
+}
+
+
+
+
+@each $color, $bg-color in $colors {
+
+    .lk--box-#{$color} {
+        &-outlined {
+            @each $size, $padding in $sizes {
+                &-#{$size} {
+                    border-color: $bg-color;
+                    padding: $padding;
+                }
+            }
+        }
+
+        &-colored {
+            @each $size, $padding in $sizes {
+                &-#{$size} {
+                    padding: $padding;
+                    background-color: $bg-color;
+                    color: white;
+                }
+            }
+        }
+    }
+}

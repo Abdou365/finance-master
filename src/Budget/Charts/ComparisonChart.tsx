@@ -12,6 +12,7 @@ import {
   YAxis,
 } from "recharts";
 import tailwindConfig from "../../../tailwind.config";
+import BoxComponent from "../../components/Box/BoxComponent";
 import { useTheme } from "../../store.tsx/theme.ctx";
 import { AccountDashboard } from "../../types/account.type";
 import { CustomLegend } from "./CustomLegend";
@@ -40,10 +41,8 @@ const ComparisonChart = ({
   const optionBoxStyle =
     " border absolute p-1 mt-2 bg-gray-50 dark:bg-primary-800 dark:border-primary-600 z-10 cursor-pointer rounded shadow";
   const listBoxButtonStyle = ` border dark:border-transparent dark:bg-primary-800 p-2 dark:border-primary-600   w-40 max-w-full`;
-  const ComparisonChartClassanmes =
-    "bg-white dark:bg-primary-900 p-2 rounded border dark:border-primary-600";
   return (
-    <section className={ComparisonChartClassanmes}>
+    <BoxComponent>
       <div>
         <Listbox>
           <Listbox.Button className={listBoxButtonStyle}>
@@ -136,7 +135,7 @@ const ComparisonChart = ({
           </BarChart>
         </ResponsiveContainer>
       </div>
-    </section>
+    </BoxComponent>
   );
 };
 

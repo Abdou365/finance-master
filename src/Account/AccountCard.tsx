@@ -1,15 +1,14 @@
 import { FaArrowRight } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { AccountType } from "../types/account.type";
+import Button from "../components/Button/Button";
+import BoxComponent from "../components/Box/BoxComponent";
 
 export const AccountCard = (props: AccountType) => {
   const nav = useNavigate();
   return (
-    <div className="rounded relative  border dark:border-primary-600 p-5 overflow-hidden">
-      <div className="absolute h-full w-full bg-white dark:bg-primary-900 top-0 left-0 blur-2xl">
-        {/* <div className="h-24 w-24 ml-auto bg-secondary-300 dark:bg-secondary-700"></div> */}
-      </div>
-      <div className="relative h-full w-full   space-y-3">
+    <BoxComponent size="medium" className="relative overflow-hidden">
+      <div className="relative h-full w-full space-y-3">
         <div className="flex justify-between w-full">
           <div className="flex flex-col">
             <span className=" uppercase font-bold">solde </span>
@@ -43,16 +42,16 @@ export const AccountCard = (props: AccountType) => {
             </tr>
           </tbody>
         </table>
-        <button
+        <Button
+          variant="link"
           onClick={() => {
             nav(`/app/${props.id}`, { relative: "route" });
           }}
-          className="btn-primary-link flex align-middle gap-2"
         >
           <span className="m-auto">Modifier</span>
           <FaArrowRight className=" m-auto" size={12} />
-        </button>
+        </Button>
       </div>
-    </div>
+    </BoxComponent>
   );
 };

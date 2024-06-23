@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import FormComponent, { FieldType } from "../components/Form/Form";
+import FormComponent, { FieldType } from "../components/Form/FormComponent";
 import Modal from "./Drawer";
 import { ModalLegacyProps, openModal } from "./modal.ctx";
 

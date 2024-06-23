@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { pick } from "lodash";
 import React, { useState } from "react";
-import FormComponent, { FieldType } from "../components/Form/Form";
+import FormComponent, { FieldType } from "../components/Form/FormComponent";
 import { useGetItemsCategory } from "../store.tsx/useItems";
 import { ItemType } from "../types/item.type";
 import Modal from "./Drawer";
