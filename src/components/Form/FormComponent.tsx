@@ -19,6 +19,27 @@ export interface FieldType {
   multiple?: boolean;
   description?: string;
   condition?: (data: Record<string, any>) => boolean;
+  placeholder?: string;
+  value?: any;
+  onChange?: (value: any) => void;
+  required?: boolean;
+  disabled?: boolean;
+  readOnly?: boolean;
+  hidden?: boolean;
+  min?: number;
+  max?: number;
+  step?: number;
+  pattern?: string;
+  className?: string;
+  style?: React.CSSProperties;
+  id?: string;
+  autoComplete?: string;
+  autoFocus?: boolean;
+  form?: string;
+  list?: string;
+  maxLength?: number;
+  minLength?: number;
+  size?: number;
 }
 
 interface FormProps {
@@ -73,6 +94,7 @@ const FormComponent: React.FC<FormProps> = (props) => {
             onChange={(date) => {
               handleChange(field.name, date?.toISOString());
             }}
+            placeholderText={field.placeholder || "Select a date"}
             value={watch(field.name)}
           />
         );
@@ -85,6 +107,7 @@ const FormComponent: React.FC<FormProps> = (props) => {
             className="input w-full text-center"
             icon={<FaCalendar />}
             selectsRange
+            placeholderText={field.placeholder || "Select a date range"}
             showIcon
             startDate={watch(field.name)["from"]}
             endDate={watch(field.name)["to"]}
@@ -107,6 +130,7 @@ const FormComponent: React.FC<FormProps> = (props) => {
                 handleChange(field.name, event.target.value);
               },
             })}
+            placeholder={field.placeholder}
           />
         );
       }
@@ -117,10 +141,12 @@ const FormComponent: React.FC<FormProps> = (props) => {
             initialValue={watch(field.name)}
             isMulti={field.multiple}
             onChange={(value) => handleChange(field.name, value)}
+            placeholder={field.placeholder}
           />
         );
       }
       case "number": {
+        const { min, max, step, disabled, hidden, required, readOnly } = field;
         return (
           <input
             className="input w-full"
@@ -131,10 +157,25 @@ const FormComponent: React.FC<FormProps> = (props) => {
               },
               valueAsNumber: true,
             })}
+            placeholder={field.placeholder}
+            min={min}
+            max={max}
+            step={step}
+            disabled={disabled}
+            hidden={hidden}
+            required={required}
+            readOnly={readOnly}
           />
         );
       }
       default: {
+        const {
+          hidden,
+          disabled,
+          required,
+          readOnly,
+          placeholder: plqceholder,
+        } = field;
         return (
           <input
             className="input w-full"
@@ -144,6 +185,11 @@ const FormComponent: React.FC<FormProps> = (props) => {
                 handleChange(field.name, event.target.value);
               },
             })}
+            placeholder={plqceholder}
+            hidden={hidden}
+            disabled={disabled}
+            required={required}
+            readOnly={readOnly}
           />
         );
       }

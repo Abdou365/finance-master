@@ -1,10 +1,14 @@
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import logo from "../assets/logo.svg";
+import logoWhite from "../assets/logo_white.svg";
 import BoxComponent from "../components/Box/BoxComponent.tsx";
 import Button from "../components/Button/Button.tsx";
 import FormComponent, { FieldType } from "../components/Form/FormComponent.tsx";
 import { useAuth } from "./useLogin.tsx";
+import { useTheme } from "../store.tsx/theme.ctx.tsx";
+import AlertMessage from "../components/Message/Message.tsx";
+import ToggleTheme from "../components/ToggleTheme/ToggleTheme.tsx";
 
 const schema: FieldType[] = [
   {
@@ -28,6 +32,7 @@ const loginContainer = "flex flex-col m-auto max-w-96 w-full gap-4";
 const Login = () => {
   const { login, register } = useAuth();
   const [params, setParams] = useSearchParams({});
+  const { theme } = useTheme();
   const [formState, setFormState] = useState({ email: "", password: "" });
 
   // step = login, register, confirm, confirm-login, confirm-register, confirm-recover, recover, send
@@ -54,7 +59,11 @@ const Login = () => {
       default:
         return (
           <BoxComponent size="medium" className={loginContainer}>
-            <img src={logo} className="h-6" alt="logo" />
+            <img
+              src={theme === "light" ? logo : logoWhite}
+              className="h-6"
+              alt="logo"
+            />
             <FormComponent
               fields={schema}
               data={formState}
@@ -104,15 +113,22 @@ const Login = () => {
   };
 
   return (
-    <main className="flex h-screen p-5  bg-gradient-to-tr from-primary-300 dark:from-primary-800 from-0% via-white dark:via-primary-950 via-50% to-white dark:to-primary-950 to-100%  ">
+    <main className="flex h-screen p-5 gap-4  bg-gradient-to-tr from-primary-300 dark:from-primary-800 from-0% via-white dark:via-primary-950 via-50% to-white dark:to-primary-950 to-100%  ">
       <div className="rounded-xl flex-1 hidden md:block">
         <img
           src="src\assets\create-a-vibrant-and-engaging-digital-illustration.png"
           className="h-full object-cover w-full rounded-xl "
         />
       </div>
-      <div className=" flex-1 flex content-center align-middle justify-center">
+      <div className="flex flex-1 flex-col place-content-center">
+        <ToggleTheme />
         {render()}
+        <AlertMessage
+          title="Attention"
+          className="mb-[0%]"
+          color="red"
+          message="Cette application est destinée à des fins éducatives uniquement. Veuillez ne pas entrer de données réelles ou sensibles. Toutes les informations saisies sont utilisées à titre de démonstration et ne seront pas enregistrées de manière sécurisée."
+        />
       </div>
     </main>
   );

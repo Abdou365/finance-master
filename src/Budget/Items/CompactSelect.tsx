@@ -6,16 +6,16 @@ import {
   defaultSelectStyles,
 } from "../../components/Form/selectClassNames";
 import { formatOptions } from "../../utils/formatOptions";
-import { TableColumnType } from "./";
+import { TableColumnType } from "../../components/Table/Table";
 
-type Props = {
+interface Props extends React.ComponentProps<typeof Select> {
   initialValue: string;
   onChange: (value: unknown | unknown[]) => void;
   options: TableColumnType["options"];
   creatable?: boolean;
   compact?: boolean;
   isMulti?: boolean;
-};
+}
 
 const createOption = (label: string) => ({
   label,
@@ -70,6 +70,7 @@ const CustomSelect: React.FC<Props> = (props) => {
 
   return (
     <SelectComponent
+      {...props}
       defaultValue={value}
       styles={{
         menu(base) {
