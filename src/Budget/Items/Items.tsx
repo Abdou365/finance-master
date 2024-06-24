@@ -4,12 +4,14 @@ import { useState } from "react";
 import { FaEdit, FaSave, FaTimes, FaTrashAlt } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 import { openConfirmModal } from "../../Modal/ConfirModal";
-import { editItemDrawer } from "../../Modal/ItemDrawer";
+import { formModal } from "../../Modal/FormModal";
 import Button from "../../components/Button/Button";
 import Empty from "../../components/Empty/Empty";
+import { FieldType } from "../../components/Form/FormComponent";
 import Table from "../../components/Table/Table";
 import store from "../../store.tsx/store";
 import { useItems } from "../../store.tsx/store.ctx";
+import { useGetItemsCategory } from "../../store.tsx/useItems";
 import { ItemType } from "../../types/item.type";
 import ItemToolbar from "./ItemToolbar";
 import "./Items.scss";
@@ -17,9 +19,53 @@ import { useItemsTable } from "./useItemsTable";
 
 export const itemCx = bem("item-group");
 
+const useItemSchema = (): FieldType[] => {
+  const { data: options } = useGetItemsCategory();
+  return [
+    {
+      type: "text",
+      name: "title",
+      label: "Non de l'entrée",
+    },
+    {
+      type: "textarea",
+      name: "description",
+      label: "Description",
+      format: "textarea",
+    },
+    {
+      type: "date",
+      name: "effect_date",
+      label: "Date d'effet",
+      format: "date",
+    },
+    {
+      type: "number",
+      name: "value",
+      label: "Valeur",
+    },
+    {
+      type: "select",
+      name: "category",
+      label: "Catégorie",
+      options, // Options should be populated as needed
+    },
+    {
+      type: "select",
+      name: "isExpense",
+      label: "Type d'entrée",
+      options: [
+        { value: true, label: "Dépense" },
+        { value: false, label: "Revenu" },
+      ],
+    },
+  ];
+};
+
 const Items = () => {
   const { items, updateItems, createItems, save, bulkDelete, deleteItem } =
     useItems();
+  const itemFields = useItemSchema();
   const { accountId } = useParams();
   const [rowSelection, setRowSelection] = useState<Record<number, boolean>>({});
   const { columns: tableColumns } = useItemsTable();
@@ -46,7 +92,9 @@ const Items = () => {
   };
 
   const viewItem = async (item: ItemType) => {
-    const res = (await editItemDrawer(item)) as ItemType | undefined;
+    const res = (await formModal({ fields: itemFields, data: item })) as
+      | ItemType
+      | undefined;
     if (res) {
       updateItems({ ...item, ...res });
     }

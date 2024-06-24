@@ -1,12 +1,7 @@
-import { omit } from "lodash";
-import React, { useState } from "react";
-import FormComponent, { FieldType } from "../components/Form/FormComponent";
-import { useGetItemsCategory } from "../store.tsx/useItems";
-import { ObjectifType } from "../types/objectif.type";
-import ModalComponent from "./ModalComponent";
-import { ModalLegacyProps, openModal } from "./modal.ctx";
+import { FieldType } from "../../components/Form/FormComponent";
+import { useGetItemsCategory } from "../../store.tsx/useItems";
 
-const useObjectifField = () => {
+export const useObjectifField = () => {
   const { data: categorie } = useGetItemsCategory();
 
   const objectifFields: FieldType[] = [
@@ -95,46 +90,4 @@ const useObjectifField = () => {
     },
   ];
   return objectifFields;
-};
-
-interface Props extends ModalLegacyProps, Partial<ObjectifType> {}
-
-export const ObjectifDrawer: React.FC<Props> = (props) => {
-  const { onCancel, onConfirm, modalId, ...itemProps } = props;
-  const [formState, setFormState] = useState({});
-  const fields = useObjectifField();
-
-  const onClose = () => {
-    onCancel();
-  };
-  return (
-    <ModalComponent
-      title={props.title || "Créer un objectif"}
-      onClose={onClose}
-      body={
-        <FormComponent
-          fields={fields}
-          data={itemProps}
-          onChange={({ name, value }) => {
-            setFormState((obj) => ({ ...obj, [name]: value }));
-          }}
-        />
-      }
-      footer={
-        <>
-          <div className="btn-primary-outlined">Anunler</div>
-          <div className="btn-primary" onClick={() => onConfirm(formState)}>
-            Valider
-          </div>
-        </>
-      }
-    />
-  );
-};
-
-export const createObjectif = async () => {
-  return await openModal(ObjectifDrawer, {});
-};
-export const updateObjectif = async (props) => {
-  return await openModal(ObjectifDrawer, props);
 };

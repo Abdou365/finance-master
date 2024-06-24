@@ -1,16 +1,29 @@
 import React, { useState } from "react";
 import FormComponent, { FieldType } from "../components/Form/FormComponent";
-import Modal from "./Drawer";
+import ModalComponent from "./ModalComponent";
 import { ModalLegacyProps, openModal } from "./modal.ctx";
 
-interface FormModalProps extends ModalLegacyProps {
+type Props = {
   fields: FieldType[];
-}
+  title?: string;
+  data?: any;
+  variant?: "modal" | "drawer";
+  size?: "full" | "compact" | "medium";
+};
+
+interface FormModalProps extends ModalLegacyProps, Props {}
 
 const FormModal: React.FC<FormModalProps> = (props) => {
-  const { onCancel, onConfirm } = props;
+  const {
+    onCancel,
+    onConfirm,
+    variant = "modal",
+    size = "medium",
+    title,
+    data,
+  } = props;
   const [, setIsShowing] = useState(false);
-  const [formState, setFormState] = useState({ title: "", description: "" });
+  const [formState, setFormState] = useState(data);
 
   const onClose = async () => {
     setIsShowing(false);
@@ -20,9 +33,9 @@ const FormModal: React.FC<FormModalProps> = (props) => {
   };
 
   return (
-    <Modal
-      as="modal"
-      compact
+    <ModalComponent
+      as={variant}
+      size={size}
       footer={
         <>
           <button className="btn-gray" onClick={onClose}>
@@ -33,7 +46,7 @@ const FormModal: React.FC<FormModalProps> = (props) => {
           </button>
         </>
       }
-      title="Créer un compte"
+      title={title || "Modal"}
       onClose={onClose}
       closeButton
       body={
@@ -51,6 +64,6 @@ const FormModal: React.FC<FormModalProps> = (props) => {
 
 export default FormModal;
 
-export const formModal = async (props: { fields: FieldType[] }) => {
+export const formModal = async (props: Props) => {
   return await openModal(FormModal, props);
 };

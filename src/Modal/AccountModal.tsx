@@ -4,7 +4,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import { FaTimes } from "react-icons/fa";
 import FormComponent from "../components/Form/FormComponent";
 import { ModalLegacyProps, openModal } from "./modal.ctx";
-import Modal from "./Drawer";
+import ModalComponent from "./ModalComponent";
 
 const useSchema = (): RJSFSchema => {
   return {
@@ -115,7 +115,7 @@ const AccountModal: React.FC<AccountModalProps> = (props) => {
     //     </Transition>
     //   </div>
     // </Dialog>
-    <Modal
+    <ModalComponent
       as="modal"
       compact
       footer={

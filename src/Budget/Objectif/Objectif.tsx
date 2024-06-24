@@ -4,25 +4,31 @@ import { FaTrophy } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { openConfirmModal } from "../../Modal/ConfirModal";
-import { createObjectif, updateObjectif } from "../../Modal/ObjectifDrawer";
+import { formModal } from "../../Modal/FormModal";
 import Button from "../../components/Button/Button";
+import Empty from "../../components/Empty/Empty";
 import store from "../../store.tsx/store";
 import { upsertObjectif, useGetAllObjectif } from "../../store.tsx/useObject";
 import { ObjectifType } from "../../types/objectif.type";
 import "./Objectif.scss";
 import { ObjectifCard } from "./ObjectifCard";
 import { ObjectifInfo } from "./ObjectifInfo";
-import Empty from "../../components/Empty/Empty";
+import { useObjectifField } from "./useObjectifField";
 
 const Objectif: React.FC = () => {
   const { accountId } = useParams();
+  const itemFields = useObjectifField();
   const [setselected, setSetselected] = useState<ObjectifType[]>([]);
   const { user } = store;
   const { data, refetch } = useGetAllObjectif();
   const { objectifs, summary } = data;
 
   const handleCreate = async () => {
-    const res: any = await createObjectif();
+    const res: any = await formModal({
+      fields: itemFields,
+      variant: "drawer",
+      title: "Créer un objectif",
+    });
 
     if (res) {
       const newObjectif = await upsertObjectif({
@@ -44,6 +50,13 @@ const Objectif: React.FC = () => {
     }
   };
 
+  /**
+   * Handles the selection of an objectif.
+   * If the objectif is already selected, it will be removed from the selected list.
+   * If the objectif is not selected, it will be added to the selected list.
+   *
+   * @param obj - The objectif to be selected or deselected.
+   */
   const handleSelect = (obj: ObjectifType) => {
     if (setselected.includes(obj)) {
       setSetselected(setselected.filter((select) => select === obj));
@@ -107,8 +120,14 @@ const Objectif: React.FC = () => {
    * @param obj - The objectif to be edited.
    */
   const handleEdit = async (obj: ObjectifType) => {
-    const res: any = await updateObjectif(obj);
     const cleanObj = omit(obj, "currentAmount", "progress");
+
+    const res: any = await formModal({
+      fields: itemFields,
+      variant: "drawer",
+      title: obj.title || "Modifier l'objectif",
+      data: cleanObj,
+    });
 
     if (res) {
       const update = await upsertObjectif({

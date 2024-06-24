@@ -1,5 +1,5 @@
 import React from "react";
-import Modal from "./Drawer";
+import ModalComponent from "./ModalComponent";
 import Button from "../components/Button/Button";
 import { ModalLegacyProps, openModal } from "./modal.ctx";
 
@@ -10,7 +10,7 @@ interface Props extends ModalLegacyProps {
 const ConfirModal: React.FC<Props> = (props) => {
   const { message, onCancel, onConfirm } = props;
   return (
-    <Modal
+    <ModalComponent
       as="confirm"
       body={message}
       title="Confirmation"

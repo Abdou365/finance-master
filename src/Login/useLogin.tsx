@@ -23,7 +23,7 @@ export function useAuth() {
       password,
     });
 
-    if (res.data.data) {
+    if (res.data.statusCode === 201) {
       localStorage.setItem("user", JSON.stringify(res.data.data));
       toast.success("Mail de confirmation envoyé");
     }
@@ -90,6 +90,9 @@ export function useAuth() {
     if (res.data.statusCode === 201) {
       localStorage.setItem("user", JSON.stringify(res.data.data));
       localStorage.setItem("login", "login");
+      toast.success("Connexion réussie");
+    } else {
+      toast.error("Code de confirmation incorrect");
     }
 
     return res.data;

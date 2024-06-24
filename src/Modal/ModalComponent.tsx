@@ -15,7 +15,7 @@ interface ModalProps {
   size?: "full" | "compact" | "medium";
 }
 
-const Modal: React.FC<ModalProps> = (props) => {
+const ModalComponent: React.FC<ModalProps> = (props) => {
   const {
     onClose,
     title,
@@ -38,9 +38,9 @@ const Modal: React.FC<ModalProps> = (props) => {
     size === "medium" && " lg:w-[800px]"
   );
   const modalContainer = twMerge(
-    "fixed inset-0 flex max-h-full items-center justify-center m-5",
-    size === "compact" && " h-fit w-[500px] m-auto",
-    size === "medium" && " h-fit w-[800px] m-auto"
+    "fixed inset-0 flex max-h-full w-full items-center justify-center m-5",
+    size === "compact" && " lg:h-fit lg:w-[500px] m-auto",
+    size === "medium" && " lg:h-fit lg:w-[800px] m-auto"
   );
   return (
     <Dialog
@@ -96,4 +96,4 @@ const Modal: React.FC<ModalProps> = (props) => {
   );
 };
 
-export default Modal;
+export default ModalComponent;
