@@ -1,11 +1,12 @@
 import React from "react";
+import { FaIcons } from "react-icons/fa";
 import { IconType } from "react-icons/lib";
 import { twMerge } from "tailwind-merge";
 
 type Props = {
   items: {
     icon?: IconType;
-    label: string;
+    label?: string;
     onClick?: () => void;
   }[];
   orientation?: "horizontal" | "vertical";
@@ -26,7 +27,7 @@ const ItemToolbar: React.FC<Props> = ({
       )}
     >
       {items.map((item, index) => {
-        const Icon = () => item.icon;
+        const Icon = item.icon || FaIcons;
         return (
           <li
             className="flex place-items-center cursor-pointer p-2 gap-2 border dark:border-primary-600 hover:bg-gray-100 dark:hover:bg-primary-900  dark:text-primary-100 "
@@ -34,7 +35,7 @@ const ItemToolbar: React.FC<Props> = ({
             key={index}
           >
             {item.icon && <Icon className="m-auto" />}
-            <span>{item.label}</span>
+            {item.label && <span>{item.label}</span>}
           </li>
         );
       })}

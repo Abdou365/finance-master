@@ -4,8 +4,8 @@ import { format } from "date-fns";
 import React, { useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import DatePicker from "../../components/DatePicker/DatePicker";
-import { TableColumnType } from "./";
 import CustomSelect from "./CompactSelect";
+import { TableColumnType } from "../../components/Table/Table";
 
 interface Props extends CellContext<any, string> {
   onChange: (item: any) => void;
@@ -31,14 +31,14 @@ const EditableCells: React.FC<Props> = (props) => {
         withPortal
         portalId="root-portal"
         value={format(props.cell.getValue(), "yyyy-MM-dd")}
-        selected={inputState}
+        selected={inputState as any}
         onSelect={(date) => {
           props.onChange({
             ...props.row.original,
             [props.column.id]: date.toISOString(),
           });
         }}
-        type={props.columnOptions.type}
+        onChange={() => {}}
       />
     );
   }
@@ -50,7 +50,7 @@ const EditableCells: React.FC<Props> = (props) => {
         name={props.column.id}
         style={{ resize: "none" }}
         defaultValue={inputState}
-        onChange={(e) => setInputState(+e.target.value)}
+        onChange={(e) => setInputState(+e.target.value as any)}
         type={props.columnOptions.type}
         onBlur={handleUpdate}
       />

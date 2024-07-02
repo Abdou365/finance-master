@@ -55,7 +55,11 @@ const useItemSchema = (): FieldType[] => {
       type: "select",
       name: "category",
       label: "Catégorie",
-      options, // Options should be populated as needed
+      options:
+        options?.map((category) => ({
+          value: category,
+          label: category,
+        })) || [],
     },
     {
       type: "select",
@@ -173,7 +177,7 @@ const Items = () => {
   ];
 
   const handleImportItems = async () => {
-    const res: Partial<ItemType>[] = await importModal({});
+    const res: any[] = await importModal({});
     console.log(res);
 
     res.map((item) => createItems(item));

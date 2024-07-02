@@ -71,7 +71,7 @@ const FormComponent: React.FC<FormProps> = (props) => {
     if (onChange) onChange({ name, value }, watch());
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: SubmitEvent) => {
     e.preventDefault();
     e.stopPropagation();
     if (props.onSubmit) {

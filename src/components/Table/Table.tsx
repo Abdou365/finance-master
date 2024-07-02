@@ -32,7 +32,7 @@ export type TableDataType = Record<string, unknown>;
 
 export type TableColumnOptionsType = {
   label: string;
-  value: string | number | boolean;
+  value: any;
 }[];
 
 // Define a type for a form field

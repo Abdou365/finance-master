@@ -45,7 +45,9 @@ function computeInitialValue(props: Props, options: Option[]) {
 
 const CustomSelect: React.FC<Props> = (props) => {
   const { compact } = props;
-  const [options, setOptions] = useState(formatOptions(props.options || []));
+  const [options, setOptions] = useState(
+    formatOptions((props.options as any) || [])
+  );
   const [value, setValue] = useState<Option | Option[] | null>(
     computeInitialValue(props, options)
   );
@@ -68,6 +70,14 @@ const CustomSelect: React.FC<Props> = (props) => {
     if (!isLoading) props.onChange(newValue.value);
   };
 
+  const handleChange = (newValue: any) => {
+    setValue(newValue);
+    if (props.isMulti) {
+      props.onChange(newValue.map((option: Option) => option.value));
+    } else {
+      props.onChange(newValue.value);
+    }
+  };
   return (
     <SelectComponent
       {...props}
@@ -95,14 +105,7 @@ const CustomSelect: React.FC<Props> = (props) => {
       openMenuOnFocus
       menuPortalTarget={compact ? document.body : undefined}
       isMulti={props.isMulti}
-      onChange={(newValue) => {
-        setValue(newValue);
-        if (props.isMulti) {
-          props.onChange(newValue.map((option: Option) => option.value));
-        } else {
-          props.onChange(newValue.value);
-        }
-      }}
+      onChange={handleChange}
       isSearchable={props.creatable || false}
       isClearable
     />
