@@ -41,6 +41,11 @@ const ComparisonChart = ({
   const optionBoxStyle =
     " border absolute p-1 mt-2 bg-gray-50 dark:bg-primary-800 dark:border-primary-600 z-10 cursor-pointer rounded shadow";
   const listBoxButtonStyle = ` border dark:border-transparent dark:bg-primary-800 p-2 dark:border-primary-600   w-40 max-w-full`;
+  const dateFilterOptions: ("month" | "day" | "year")[] = [
+    "month",
+    "day",
+    "year",
+  ];
   return (
     <BoxComponent>
       <div>
@@ -49,7 +54,7 @@ const ComparisonChart = ({
             {separateObj[separateBy]}{" "}
           </Listbox.Button>
           <Listbox.Options className={optionBoxStyle}>
-            {["month", "day", "year"].map((value) => (
+            {dateFilterOptions.map((value) => (
               <Listbox.Option
                 className={listboxOptionStyle}
                 key={value}
@@ -94,7 +99,7 @@ const ComparisonChart = ({
               }}
             />
             <Tooltip content={CustomTooltip} />
-            <Legend name="cashing" content={CustomLegend} />
+            <Legend name="cashing" content={CustomLegend as any} />
 
             <Bar
               radius={3}

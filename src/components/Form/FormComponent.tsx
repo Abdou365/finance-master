@@ -45,7 +45,10 @@ export interface FieldType {
 interface FormProps {
   fields: FieldType[];
   data?: any;
-  onChange?: (props: { name: string; value: any }) => void;
+  onChange?: (
+    props: { name: string; value: any },
+    formState: Record<string, any>
+  ) => void;
   onSubmit?: (data: Record<string, any>) => void;
   submitButtonText?: string;
 }
@@ -64,10 +67,8 @@ const FormComponent: React.FC<FormProps> = (props) => {
   });
 
   const handleChange = (name: string, value: any) => {
-    console.log({ name, value });
-
     setValue(name, value);
-    if (onChange) onChange({ name, value });
+    if (onChange) onChange({ name, value }, watch());
   };
 
   const handleSubmit = (e) => {

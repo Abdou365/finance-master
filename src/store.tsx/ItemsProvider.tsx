@@ -51,7 +51,6 @@ const ItemsProvider = ({ children }: { children: React.ReactNode }) => {
       {
         ...item,
         id: uuidv4(),
-        category: "",
         status: "published",
         createdAt: new Date().toISOString(),
         userId: store.user()?.id ?? "",
@@ -68,8 +67,10 @@ const ItemsProvider = ({ children }: { children: React.ReactNode }) => {
       );
       return;
     }
-    const editedItems = difference(items, data?.items);
-    await upsertItems(editedItems, publishedItems.length);
+    if (data) {
+      const editedItems = difference(items, data?.items);
+      await upsertItems(editedItems, publishedItems.length);
+    }
   };
 
   const bulkDelete = (ids: string[]) => {
@@ -94,6 +95,9 @@ const ItemsProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   useBeforeUnload(() => {
+    if (!data) {
+      return;
+    }
     const editedItems = difference(items, data?.items);
     if (editedItems.length > 0) {
       save();
@@ -101,11 +105,16 @@ const ItemsProvider = ({ children }: { children: React.ReactNode }) => {
   });
 
   useBlocker(() => {
+    if (!data) {
+      return false;
+    }
     const editedItems = difference(items, data?.items);
     console.log(editedItems);
     if (editedItems.length > 0) {
       save();
+      return false;
     }
+    return true;
   });
 
   return (

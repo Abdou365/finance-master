@@ -5,9 +5,7 @@ import ListComponent from "../components/List/ListComponent";
 import ListItemComponent from "../components/List/ListItemComponent";
 import store from "../store.tsx/store";
 
-type Props = {};
-
-const Profile = (props: Props) => {
+const Profile = () => {
   const user = store.user();
   return (
     <div className=" space-y-4">
@@ -15,7 +13,7 @@ const Profile = (props: Props) => {
         <ListComponent title="Information de profile">
           <ListItemComponent>
             <span>email</span>
-            <span>{user.email}</span>
+            <span>{user && user.email}</span>
           </ListItemComponent>
           <ListItemComponent>
             <span>password</span>
@@ -23,7 +21,7 @@ const Profile = (props: Props) => {
           </ListItemComponent>
           <ListItemComponent>
             <span>Inscrit depuis</span>
-            <span>{format(user?.createdAt, "dd MMMM yyy")}</span>
+            <span>{user && format(user?.createdAt, "dd MMMM yyy")}</span>
           </ListItemComponent>
           <Button>Modifier le profile</Button>
         </ListComponent>

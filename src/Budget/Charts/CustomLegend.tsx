@@ -1,5 +1,4 @@
 import { LegendProps } from "recharts";
-import { ContentType } from "recharts/types/component/DefaultLegendContent";
 import { twJoin } from "tailwind-merge";
 import { intelligentRound } from "../../utils/rounding";
 
@@ -19,12 +18,12 @@ export const CustomLegend: React.FC<LegendProps> = ({ payload }) => {
     </div>
   );
 };
-export const CustomDetailLegend: React.FC<ContentType> = ({ payload }) => {
+export const CustomDetailLegend: React.FC<any> = ({ payload }) => {
   return (
     <table>
       <tbody>
         {payload &&
-          payload.map((entry, index) => (
+          payload.map((entry: any, index: number) => (
             <tr key={`item-${index}`} className="">
               <td>
                 <div

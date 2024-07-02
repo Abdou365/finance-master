@@ -150,6 +150,8 @@ type TableComponentProps = {
   selectable?: boolean;
   columns: TableColumnType[];
   actions: TableAcion[];
+  classNames?: string;
+  style?: React.CSSProperties;
 };
 
 // Give our default column cell renderer editing superpowers!
@@ -221,7 +223,7 @@ const Table: React.FC<TableComponentProps> = ({
         });
       }),
 
-      actions.length > 0 &&
+      actions?.length > 0 &&
         columnHelper.display({
           id: "select",
           size: 40,
@@ -275,7 +277,7 @@ const Table: React.FC<TableComponentProps> = ({
 
   const rowVirtualizer = useVirtualizer({
     getScrollElement: () => tableContainerRef.current!,
-    count: rows.length,
+    count: rows?.length,
     overscan: 32,
     estimateSize: () => 50,
     measureElement:
@@ -340,47 +342,82 @@ const Table: React.FC<TableComponentProps> = ({
       <div ref={tableContainerRef} className="overflow-auto flex-1  ">
         <table className="w-full text-sm text-left">
           <tbody>
-            {rowVirtualizer.getVirtualItems().map((virtualRow, index) => {
-              const row = rows[virtualRow.index];
-              return (
-                <tr
-                  className={twMerge(
-                    "g-white",
-                    table.getState().rowSelection[index] &&
-                      "bg-primary-100 dark:bg-primary-700"
-                  )}
-                  style={{
-                    height: `${virtualRow.size}px`,
-                    transform: `translateY(${
-                      virtualRow.start - index * virtualRow.size
-                    }px)`,
-                  }}
-                  key={row.id}
-                >
-                  {row.getVisibleCells().map((cell) => {
-                    return (
-                      <td
-                        className={twMerge(
-                          " dark:bg-primary-950 bg-gray-50  border dark:border-primary-600 py-1 px-2 font-medium",
-                          table.getState().rowSelection[index] &&
-                            "text-primary-500"
-                        )}
-                        style={{
-                          maxWidth: cell.column.getSize(),
-                          width: cell.column.getSize(),
-                        }}
-                        key={cell.id}
-                      >
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </td>
-                    );
-                  })}
-                </tr>
-              );
-            })}
+            {rowVirtualizer.getVirtualItems().length > 0
+              ? rowVirtualizer.getVirtualItems().map((virtualRow, index) => {
+                  const row = rows[virtualRow.index];
+                  return (
+                    <tr
+                      className={twMerge(
+                        "g-white",
+                        table.getState().rowSelection[index] &&
+                          "bg-primary-100 dark:bg-primary-700"
+                      )}
+                      style={{
+                        height: `${virtualRow.size}px`,
+                        transform: `translateY(${
+                          virtualRow.start - index * virtualRow.size
+                        }px)`,
+                      }}
+                      key={row.id}
+                    >
+                      {row.getVisibleCells().map((cell) => {
+                        return (
+                          <td
+                            className={twMerge(
+                              " dark:bg-primary-950 bg-gray-50  border dark:border-primary-600 py-1 px-2 font-medium",
+                              table.getState().rowSelection[index] &&
+                                "text-primary-500"
+                            )}
+                            style={{
+                              maxWidth: cell.column.getSize(),
+                              width: cell.column.getSize(),
+                            }}
+                            key={cell.id}
+                          >
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
+                            )}
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  );
+                })
+              : rows.map((row) => {
+                  return (
+                    <tr
+                      className={twMerge(
+                        "g-white",
+                        table.getState().rowSelection[row.index] &&
+                          "bg-primary-100 dark:bg-primary-700"
+                      )}
+                      key={row.id}
+                    >
+                      {row.getVisibleCells().map((cell) => {
+                        return (
+                          <td
+                            className={twMerge(
+                              " dark:bg-primary-950 bg-gray-50  border dark:border-primary-600 py-1 px-2 font-medium",
+                              table.getState().rowSelection[row.index] &&
+                                "text-primary-500"
+                            )}
+                            style={{
+                              maxWidth: cell.column.getSize(),
+                              width: cell.column.getSize(),
+                            }}
+                            key={cell.id}
+                          >
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
+                            )}
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  );
+                })}
           </tbody>
         </table>
       </div>

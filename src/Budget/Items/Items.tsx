@@ -1,10 +1,16 @@
 import bem from "bem-ts";
 import { compact } from "lodash";
 import { useState } from "react";
-import { FaEdit, FaSave, FaTimes, FaTrashAlt } from "react-icons/fa";
+import {
+  FaEdit,
+  FaFileImport,
+  FaSave,
+  FaTimes,
+  FaTrashAlt,
+} from "react-icons/fa";
 import { useParams } from "react-router-dom";
-import { openConfirmModal } from "../../Modal/ConfirModal";
-import { formModal } from "../../Modal/FormModal";
+import { openConfirmModal } from "../../components/Modal/ConfirModal";
+import { formModal } from "../../components/Modal/FormModal";
 import Button from "../../components/Button/Button";
 import Empty from "../../components/Empty/Empty";
 import { FieldType } from "../../components/Form/FormComponent";
@@ -16,6 +22,7 @@ import { ItemType } from "../../types/item.type";
 import ItemToolbar from "./ItemToolbar";
 import "./Items.scss";
 import { useItemsTable } from "./useItemsTable";
+import { importModal } from "../../components/Modal/ImportModal/ImportModal";
 
 export const itemCx = bem("item-group");
 
@@ -92,9 +99,11 @@ const Items = () => {
   };
 
   const viewItem = async (item: ItemType) => {
-    const res = (await formModal({ fields: itemFields, data: item })) as
-      | ItemType
-      | undefined;
+    const res = (await formModal({
+      fields: itemFields,
+      data: item,
+      variant: "drawer",
+    })) as ItemType | undefined;
     if (res) {
       updateItems({ ...item, ...res });
     }
@@ -163,6 +172,13 @@ const Items = () => {
     },
   ];
 
+  const handleImportItems = async () => {
+    const res: Partial<ItemType>[] = await importModal({});
+    console.log(res);
+
+    res.map((item) => createItems(item));
+  };
+
   return (
     <>
       <div className={itemCx("filter")}>
@@ -182,6 +198,11 @@ const Items = () => {
                 label: "Créer",
                 icon: FaEdit,
                 onClick: handleCreate,
+              },
+              {
+                label: "Importer",
+                icon: FaFileImport,
+                onClick: handleImportItems,
               },
               {
                 label: "Supprimer",

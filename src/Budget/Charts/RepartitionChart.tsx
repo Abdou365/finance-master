@@ -7,10 +7,10 @@ import {
   Tooltip,
 } from "recharts";
 import tailwindConfig from "../../../tailwind.config";
-import { AccountExpenseRepartition } from "../../types/account.type";
-import { CustomTooltip } from "./CustomTooltip";
-import { CustomDetailLegend, CustomLegend } from "./CustomLegend";
 import BoxComponent from "../../components/Box/BoxComponent";
+import { AccountExpenseRepartition } from "../../types/account.type";
+import { CustomDetailLegend } from "./CustomLegend";
+import { CustomTooltip } from "./CustomTooltip";
 
 const COLORS = [
   tailwindConfig.theme.extend.colors.primary[300],
@@ -43,7 +43,7 @@ const RepartitionChart = ({ data }: { data?: AccountExpenseRepartition[] }) => {
               paddingAngle={5}
               dataKey="value"
             >
-              {data.map((entry, index) => (
+              {data.map((_entry, index) => (
                 <Cell
                   stroke="none"
                   key={`cell-${index}`}

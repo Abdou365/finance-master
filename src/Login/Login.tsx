@@ -113,22 +113,24 @@ const Login = () => {
   };
 
   return (
-    <main className="flex h-screen p-5 gap-4  bg-gradient-to-tr from-primary-300 dark:from-primary-800 from-0% via-white dark:via-primary-950 via-50% to-white dark:to-primary-950 to-100%  ">
-      <div className="rounded-xl flex-1 hidden md:block">
-        <img
-          src="src\assets\create-a-vibrant-and-engaging-digital-illustration.png"
-          className="h-full object-cover w-full rounded-xl "
-        />
-      </div>
-      <div className="flex flex-1 flex-col place-content-center">
-        <ToggleTheme />
-        {render()}
-        <AlertMessage
-          title="Attention"
-          className="mb-[0%]"
-          color="red"
-          message="Cette application est destinée à des fins éducatives uniquement. Veuillez ne pas entrer de données réelles ou sensibles. Toutes les informations saisies sont utilisées à titre de démonstration et ne seront pas enregistrées de manière sécurisée."
-        />
+    <main className="   bg-gradient-to-tr from-primary-300 dark:from-primary-800 from-0% via-white dark:via-primary-950 via-50% to-white dark:to-primary-950 to-100%  ">
+      <div className="flex h-screen p-5 gap-4 container m-auto">
+        <div className="rounded-xl flex-1 hidden md:block">
+          <img
+            src="src\assets\create-a-vibrant-and-engaging-digital-illustration.png"
+            className="h-full object-cover w-full rounded-xl "
+          />
+        </div>
+        <div className="flex flex-1 flex-col place-content-center">
+          <ToggleTheme />
+          {render()}
+          <AlertMessage
+            title="Attention"
+            className="mb-[0%]"
+            color="red"
+            message="Cette application est destinée à des fins éducatives uniquement. Veuillez ne pas entrer de données réelles ou sensibles. Toutes les informations saisies sont utilisées à titre de démonstration et ne seront pas enregistrées de manière sécurisée."
+          />
+        </div>
       </div>
     </main>
   );

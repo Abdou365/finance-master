@@ -2,7 +2,7 @@
 import { Dialog, Transition } from "@headlessui/react";
 import React, { Fragment, useEffect, useState } from "react";
 import { FaTimes } from "react-icons/fa";
-import { twMerge } from "tailwind-merge";
+import { twJoin, twMerge } from "tailwind-merge";
 
 interface ModalProps {
   title?: string;
@@ -13,6 +13,7 @@ interface ModalProps {
   children?: React.ReactNode;
   as?: "drawer" | "modal" | "confirm";
   size?: "full" | "compact" | "medium";
+  celled?: boolean;
 }
 
 const ModalComponent: React.FC<ModalProps> = (props) => {
@@ -24,6 +25,7 @@ const ModalComponent: React.FC<ModalProps> = (props) => {
     as = "drawer",
     closeButton,
     size = "medium",
+    celled,
   } = props;
   const [isShowing, setIsShowing] = useState(false);
   useEffect(() => {
@@ -38,14 +40,14 @@ const ModalComponent: React.FC<ModalProps> = (props) => {
     size === "medium" && " lg:w-[800px]"
   );
   const modalContainer = twMerge(
-    "fixed inset-0 flex max-h-full w-full items-center justify-center m-5",
+    "fixed inset-0 flex max-h-full w-full items-center justify-center ",
     size === "compact" && " lg:h-fit lg:w-[500px] m-auto",
     size === "medium" && " lg:h-fit lg:w-[800px] m-auto"
   );
   return (
     <Dialog
       open
-      className="z-50 h-full w-full bg-black bg-opacity-80 top-0 right-0 absolute "
+      className="h-full w-full bg-black bg-opacity-80 top-0 right-0 absolute  p-10"
       onClose={async () => {
         setIsShowing(false);
         setTimeout(() => {}, 300);
@@ -69,7 +71,13 @@ const ModalComponent: React.FC<ModalProps> = (props) => {
               as === "modal" && "rounded"
             )}
           >
-            <Dialog.Title className="border-b dark:border-b-primary-600 p-3 flex justify-between">
+            <Dialog.Title
+              className={twMerge(
+                `${
+                  celled && "border-b dark:border-b-primary-600"
+                } p-3 flex justify-between`
+              )}
+            >
               <h2 className=" text-xl font-bold">{title} </h2>
               {closeButton && (
                 <FaTimes
@@ -78,15 +86,16 @@ const ModalComponent: React.FC<ModalProps> = (props) => {
                 />
               )}
             </Dialog.Title>
-            <Dialog.Description
-              as="div"
-              className={
-                "flex-1 bg-gray-50 dark:bg-primary-900 overflow-auto p-3"
-              }
-            >
+            <Dialog.Description as="div" className={"flex-1 overflow-auto p-3"}>
               {body}
             </Dialog.Description>
-            <div className="border-t dark:border-t-primary-600 p-3 flex justify-between">
+            <div
+              className={twJoin(
+                `${
+                  celled && "border-t  dark:border-t-primary-600"
+                }  p-3 flex justify-between`
+              )}
+            >
               {footer}
             </div>
           </Dialog.Panel>

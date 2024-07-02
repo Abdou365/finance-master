@@ -3,7 +3,7 @@ import { useState } from "react";
 import { FaPlusCircle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
-import { formModal } from "../Modal/FormModal";
+import { formModal } from "../components/Modal/FormModal";
 import Button from "../components/Button/Button";
 import ListComponent from "../components/List/ListComponent";
 import ListItemComponent from "../components/List/ListItemComponent";
@@ -84,7 +84,7 @@ export const AccountList = () => {
     <div className="flex flex-col mx-auto gap-4">
       <div className="flex justify-between">
         <div>
-          {currentData.length > 6 && (
+          {data && currentData.length > 6 && (
             <Pagination
               currentPage={viewIndex}
               totalPages={data?.length / 6}

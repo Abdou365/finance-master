@@ -1,5 +1,5 @@
 import React from "react";
-import { editItemDrawer } from "../../Modal/ItemDrawer";
+import { editItemDrawer } from "../../components/Modal/ItemDrawer";
 import { useItems } from "../../store.tsx/store.ctx";
 import { ItemType } from "../../types/item.type";
 import ItemInput from "./ItemInput";

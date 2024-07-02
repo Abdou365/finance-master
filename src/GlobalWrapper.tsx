@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Outlet } from "react-router-dom";
-import { ModalManager } from "./Modal/modal.ctx";
+import { ModalManager } from "./components/Modal/modal.ctx";
 import { ThemeProvider } from "./store.tsx/theme.ctx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";

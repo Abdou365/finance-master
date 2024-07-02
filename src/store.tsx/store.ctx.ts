@@ -11,7 +11,6 @@ export type StoreType = {
   items: ItemType[];
   count: number;
   pageCount: number;
-  updateFilter: (string: string) => void;
   updateItems: (item: ItemType) => void;
   createItems: (item: Omit<ItemType, "id" | "updatedAt" | "createdAt">) => void;
   deleteItem: (id: string) => void;
@@ -24,7 +23,6 @@ export const initialState: StoreType = {
   items: [],
   count: 0,
   pageCount: 0,
-  updateFilter: function (_string) {},
   updateItems: function (_item: ItemType) {},
   createItems: function (_item: Partial<ItemType>) {},
   save: function (): void {},

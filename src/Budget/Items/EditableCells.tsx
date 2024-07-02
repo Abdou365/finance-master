@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { CellContext } from "@tanstack/react-table";
-import TextareaAutosize from "react-textarea-autosize";
-import React, { useState } from "react";
-import { TableColumnType } from "./";
 import { format } from "date-fns";
+import React, { useState } from "react";
+import TextareaAutosize from "react-textarea-autosize";
 import DatePicker from "../../components/DatePicker/DatePicker";
+import { TableColumnType } from "./";
 import CustomSelect from "./CompactSelect";
 
 interface Props extends CellContext<any, string> {
@@ -59,6 +59,7 @@ const EditableCells: React.FC<Props> = (props) => {
 
   if (props.columnOptions.type === "select" && props.columnOptions.options) {
     return (
+      // <TableSelectComponent />
       // <Select
       //   state={inputState}
       //   options={props.columnOptions.options}

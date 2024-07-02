@@ -18,7 +18,7 @@ export const useItemsTable = () => {
       label: "Caetegory",
       type: "select",
       options: formatOptions(
-        [...(options || []), ...defaultCategory].map((option) =>
+        (options || defaultCategory).map((option) =>
           typeof option === "string" ? option : option.value
         )
       ),
@@ -43,7 +43,6 @@ export const useItemsTable = () => {
       ],
       size: 50,
     },
-
     {
       name: "value",
       label: "Montant",

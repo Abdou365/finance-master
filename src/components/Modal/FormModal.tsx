@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import FormComponent, { FieldType } from "../components/Form/FormComponent";
+import FormComponent, { FieldType } from "../Form/FormComponent";
 import ModalComponent from "./ModalComponent";
 import { ModalLegacyProps, openModal } from "./modal.ctx";
 
@@ -36,6 +36,7 @@ const FormModal: React.FC<FormModalProps> = (props) => {
     <ModalComponent
       as={variant}
       size={size}
+      celled
       footer={
         <>
           <button className="btn-gray" onClick={onClose}>

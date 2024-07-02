@@ -11,7 +11,6 @@ type Props = {
   trigger: ReactNode;
   mode?: "hover" | "click";
   keepOpen?: boolean;
-  size?: "small" | "medium" | "large";
   closeOnClick?: boolean;
   as?: "Poppup" | "Tooltip" | "Legend";
 };
@@ -21,7 +20,6 @@ const Tooltip: React.FC<Props> = ({
   children,
   trigger,
   mode = "click",
-  size = "medium",
   closeOnClick,
   keepOpen = false,
   as = "Tooltip",
@@ -60,8 +58,12 @@ const Tooltip: React.FC<Props> = ({
   });
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (popperRef.current && !popperElement.contains(event.target)) {
+    const handleClickOutside = (event: any) => {
+      if (
+        popperElement &&
+        popperRef.current &&
+        !popperElement.contains(event.target)
+      ) {
         setVisible(false);
       }
     };

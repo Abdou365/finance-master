@@ -41,7 +41,8 @@
     "recharts": "^2.12.6",
     "sass": "^1.75.0",
     "tailwind-merge": "^2.3.0",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@tanstack/eslint-plugin-query": "^5.28.11",

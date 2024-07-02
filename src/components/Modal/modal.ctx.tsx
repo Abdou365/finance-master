@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { uniqueId } from "lodash";
 import React, { useRef, useState } from "react";
+import ReactDOM from "react-dom";
 
 export const modalPromise = {
   current: (props: any) => {
@@ -45,7 +46,8 @@ export const ModalManager = ({ children }: { children: React.ReactNode }) => {
     setModals((modal) => modal.filter((m) => m.modalId !== modalId));
     resolveRef.current(data || true);
   };
-  return (
+
+  return ReactDOM.createPortal(
     <>
       {children}
       {modals.map((m) => {
@@ -60,6 +62,7 @@ export const ModalManager = ({ children }: { children: React.ReactNode }) => {
           />
         );
       })}
-    </>
+    </>,
+    document.body
   );
 };

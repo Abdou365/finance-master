@@ -1,6 +1,6 @@
 import React from "react";
 import ModalComponent from "./ModalComponent";
-import Button from "../components/Button/Button";
+import Button from "../Button/Button";
 import { ModalLegacyProps, openModal } from "./modal.ctx";
 
 interface Props extends ModalLegacyProps {
