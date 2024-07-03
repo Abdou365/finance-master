@@ -39,7 +39,7 @@ $sizes: (
 
 @each $color, $bg-color in $colors {
 
-    .lk--box-#{$color} {
+    .lk--box-#{"#{$color}"} {
         &-outlined {
             @each $size, $padding in $sizes {
                 &-#{$size} {

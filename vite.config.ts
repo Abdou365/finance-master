@@ -6,7 +6,15 @@ import checker from "vite-plugin-checker"
 export default defineConfig({
   plugins: [react(), checker({ typescript: false })],
   build:{
-    sourcemap: true
+    chunkSizeWarningLimit: 2000,
+    sourcemap: true,
+    rollupOptions: {
+      output: {
+        manualChunks: { 
+          vendor : ['react', "react-dom"]
+        },
+      },
+    },
   },
   css: {},
 });

@@ -25,7 +25,7 @@ body {
     @apply border text-white active:brightness-95;
     background-color: $color;
   }
-  @elseif $variant == "outlined" {
+  @else if $variant == "outlined" {
     color: $color;
     &:active {
       background-color: $color;
@@ -33,7 +33,7 @@ body {
     @apply bg-transparent active:text-white;
   }
 
-  @elseif $variant == "link" {
+  @else if $variant == "link" {
     color: $color;
     &:active {
       background-color: $color;
@@ -46,10 +46,10 @@ body {
   @if $size == "small" {
     @apply px-1 py-1 text-sm min-h-8 min-w-8 align-middle;
   }
-  @elseif $size == "large" {
+  @else if $size == "large" {
     @apply px-4 py-2 text-lg align-middle;
   }
-  @elseif $size == "medium" {
+  @else if $size == "medium" {
     @apply px-2 py-1 text-base align-middle;
   }
 }
@@ -74,13 +74,13 @@ $colors: (
 $buttonVariants: ("solid", "outlined", "ghost", "soft", "white", "link");
 
 @each $color, $value in $colors {
-  .btn-#{$color} {
+  .btn-#{"#{$color}"} {
     @include padding("medium");
     @include button($value);
   }
 
   @each $variant in $buttonVariants {
-    .btn-#{$color}-#{$variant} {
+    .btn-#{"#{$color}"}-#{$variant} {
       @include padding("medium");
       @include button($value, $variant);
     }

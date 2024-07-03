@@ -20,28 +20,29 @@ const Sidebar = () => {
   const { logout } = useAuth();
   const { accountId } = useParams();
 
-  const routes: { icon: React.ReactNode; link: string; name: string }[] = compact([
-    {
-      icon: <FaHome className="m-auto" />,
-      link: `/`,
-      name: "Acceuil",
-    },
-    accountId && {
-      icon: <FaChartBar className="m-auto" />,
-      link: `${accountId}/`,
-      name: "Dashboard",
-    },
-    accountId && {
-      icon: <FaMoneyBillWave className="m-auto" />,
-      link: `${accountId}/activity`,
-      name: "Activity",
-    },
-   accountId && {
-      icon: <FaTrophy className="m-auto" />,
-      link: `${accountId}/objectif`,
-      name: "Objectif",
-    },
-  ]);
+  const routes: { icon: React.ReactNode; link: string; name: string }[] =
+    compact([
+      {
+        icon: <FaHome className="m-auto" />,
+        link: `/`,
+        name: "Acceuil",
+      },
+      accountId && {
+        icon: <FaChartBar className="m-auto" />,
+        link: `${accountId}/`,
+        name: "Dashboard",
+      },
+      accountId && {
+        icon: <FaMoneyBillWave className="m-auto" />,
+        link: `${accountId}/activity`,
+        name: "Activity",
+      },
+      accountId && {
+        icon: <FaTrophy className="m-auto" />,
+        link: `${accountId}/objectif`,
+        name: "Objectif",
+      },
+    ]);
   return (
     <div className="h-screen  flex justify-between   flex-col items-center    border-r dark:border-none bg-white dark:bg-primary-600">
       <div className="space-y-48 rounded-md">
@@ -63,10 +64,10 @@ const Sidebar = () => {
       </div>
       <div>
         <ul className=" flex flex-col ">
-        <Link to={'/user'}>
-          <li className={sidebarItemStyle}>
-            <FaUserCircle className="m-auto" />
-          </li>
+          <Link to={"/user"}>
+            <li className={sidebarItemStyle}>
+              <FaUserCircle className="m-auto" />
+            </li>
           </Link>
           <li className={sidebarItemStyle} onClick={() => logout()}>
             <FaDoorOpen className="m-auto" />
