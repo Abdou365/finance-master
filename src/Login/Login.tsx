@@ -9,6 +9,7 @@ import { useAuth } from "./useLogin.tsx";
 import { useTheme } from "../store.tsx/theme.ctx.tsx";
 import AlertMessage from "../components/Message/Message.tsx";
 import ToggleTheme from "../components/ToggleTheme/ToggleTheme.tsx";
+import illustration from "../assets/create-a-vibrant-and-engaging-digital-illustration.png";
 
 const schema: FieldType[] = [
   {
@@ -117,7 +118,7 @@ const Login = () => {
       <div className="flex h-screen p-5 gap-4 container m-auto">
         <div className="rounded-xl flex-1 hidden md:block">
           <img
-            src="src\assets\create-a-vibrant-and-engaging-digital-illustration.png"
+            src={illustration}
             className="h-full object-cover w-full rounded-xl "
           />
         </div>

@@ -18,9 +18,7 @@ const AccoutMenu: React.FC = () => {
           menuItems?.map((option) => (
             <Menu.Item>
               <div className="px-2 py-1 hover:bg-primary-100 text-sm text-gray-700">
-                <Link to={`http://localhost:5173/app/${option.id}/activity`}>
-                  {option.title}
-                </Link>
+                <Link to={`/app/${option.id}/activity`}>{option.title}</Link>
               </div>
             </Menu.Item>
           ))}
