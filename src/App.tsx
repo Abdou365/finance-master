@@ -8,6 +8,7 @@ import Objectif from "./Budget/Objectif/Objectif";
 import GlobalWrapper from "./GlobalWrapper";
 import Login from "./Login/Login";
 import ProtectedRoute from "./route/ProtectedRoute";
+import NotFoundScreen from "./components/404/404";
 
 const router = createBrowserRouter([
   {
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
       },
       { path: "/auth", Component: Login },
     ],
+  },
+  {
+    path: "*",
+    Component: NotFoundScreen,
   },
 ]);
 
