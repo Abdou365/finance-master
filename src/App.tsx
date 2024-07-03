@@ -12,11 +12,11 @@ import NotFoundScreen from "./components/404/404";
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "",
     Component: GlobalWrapper,
     children: [
       {
-        path: "/",
+        path: "",
         Component: ProtectedRoute,
         children: [
           {

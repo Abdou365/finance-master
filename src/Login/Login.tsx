@@ -1,15 +1,15 @@
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import illustration from "../assets/create-a-vibrant-and-engaging-digital-illustration.png";
 import logo from "../assets/logo.svg";
 import logoWhite from "../assets/logo_white.svg";
 import BoxComponent from "../components/Box/BoxComponent.tsx";
 import Button from "../components/Button/Button.tsx";
 import FormComponent, { FieldType } from "../components/Form/FormComponent.tsx";
-import { useAuth } from "./useLogin.tsx";
-import { useTheme } from "../store.tsx/theme.ctx.tsx";
 import AlertMessage from "../components/Message/Message.tsx";
 import ToggleTheme from "../components/ToggleTheme/ToggleTheme.tsx";
-import illustration from "../assets/create-a-vibrant-and-engaging-digital-illustration.png";
+import { useTheme } from "../store.tsx/theme.ctx.tsx";
+import { useAuth } from "./useLogin.tsx";
 
 const schema: FieldType[] = [
   {
