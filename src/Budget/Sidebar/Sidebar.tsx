@@ -52,7 +52,7 @@ const Sidebar = () => {
               mode="hover"
               as="Legend"
               trigger={
-                <Link to={route.link}>
+                <Link to={route.link} replace>
                   <li className={sidebarItemStyle}>{route.icon}</li>
                 </Link>
               }

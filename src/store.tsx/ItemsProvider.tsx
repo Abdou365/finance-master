@@ -12,12 +12,14 @@ import { ItemCtx } from "./store.ctx";
 import { upsertItems, useGetItems } from "./useItems";
 import store from "./store";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const ItemsProvider = ({ children }: { children: React.ReactNode }) => {
   const { accountId = "" } = useParams();
   const [searchParams] = useSearchParams();
   const page = searchParams.get("page") || "";
   const isFreeUser = store.isFreeUser();
+  const navigate = useNavigate();
 
   const { data, refetch } = useGetItems(accountId, +page);
 
@@ -108,13 +110,14 @@ const ItemsProvider = ({ children }: { children: React.ReactNode }) => {
     if (!data) {
       return false;
     }
-    const editedItems = difference(items, data?.items);
+    const editedItems = difference(items, data?.items || []);
     console.log(editedItems);
     if (editedItems.length > 0) {
       save();
       return false;
+    } else {
+      return false;
     }
-    return true;
   });
 
   return (

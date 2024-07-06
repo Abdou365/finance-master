@@ -103,9 +103,10 @@ const CustomSelect: React.FC<Props> = (props) => {
       options={options}
       value={value}
       openMenuOnFocus
-      menuPortalTarget={compact ? document.body : undefined}
+      menuPortalTarget={document.body}
       isMulti={props.isMulti}
       onChange={handleChange}
+      menuPosition="fixed"
       isSearchable={props.creatable || false}
       isClearable
     />

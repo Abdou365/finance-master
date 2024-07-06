@@ -10,6 +10,7 @@ import { ModalLegacyProps, openModal } from "../modal.ctx";
 import { formatImportData } from "./importModal.utils";
 import Textarea from "react-textarea-autosize";
 import { FaFileImport } from "react-icons/fa";
+import CustomSelect from "../../../Budget/Items/CompactSelect";
 
 const steps = [
   {
@@ -32,6 +33,33 @@ const ImportModal: React.FC<ImportModalProps> = (props) => {
   const [activeStep, setActiveStep] = useState(0);
   const [importedData, setImportedData] = useState<any>([]);
   const [items, setItems] = useState<Partial<ItemType>[]>([]);
+  const [dateFormat, setDateFormat] = useState<string>("yyyy-mm-dd");
+  const dateFormats = [
+    {
+      label: "2000-01-01",
+      value: "yyyy-mm-dd",
+    },
+    {
+      label: "01/01/2000",
+      value: "dd/mm/yyyy",
+    },
+    {
+      label: "01-01-2000",
+      value: "dd-mm-yyyy",
+    },
+    {
+      label: "01.01.2000",
+      value: "dd.mm.yyyy",
+    },
+    {
+      label: "2000.01.01",
+      value: "yyyy.mm.dd",
+    },
+    {
+      label: "2000/01/01",
+      value: "yyyy/mm/dd",
+    },
+  ];
   const { columns } = useItemsTable();
   const itemKeys: string[] = [
     "title",
@@ -52,7 +80,12 @@ const ImportModal: React.FC<ImportModalProps> = (props) => {
       const workbook = XLSX.read(data, { type: "array" });
       const sheetName = workbook.SheetNames[0];
       const sheet = workbook.Sheets[sheetName];
-      const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+      console.log(sheet);
+
+      const jsonData = XLSX.utils.sheet_to_json(sheet, {
+        header: 1,
+        raw: false,
+      });
 
       if (jsonData.length > 0) {
         setActiveStep(1);
@@ -89,6 +122,14 @@ const ImportModal: React.FC<ImportModalProps> = (props) => {
               <FaFileImport size={40} />
               <span className=" text-xl font-semibold">Select Files</span>
             </div>
+            <div className=""> Choix du format de la date </div>
+            <CustomSelect
+              options={dateFormats}
+              initialValue={dateFormat}
+              onChange={(value) => {
+                setDateFormat(value as string);
+              }}
+            />
             <div>Coller les données</div>
             <Textarea
               className="w-full bg-gray-50 dark:bg-primary-900 border border-gray-300 rounded focus:outline-none dark:border-primary-600 p-2"

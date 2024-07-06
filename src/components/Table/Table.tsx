@@ -11,7 +11,7 @@ import {
 } from "@tanstack/react-table";
 import React, { useEffect, useMemo } from "react";
 import EditableCells from "../../Budget/Items/EditableCells";
-import { compact } from "lodash";
+import { compact, uniqueId } from "lodash";
 import { twMerge } from "tailwind-merge";
 import { useVirtualizer } from "@tanstack/react-virtual";
 
@@ -215,6 +215,7 @@ const Table: React.FC<TableComponentProps> = ({
           size: column.size,
           cell: (info) => (
             <EditableCells
+              key={info.row.original.id}
               columnOptions={column}
               onChange={updateData}
               {...info}

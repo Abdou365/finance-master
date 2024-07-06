@@ -16,14 +16,17 @@ const router = createBrowserRouter([
     Component: GlobalWrapper,
     children: [
       {
-        path: "",
+        path: "/",
         Component: ProtectedRoute,
         children: [
           {
             path: "/app",
             Component: Budget,
             children: [
-              { path: ":accountId", Component: DashBoard },
+              {
+                path: ":accountId",
+                Component: DashBoard,
+              },
               { path: ":accountId/activity", Component: Activity },
               { path: ":accountId/objectif", Component: Objectif },
             ],
@@ -35,7 +38,7 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "*",
+    path: "/",
     Component: NotFoundScreen,
   },
 ]);
