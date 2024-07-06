@@ -5,7 +5,6 @@ import { convertDate } from '../../../utils/date.utils';
 type NewType = Record<string, string>;
 
 export const formatImportData = (keyMapping : NewType, data: Array<string|number>[] ): Record<string, any>[] => {
-    console.log(data);
     
   const tableHeaders = data[0];
     const tableData = data.slice(1);
@@ -25,7 +24,6 @@ export const formatImportData = (keyMapping : NewType, data: Array<string|number
                 return;
             }
             if (keyMapping[header] === "date" ) {    
-                console.log(row[index])            
                 rowData[keyMapping[header]] = convertDate(row[index].toString());
                 return;
             }

@@ -178,8 +178,6 @@ const Items = () => {
 
   const handleImportItems = async () => {
     const res: any[] = await importModal({});
-    console.log(res);
-
     res.map((item) => createItems(item));
   };
 

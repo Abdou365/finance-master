@@ -2,17 +2,17 @@ import { difference } from "lodash";
 import { useEffect, useState } from "react";
 import {
   useBeforeUnload,
+  useBlocker,
+  useNavigate,
   useParams,
   useSearchParams,
-  useBlocker,
 } from "react-router-dom";
+import { toast } from "react-toastify";
 import { v4 as uuidv4 } from "uuid";
 import { ItemType } from "../types/item.type";
+import store from "./store";
 import { ItemCtx } from "./store.ctx";
 import { upsertItems, useGetItems } from "./useItems";
-import store from "./store";
-import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 
 const ItemsProvider = ({ children }: { children: React.ReactNode }) => {
   const { accountId = "" } = useParams();
@@ -111,7 +111,6 @@ const ItemsProvider = ({ children }: { children: React.ReactNode }) => {
       return false;
     }
     const editedItems = difference(items, data?.items || []);
-    console.log(editedItems);
     if (editedItems.length > 0) {
       save();
       return false;

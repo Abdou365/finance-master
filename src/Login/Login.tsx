@@ -43,8 +43,6 @@ const Login = () => {
   const isLogin = step === "login";
   const isRegister = step === "register";
 
-  console.log(step, token);
-
   const render = () => {
     switch (true) {
       case step === "confirm" && typeof token === "string":
@@ -170,7 +168,6 @@ const ConfirmAuth: React.FC<{ token: string }> = (props) => {
           },
         ]}
         onSubmit={async (data) => {
-          console.log(data);
           await handleSubmit(data);
         }}
       />
@@ -261,7 +258,6 @@ const ConfirmRecover: React.FC<{ token: string }> = ({ token }) => {
           },
         ]}
         onSubmit={async (data) => {
-          console.log(data);
           await handleSubmit(data);
         }}
       />

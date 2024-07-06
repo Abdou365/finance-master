@@ -51,8 +51,6 @@ const useObjectifField = () => {
         { value: "day", label: "Journalier" },
       ],
       condition: (data) => {
-        console.log(data);
-
         return data.isRecurrent;
       },
     },

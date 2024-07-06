@@ -80,8 +80,6 @@ const ImportModal: React.FC<ImportModalProps> = (props) => {
       const workbook = XLSX.read(data, { type: "array" });
       const sheetName = workbook.SheetNames[0];
       const sheet = workbook.Sheets[sheetName];
-      console.log(sheet);
-
       const jsonData = XLSX.utils.sheet_to_json(sheet, {
         header: 1,
         raw: false,
@@ -103,8 +101,6 @@ const ImportModal: React.FC<ImportModalProps> = (props) => {
     setImportedData(data);
     setActiveStep(1);
   };
-
-  console.log(items);
 
   const render = () => {
     switch (activeStep) {
@@ -144,9 +140,6 @@ const ImportModal: React.FC<ImportModalProps> = (props) => {
           <div className="flex flex-col">
             <div className="">
               <FormComponent
-                onChange={(data, formState) => {
-                  console.log(data, formState);
-                }}
                 onSubmit={(formState) => {
                   setActiveStep(2);
                   setItems(formatImportData(formState, importedData));
