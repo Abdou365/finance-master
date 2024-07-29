@@ -19,7 +19,7 @@ export const ObjectifInfo: React.FC<ObjectifProps> = ({
         <span className="objectif__progress-number">{completed}</span>
         <span className="objectif__progress-label">/{length}</span>
       </div>
-      <span className="objectif__progress-label">Budget respecté</span>
+      <span className="objectif__progress-label">Objectifs atteints</span>
     </div>
     <div>
       <CircleProgress

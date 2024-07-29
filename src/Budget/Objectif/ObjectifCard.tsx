@@ -8,10 +8,12 @@ import { ObjectifType } from "../../types/objectif.type";
 import "./ObjectifCard.scss";
 
 const ObjecttifDate: React.FC<{ objectif: ObjectifType }> = ({ objectif }) => {
+  console.log(objectif);
+
   if (objectif.isRecurrent) {
     return (
       <Badge type="info" icon={FaCalendarDay}>
-        Recurrent
+        Recurrent : {objectif.recurrenceInterval} {objectif.recurrence}
       </Badge>
     );
   }
