@@ -14,12 +14,7 @@ const NavBar: React.FC = () => {
     <nav className="bg-primary-500 text-white flex justify-between place-content-center py-2 px-10">
       <AccoutMenu />
       <div className="flex gap-2">
-        <Tooltip
-          mode="click"
-          trigger={<button>{email}</button>}
-          size="large"
-          as="Poppup"
-        >
+        <Tooltip mode="click" trigger={<button>{email}</button>} as="Poppup">
           <VerticalMenu
             items={[
               {

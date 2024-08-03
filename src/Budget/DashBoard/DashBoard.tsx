@@ -32,7 +32,7 @@ const DashBoard = () => {
                 {account?.Item.map((item) => {
                   return (
                     <ListItemComponent>
-                      <Badge type="primary">{item.category}</Badge>
+                      <Badge variant="primary">{item.category}</Badge>
                       <p className="text-sm">{item.title}</p>
                       <AnimatedNumber
                         className={twMerge(
@@ -41,7 +41,7 @@ const DashBoard = () => {
                         )}
                         value={item.value}
                         duration={500}
-                        withSign
+                        sign="€"
                       />
                     </ListItemComponent>
                   );

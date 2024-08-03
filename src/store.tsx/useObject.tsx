@@ -11,17 +11,42 @@ export const useGetAllObjectif = () => {
   const { user } = store;
   const {
     data = {
-      objectifs: [],
-      summary: { completed: 0, opened: 0, total: 0, progress: 0 },
+      savings: [],
+      incomes: [],
+      summary: {
+        objectis: {
+          completed: 0,
+          opened: 0,
+          total: 0,
+          progress: 0,
+        },
+        incomes: {
+          completed: 0,
+          opened: 0,
+          total: 0,
+          progress: 0,
+        },
+        savings: {
+          completed: 0,
+          opened: 0,
+          total: 0,
+          progress: 0,
+        },
+      },
     },
     refetch,
   } = useQuery({
-    queryKey: ["getAllObjectif"],
+    queryKey: ["getAllObjectif", user()?.id, accountId],
     queryFn: async () => {
       const res = await api.get<
         DBResponseType<{
-          objectifs: ObjectifType[];
-          summary: SummaryObjectType;
+          savings: ObjectifType[];
+          incomes: ObjectifType[];
+          summary: {
+            objectis: SummaryObjectType;
+            incomes: SummaryObjectType;
+            savings: SummaryObjectType;
+          };
         }>
       >("/objectif/all/" + user()?.id + "/" + accountId);
       if (res) {
@@ -29,6 +54,7 @@ export const useGetAllObjectif = () => {
       }
     },
   });
+
   return { data, refetch };
 };
 export const upsertObjectif = async (data: Partial<ObjectifType>) => {

@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import {
   useBeforeUnload,
   useBlocker,
-  useNavigate,
   useParams,
   useSearchParams,
 } from "react-router-dom";
@@ -19,7 +18,7 @@ const ItemsProvider = ({ children }: { children: React.ReactNode }) => {
   const [searchParams] = useSearchParams();
   const page = searchParams.get("page") || "";
   const isFreeUser = store.isFreeUser();
-  const navigate = useNavigate();
+  const [hasChanged, setHasChanged] = useState(false);
 
   const { data, refetch } = useGetItems(accountId, +page);
 
@@ -41,6 +40,7 @@ const ItemsProvider = ({ children }: { children: React.ReactNode }) => {
       return i;
     });
     setItems(newItem);
+    setHasChanged(true);
   };
 
   const createItems = (
@@ -72,6 +72,7 @@ const ItemsProvider = ({ children }: { children: React.ReactNode }) => {
     if (data) {
       const editedItems = difference(items, data?.items);
       await upsertItems(editedItems, publishedItems.length);
+      setHasChanged(false);
     }
   };
 
@@ -96,27 +97,19 @@ const ItemsProvider = ({ children }: { children: React.ReactNode }) => {
     setItems(newItem);
   };
 
-  useBeforeUnload(() => {
-    if (!data) {
-      return;
-    }
-    const editedItems = difference(items, data?.items);
-    if (editedItems.length > 0) {
-      save();
-    }
-  });
-
   useBlocker(() => {
-    if (!data) {
-      return false;
+    if (hasChanged) {
+      const confirm = window.confirm(
+        "Vous avez des modifications non enregistrées. Voulez-vous quittez la page?"
+      );
+
+      if (confirm) {
+        return false;
+      }
+
+      return true;
     }
-    const editedItems = difference(items, data?.items || []);
-    if (editedItems.length > 0) {
-      save();
-      return false;
-    } else {
-      return false;
-    }
+    return false;
   });
 
   return (

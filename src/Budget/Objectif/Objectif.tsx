@@ -1,12 +1,13 @@
 import { omit, uniqueId } from "lodash";
 import { useState } from "react";
 import { FaTrophy } from "react-icons/fa";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
-import { openConfirmModal } from "../../components/Modal/ConfirModal";
-import { formModal } from "../../components/Modal/FormModal";
 import Button from "../../components/Button/Button";
 import Empty from "../../components/Empty/Empty";
+import { openConfirmModal } from "../../components/Modal/ConfirModal";
+import { formModal } from "../../components/Modal/FormModal";
+import TabComponent from "../../components/Tab/TabComponent";
 import store from "../../store.tsx/store";
 import { upsertObjectif, useGetAllObjectif } from "../../store.tsx/useObject";
 import { ObjectifType } from "../../types/objectif.type";
@@ -14,14 +15,31 @@ import "./Objectif.scss";
 import { ObjectifCard } from "./ObjectifCard";
 import { ObjectifInfo } from "./ObjectifInfo";
 import { useObjectifField } from "./useObjectifField";
+import { PieChart } from "recharts";
+import PieChartWithNeedle from "../../components/PieChartWithNeedle/PieChartWithNeedle";
 
 const Objectif: React.FC = () => {
+  const [params, setParams] = useSearchParams();
+  const selectedTab = params.get("view") || "objectifs";
+  const setSelectedTab = (tabName: string) => {
+    setParams({ view: tabName });
+    setSetselected([]);
+  };
   const { accountId } = useParams();
   const itemFields = useObjectifField();
   const [setselected, setSetselected] = useState<ObjectifType[]>([]);
   const { user } = store;
   const { data, refetch } = useGetAllObjectif();
-  const { objectifs, summary } = data;
+  const { savings = [], incomes = [], summary } = data;
+  const allObjectifTabs = {
+    objectifs: [...savings, ...incomes],
+    savings,
+    incomes,
+  };
+
+  const objectifs =
+    allObjectifTabs[selectedTab as keyof typeof allObjectifTabs];
+  const objectifSumary = summary?.[selectedTab as keyof typeof summary];
 
   const handleCreate = async () => {
     const res: any = await formModal({
@@ -115,6 +133,21 @@ const Objectif: React.FC = () => {
     }
   };
 
+  if (!objectifs.length && !objectifSumary) {
+    return (
+      <Empty
+        action={
+          <Button
+            onClick={handleCreate}
+            className="objectif__button btn-primary"
+          >
+            <FaTrophy /> Ajouter un Objectif
+          </Button>
+        }
+      />
+    );
+  }
+
   /**
    * Handles the edit operation for an objectif.
    * @param obj - The objectif to be edited.
@@ -158,6 +191,15 @@ const Objectif: React.FC = () => {
             </Button>
           </div>
         </div>
+        <TabComponent
+          tabs={[
+            { name: "objectifs", label: "Tous" },
+            { name: "savings", label: "Épargne" },
+            { name: "incomes", label: "Revenus" },
+          ]}
+          selectedTab={selectedTab}
+          onSelectTab={setSelectedTab}
+        />
         {!objectifs && <Empty />}
         {objectifs && (
           <div className="objectif__content">
@@ -173,9 +215,9 @@ const Objectif: React.FC = () => {
               ))}
             </div>
             <ObjectifInfo
-              completed={summary?.completed}
-              length={summary?.total}
-              progress={summary?.progress}
+              completed={objectifSumary?.completed}
+              length={objectifs.length}
+              progress={objectifSumary?.progress}
             />
           </div>
         )}

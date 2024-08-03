@@ -142,15 +142,6 @@ const Items = () => {
     }
   };
 
-  if (items.length === 0) {
-    return (
-      <Empty
-        title="No items found"
-        description="Create a new item by clicking on the create button"
-        action={<Button onClick={handleCreate}>Ajouter un mouvement</Button>}
-      />
-    );
-  }
   const tableActionButtonStyles =
     "bg-gray-200 dark:bg-primary-600 dark:text-white p-1 rounded";
 
@@ -215,16 +206,28 @@ const Items = () => {
           />
         </div>
       </div>
-      <div className="flex flex-col flex-1 overflow-hidden dark:bg-primary-600 bg-gray-200 ">
-        <Table
-          selectable
-          rowSelection={rowSelection}
-          setRowSelection={setRowSelection}
-          columns={tableColumns}
-          actions={tableActions}
-          onChange={updateItems}
-          tableData={items}
-        />
+      <div className="flex flex-col flex-1 overflow-hidden ">
+        {items.length === 0 ? (
+          <div className=" sm:w-1/2 m-auto">
+            <Empty
+              title="No items found"
+              description="Create a new item by clicking on the create button"
+              action={
+                <Button onClick={handleCreate}>Ajouter un mouvement</Button>
+              }
+            />
+          </div>
+        ) : (
+          <Table
+            selectable
+            rowSelection={rowSelection}
+            setRowSelection={setRowSelection}
+            columns={tableColumns}
+            actions={tableActions}
+            onChange={updateItems}
+            tableData={items}
+          />
+        )}
       </div>
     </>
   );

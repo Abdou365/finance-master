@@ -115,7 +115,9 @@ const Tooltip: React.FC<Props> = ({
               }}
               {...attributes.popper}
             >
-              <div className={cx("content")}>{children}</div>
+              <div className={cx("content")} onClick={handleTrigger}>
+                {children}
+              </div>
               {as !== "Poppup" && (
                 <div
                   className={cx("arrow")}
