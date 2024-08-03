@@ -6,7 +6,7 @@ interface AnimatedNumberProps {
   duration?: number;
   delay?: number;
   className?: string;
-  withSign?: boolean;
+  sign?: string;
 }
 
 const AnimatedNumber: React.FC<AnimatedNumberProps> = ({
@@ -14,7 +14,7 @@ const AnimatedNumber: React.FC<AnimatedNumberProps> = ({
   duration = 200,
   delay = 0,
   className,
-  withSign = false,
+  sign,
 }) => {
   const [displayValue, setDisplayValue] = useState<number>(0);
 
@@ -43,7 +43,7 @@ const AnimatedNumber: React.FC<AnimatedNumberProps> = ({
   return (
     <div className={className}>
       {displayValue}
-      {withSign && "€"}
+      {sign}
     </div>
   );
 };

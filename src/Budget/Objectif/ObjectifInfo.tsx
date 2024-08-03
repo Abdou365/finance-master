@@ -1,6 +1,13 @@
 import React from "react";
-import CircleProgress from "../../components/CircleProgress/CircleProgress";
-import { intelligentRound } from "../../utils/rounding";
+import PieChartWithNeedle from "../../components/PieChartWithNeedle/PieChartWithNeedle";
+import { theme } from "../../utils/tailwind";
+import BoxComponent from "../../components/Box/BoxComponent";
+
+const data = [
+  { name: "Score faible 😒", value: 100 / 3, color: theme.colors.red[500] },
+  { name: "Score bon 😊", value: 100 / 3, color: theme.colors.yellow[500] },
+  { name: "Score très bon 😍", value: 100 / 3, color: theme.colors.green[500] },
+];
 
 type ObjectifProps = {
   completed?: number;
@@ -11,9 +18,9 @@ type ObjectifProps = {
 export const ObjectifInfo: React.FC<ObjectifProps> = ({
   completed = 21,
   length = 21,
-  progress = 75,
+  progress = 0,
 }) => (
-  <div className="objectif__info">
+  <BoxComponent className="sm:min-w-80">
     <div className="objectif__circle-progress">
       <div>
         <span className="objectif__progress-number">{completed}</span>
@@ -21,12 +28,6 @@ export const ObjectifInfo: React.FC<ObjectifProps> = ({
       </div>
       <span className="objectif__progress-label">Objectifs atteints</span>
     </div>
-    <div>
-      <CircleProgress
-        size={200}
-        strokeWidth={10}
-        progress={intelligentRound(progress, "standard", 1, 0)}
-      />
-    </div>
-  </div>
+    <PieChartWithNeedle data={data} value={progress} />
+  </BoxComponent>
 );

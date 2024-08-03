@@ -36,7 +36,7 @@ const RepartitionChart = ({ data }: { data?: AccountExpenseRepartition[] }) => {
             "border dark:border-none bg-gray-50 dark:bg-primary-950 rounded"
           }
         >
-          <PieChart onMouseEnter={() => {}}>
+          <PieChart>
             <Pie
               data={data}
               innerRadius={"50%"}

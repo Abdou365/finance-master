@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import { FaCalendarDay, FaEllipsisV } from "react-icons/fa";
+import { FaEllipsisV, FaMoneyBillWave, FaPiggyBank } from "react-icons/fa";
 import { twMerge } from "tailwind-merge";
 import Badge from "../../components/Badge/Badge";
 import Button from "../../components/Button/Button";
@@ -7,28 +7,20 @@ import Tooltip from "../../components/Tooltip/Tooltip";
 import { ObjectifType } from "../../types/objectif.type";
 import "./ObjectifCard.scss";
 
-const ObjecttifDate: React.FC<{ objectif: ObjectifType }> = ({ objectif }) => {
+const ObjectifDate: React.FC<{ objectif: ObjectifType }> = ({ objectif }) => {
   console.log(objectif);
 
   if (objectif.isRecurrent) {
     return (
-      <Badge type="info" icon={FaCalendarDay}>
+      <>
         Recurrent : {objectif.recurrenceInterval} {objectif.recurrence}
-      </Badge>
+      </>
     );
   }
   return (
     <>
-      {objectif.from && (
-        <Badge type="info" icon={FaCalendarDay}>
-          {format(objectif.from, "dd MMM yy")}
-        </Badge>
-      )}
-      {objectif.to && (
-        <Badge type="info" icon={FaCalendarDay}>
-          {format(objectif.to, "dd MMM yy")}
-        </Badge>
-      )}
+      {objectif.from && format(objectif.from, "dd MMM yy")} -{" "}
+      {objectif.to && format(objectif.to, "dd MMM yy")}
     </>
   );
 };
@@ -40,20 +32,22 @@ export const ObjectifCard: React.FC<{
   onDelete: (objectif: ObjectifType) => void;
 }> = ({ objectif, onSelect, onEdit, onDelete }) => {
   return (
-    <div className="objectifCard">
+    <div className="objectifCard flex flex-col gap-2">
       <div className="flex justify-between">
-        <div>
-          <div className="flex gap-2 items-center">
-            <input
-              type="checkbox"
-              className="lk-input--checkbox"
-              onClick={() => onSelect(objectif)}
-            />
-            <h5 className="font-bold line-clamp-1">{objectif.title}</h5>
-          </div>
-          <div className="flex gap-2">
-            <ObjecttifDate objectif={objectif} />
-          </div>
+        <div className="flex gap-2 items-center flex-1">
+          <input
+            type="checkbox"
+            className="lk-input--checkbox"
+            onClick={() => onSelect(objectif)}
+          />
+          <h5 className="font-bold line-clamp-1">{objectif.title}</h5>
+          <Badge
+            icon={objectif.type === "savings" ? FaPiggyBank : FaMoneyBillWave}
+            variant={objectif.type === "savings" ? "info" : "warning"}
+            className="ml-auto"
+          >
+            {objectif.type}
+          </Badge>
         </div>
 
         <div>
@@ -83,22 +77,40 @@ export const ObjectifCard: React.FC<{
         </div>
       </div>
 
-      <div className=" flex items-baseline gap-2 mt-3">
-        <div className={"w-full rounded bg-gray-300 h-2 overflow-hidden"}>
-          <div
-            className={twMerge(
-              "h-full bg-red-500 rounded ",
-              objectif.progress >= 50 && "bg-yellow-500",
-              objectif.progress >= 100 && "bg-green-500"
-            )}
-            style={{
-              width: `${objectif.progress || 0}%`,
-            }}
-          ></div>
+      <div className=" flex gap-2">
+        {objectif.categories.slice(0, 3).map((category, index) => (
+          <Badge variant="light" key={index}>
+            {category}
+          </Badge>
+        ))}
+      </div>
+
+      <div className=" line-clamp-5 text-sm text-gray-600 dark:text-primary-300">
+        {objectif.description}
+      </div>
+
+      <div className="mt-auto">
+        <div className=" flex items-baseline gap-2">
+          <div className={"w-full rounded bg-gray-300 h-2 overflow-hidden"}>
+            <div
+              className={twMerge(
+                "h-full bg-red-500 rounded ",
+                objectif.progress >= 50 && "bg-yellow-500",
+                objectif.progress >= 100 && "bg-green-500"
+              )}
+              style={{
+                width: `${objectif.progress || 0}%`,
+              }}
+            ></div>
+          </div>
+          <span className="text-sm font-bold">
+            {objectif.progress > 100 ? 100 : Math.floor(objectif.progress || 0)}
+            %
+          </span>
         </div>
-        <span className="text-sm font-bold">
-          {objectif.progress > 100 ? 100 : Math.floor(objectif.progress || 0)}%
-        </span>
+        <div className=" text-sm text-gray-600 dark:text-primary-400">
+          <ObjectifDate objectif={objectif} />
+        </div>
       </div>
     </div>
   );

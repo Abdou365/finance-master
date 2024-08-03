@@ -1,0 +1,49 @@
+.needle-base {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background-color: red;
+  bottom: 0%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  border-radius: 100%;
+}
+
+@keyframes dash2 {
+  from {
+    stroke-dashoffset: 280;
+  }
+  to {
+    stroke-dashoffset: -40;
+  }
+}
+
+.line1 {
+  stroke-dasharray: calc(320 / 6);
+  stroke-dashoffset: 0;
+  // animation: dash 1.5s linear alternate infinite;
+}
+
+.line2 {
+  stroke-dasharray: calc(320 / 6 * 2);
+  stroke-dashoffset: 0;
+  // animation: dash2 1.5s linear alternate infinite;
+}
+
+@keyframes dash {
+  from {
+    stroke-dashoffset: 360;
+  }
+  to {
+    stroke-dashoffset: 40;
+  }
+}
+
+@keyframes dash2 {
+  from {
+    stroke-dashoffset: 280;
+  }
+  to {
+    stroke-dashoffset: -40;
+  }
+}

@@ -45,7 +45,7 @@ const SummaryCard: React.FC<SummaryCardProps> = ({
             duration={1000}
             className={cx("title")}
             value={result}
-            withSign
+            sign
           />
         </div>
       </div>

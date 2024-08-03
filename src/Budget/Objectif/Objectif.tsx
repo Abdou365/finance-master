@@ -15,6 +15,8 @@ import "./Objectif.scss";
 import { ObjectifCard } from "./ObjectifCard";
 import { ObjectifInfo } from "./ObjectifInfo";
 import { useObjectifField } from "./useObjectifField";
+import { PieChart } from "recharts";
+import PieChartWithNeedle from "../../components/PieChartWithNeedle/PieChartWithNeedle";
 
 const Objectif: React.FC = () => {
   const [params, setParams] = useSearchParams();
@@ -130,6 +132,21 @@ const Objectif: React.FC = () => {
       refetch();
     }
   };
+
+  if (!objectifs.length && !objectifSumary) {
+    return (
+      <Empty
+        action={
+          <Button
+            onClick={handleCreate}
+            className="objectif__button btn-primary"
+          >
+            <FaTrophy /> Ajouter un Objectif
+          </Button>
+        }
+      />
+    );
+  }
 
   /**
    * Handles the edit operation for an objectif.
