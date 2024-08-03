@@ -1,4 +1,4 @@
-import { difference } from "lodash";
+import { difference, set } from "lodash";
 import { useEffect, useState } from "react";
 import {
   useBeforeUnload,
@@ -60,6 +60,7 @@ const ItemsProvider = ({ children }: { children: React.ReactNode }) => {
       },
       ...prev,
     ]);
+    setHasChanged(true);
   };
 
   const save = async () => {
@@ -105,11 +106,13 @@ const ItemsProvider = ({ children }: { children: React.ReactNode }) => {
 
       if (confirm) {
         return false;
+        setHasChanged(false);
       }
 
       return true;
     }
     return false;
+    setHasChanged(false);
   });
 
   return (
