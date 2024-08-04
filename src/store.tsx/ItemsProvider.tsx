@@ -96,6 +96,7 @@ const ItemsProvider = ({ children }: { children: React.ReactNode }) => {
       return i;
     });
     setItems(newItem);
+    setHasChanged(true);
   };
 
   useBlocker(() => {
@@ -106,14 +107,19 @@ const ItemsProvider = ({ children }: { children: React.ReactNode }) => {
 
       if (confirm) {
         return false;
-        setHasChanged(false);
       }
 
       return true;
     }
     return false;
-    setHasChanged(false);
   });
+
+  useEffect(() => {
+    return () => {
+      setHasChanged(false);
+      setItems([]);
+    };
+  }, []);
 
   return (
     <ItemCtx.Provider

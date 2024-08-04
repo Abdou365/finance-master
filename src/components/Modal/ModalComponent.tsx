@@ -35,73 +35,106 @@ const ModalComponent: React.FC<ModalProps> = (props) => {
   }, [isShowing]);
 
   const drawerConatainer = twMerge(
-    "fixed inset-0 flex lg:w-[90%] items-center justify-center ml-auto",
-    size === "compact" && " lg:w-[500px]",
-    size === "medium" && " lg:w-[800px]"
+    "fixed inset-0 flex  items-center justify-center ml-auto",
+    size === "compact" && " sm:w-[500px]",
+    size === "medium" && " sm:max-w-[800px]"
   );
   const modalContainer = twMerge(
-    "fixed inset-0 flex max-h-full w-full items-center justify-center ",
-    size === "compact" && " lg:h-fit lg:w-[500px] m-auto",
-    size === "medium" && " lg:h-fit lg:w-[800px] m-auto"
+    "fixed inset-0 flex max-h-full w-full items-center justify-center",
+    size === "compact" && " sm:h-fit sm:w-[500px] m-auto",
+    size === "medium" && " sm:h-fit sm:w-[800px] m-auto"
   );
   return (
+    // <Transition.Root
+    //   show={isShowing}
+    //   as={Fragment}
+    //   enter="transition duration-300"
+    //   enterFrom="transform  opacity-0"
+    //   enterTo=" transform  opacity-100"
+    //   leave="transition duration-300"
+    //   leaveFrom="transform  opacity-100"
+    //   leaveTo="transform  opacity-0"
+    // >
     <Dialog
       open
-      className="h-full w-full bg-black bg-opacity-80 top-0 right-0 absolute  p-10"
+      className="h-full w-full bg-black bg-opacity-80 top-0 right-0 absolute p-10 overflow-hidden"
       onClose={async () => {
         setIsShowing(false);
-        setTimeout(() => {}, 300);
-        onClose();
+        setTimeout(() => {
+          onClose();
+        }, 300);
       }}
     >
       <div className={as === "drawer" ? drawerConatainer : modalContainer}>
-        <Transition
-          as={Fragment}
-          show={isShowing}
-          enter="transform transition duration-400"
-          enterFrom="opacity-0 translate-x-full"
-          enterTo="opacity-100 translate-x-0"
-          leave="transform transition duration-200 ease-in-out"
-          leaveFrom="opacity-100 translate-x-0"
-          leaveTo="opacity-0 translate-x-full"
+        {/* <Transition.Child
+            as={Fragment}
+            // show={isShowing}
+            enter={
+              ["modal", "confirm"].includes(as)
+                ? "transition duration-300"
+                : "transition duration-400"
+            }
+            enterFrom={
+              ["modal", "confirm"].includes(as)
+                ? "transform -translate-x-full opacity-0"
+                : "transform translate-x-full opacity-0"
+            }
+            enterTo={
+              ["modal", "confirm"].includes(as)
+                ? "transform translate-x-0 opacity-100"
+                : "transform translate-x-0 opacity-100"
+            }
+            leave={
+              ["modal", "confirm"].includes(as)
+                ? "transition duration-300"
+                : "transition duration-300"
+            }
+            leaveFrom={
+              ["modal", "confirm"].includes(as)
+                ? "transform translate-x-0 opacity-100"
+                : "transform translate-x-0 opacity-100"
+            }
+            leaveTo={
+              ["modal", "confirm"].includes(as)
+                ? "transform translate-x-full opacity-0"
+                : "transform translate-x-full opacity-0"
+            }
+          > */}
+        <Dialog.Panel
+          className={twMerge(
+            "bg-white dark:bg-primary-950  shadow-lg h-full w-full flex flex-col",
+            ["confirm", "modal"].includes(as) && "rounded"
+          )}
         >
-          <Dialog.Panel
+          <Dialog.Title
             className={twMerge(
-              "bg-white dark:bg-primary-950  shadow-lg h-full w-full flex flex-col",
-              as === "modal" && "rounded"
+              `${
+                celled && "border-b dark:border-b-primary-600"
+              } p-3 flex justify-between`
             )}
           >
-            <Dialog.Title
-              className={twMerge(
-                `${
-                  celled && "border-b dark:border-b-primary-600"
-                } p-3 flex justify-between`
-              )}
-            >
-              <h2 className=" text-xl font-bold">{title} </h2>
-              {closeButton && (
-                <FaTimes
-                  onClick={onClose}
-                  className="btn-gray-link btn-small"
-                />
-              )}
-            </Dialog.Title>
-            <Dialog.Description as="div" className={"flex-1 overflow-auto p-3"}>
-              {body}
-            </Dialog.Description>
-            <div
-              className={twJoin(
-                `${
-                  celled && "border-t  dark:border-t-primary-600"
-                }  p-3 flex justify-between`
-              )}
-            >
-              {footer}
-            </div>
-          </Dialog.Panel>
-        </Transition>
+            <h2 className=" text-xl font-bold">{title} </h2>
+            {closeButton && (
+              <FaTimes onClick={onClose} className="btn-gray-link btn-small" />
+            )}
+          </Dialog.Title>
+          <Dialog.Description as="div" className={"flex-1 overflow-auto p-3"}>
+            {body}
+          </Dialog.Description>
+          <div
+            className={twJoin(
+              `${
+                celled && "border-t  dark:border-t-primary-600"
+              }  p-3 flex justify-between`
+            )}
+          >
+            {footer}
+          </div>
+        </Dialog.Panel>
+        {/* </Transition.Child> */}
       </div>
     </Dialog>
+    // </Transition.Root>
   );
 };
 
