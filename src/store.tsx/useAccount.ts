@@ -3,6 +3,8 @@ import { api } from "../api/axios.ts";
 import { AccountDashboard, AccountType } from "../types/account.type.ts";
 import { DBResponseType } from "../types/fetch.type.ts";
 import store from "./store.ts";
+import { useEffect } from "react";
+import { useLoading } from "../Loading/Loading.tsx";
 
 export const useAccount = () => {
   const response = useQuery({
@@ -33,6 +35,7 @@ export const useAccountNav = () => {
   return response;
 };
 export const useAccountDashboard = (id?: string) => {
+  const { setIsLoading } = useLoading();
   const response = useQuery({
     queryKey: ["account-dashboard", id],
     queryFn: async () => {
@@ -40,6 +43,10 @@ export const useAccountDashboard = (id?: string) => {
       return res.data;
     },
   });
+
+  useEffect(() => {
+    setIsLoading(response.isLoading);
+  }, [response.isLoading]);
 
   if (response.isSuccess) {
     return response.data;

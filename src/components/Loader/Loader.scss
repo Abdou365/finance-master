@@ -1,0 +1,9 @@
+.loader {
+  @apply border-4 border-solid border-primary-800 border-t-primary-400 rounded-full w-12 h-12 animate-spin;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

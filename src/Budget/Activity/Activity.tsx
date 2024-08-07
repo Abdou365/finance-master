@@ -5,7 +5,6 @@ const Activity = () => {
   return (
     <section className=" w-full m-auto flex-1 overflow-hidden flex flex-col gap-2">
       <ItemsProvider>
-        {/* <Header /> */}
         <Items />
       </ItemsProvider>
     </section>

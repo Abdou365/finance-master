@@ -12,15 +12,17 @@ import { ItemType } from "../types/item.type";
 import store from "./store";
 import { ItemCtx } from "./store.ctx";
 import { upsertItems, useGetItems } from "./useItems";
+import { useLoading } from "../Loading/Loading";
 
 const ItemsProvider = ({ children }: { children: React.ReactNode }) => {
   const { accountId = "" } = useParams();
   const [searchParams] = useSearchParams();
+  const { setIsLoading } = useLoading();
   const page = searchParams.get("page") || "";
   const isFreeUser = store.isFreeUser();
   const [hasChanged, setHasChanged] = useState(false);
 
-  const { data, refetch } = useGetItems(accountId, +page);
+  const { data, refetch, isLoading } = useGetItems(accountId, +page);
 
   const [items, setItems] = useState<ItemType[]>([]);
 
@@ -31,6 +33,10 @@ const ItemsProvider = ({ children }: { children: React.ReactNode }) => {
       setItems(data.items);
     }
   }, [data]);
+
+  useEffect(() => {
+    setIsLoading(isLoading);
+  }, [isLoading]);
 
   const updateItems = (item: ItemType) => {
     const newItem = items.map((i) => {
@@ -84,8 +90,8 @@ const ItemsProvider = ({ children }: { children: React.ReactNode }) => {
       }
       return i;
     });
-
     setItems(newItem);
+    setHasChanged(true);
   };
 
   const deleteItem = (id: string) => {

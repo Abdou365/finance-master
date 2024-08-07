@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Dialog, Transition } from "@headlessui/react";
-import React, { Fragment, useEffect, useState } from "react";
+import { Dialog } from "@headlessui/react";
+import React, { useEffect, useState } from "react";
 import { FaTimes } from "react-icons/fa";
 import { twJoin, twMerge } from "tailwind-merge";
 

@@ -9,11 +9,10 @@ import {
   FaTrashAlt,
 } from "react-icons/fa";
 import { useParams } from "react-router-dom";
+import { FieldType } from "../../components/Form/FormComponent";
 import { openConfirmModal } from "../../components/Modal/ConfirModal";
 import { formModal } from "../../components/Modal/FormModal";
-import Button from "../../components/Button/Button";
-import Empty from "../../components/Empty/Empty";
-import { FieldType } from "../../components/Form/FormComponent";
+import { importModal } from "../../components/Modal/ImportModal/ImportModal";
 import Table from "../../components/Table/Table";
 import store from "../../store.tsx/store";
 import { useItems } from "../../store.tsx/store.ctx";
@@ -22,7 +21,6 @@ import { ItemType } from "../../types/item.type";
 import ItemToolbar from "./ItemToolbar";
 import "./Items.scss";
 import { useItemsTable } from "./useItemsTable";
-import { importModal } from "../../components/Modal/ImportModal/ImportModal";
 
 export const itemCx = bem("item-group");
 
@@ -207,27 +205,15 @@ const Items = () => {
         </div>
       </div>
       <div className="flex flex-col flex-1 overflow-hidden ">
-        {items.length === 0 ? (
-          <div className=" sm:w-1/2 m-auto">
-            <Empty
-              title="No items found"
-              description="Create a new item by clicking on the create button"
-              action={
-                <Button onClick={handleCreate}>Ajouter un mouvement</Button>
-              }
-            />
-          </div>
-        ) : (
-          <Table
-            selectable
-            rowSelection={rowSelection}
-            setRowSelection={setRowSelection}
-            columns={tableColumns}
-            actions={tableActions}
-            onChange={updateItems}
-            tableData={items}
-          />
-        )}
+        <Table
+          selectable
+          rowSelection={rowSelection}
+          setRowSelection={setRowSelection}
+          columns={tableColumns}
+          actions={tableActions}
+          onChange={updateItems}
+          tableData={items || []}
+        />
       </div>
     </>
   );
