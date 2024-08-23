@@ -46,11 +46,11 @@ const sendNotification = (statusCode: number) => {
 
 api.interceptors.response.use(
   (response) => {
-    sendNotification(response.status);
+    sendNotification(response?.status);
     return response;
   },
   (error) => {
-    sendNotification(error.response.status);
+    sendNotification(error.response?.status);
     return Promise.reject(error);
   }
 );
