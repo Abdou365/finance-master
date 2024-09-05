@@ -78,7 +78,7 @@ const ItemsProvider = ({ children }: { children: React.ReactNode }) => {
     }
     if (data) {
       const editedItems = difference(items, data?.items);
-      await upsertItems(editedItems, publishedItems.length);
+      await upsertItems(editedItems, publishedItems.length || items.length);
       setHasChanged(false);
     }
   };
