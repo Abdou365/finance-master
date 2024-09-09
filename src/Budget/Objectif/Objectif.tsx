@@ -15,8 +15,6 @@ import "./Objectif.scss";
 import { ObjectifCard } from "./ObjectifCard";
 import { ObjectifInfo } from "./ObjectifInfo";
 import { useObjectifField } from "./useObjectifField";
-import { PieChart } from "recharts";
-import PieChartWithNeedle from "../../components/PieChartWithNeedle/PieChartWithNeedle";
 
 const Objectif: React.FC = () => {
   const [params, setParams] = useSearchParams();
