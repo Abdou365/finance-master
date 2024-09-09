@@ -8,8 +8,6 @@ import { ObjectifType } from "../../types/objectif.type";
 import "./ObjectifCard.scss";
 
 const ObjectifDate: React.FC<{ objectif: ObjectifType }> = ({ objectif }) => {
-  console.log(objectif);
-
   if (objectif.isRecurrent) {
     return (
       <>
