@@ -5,6 +5,7 @@ import { IconType } from "react-icons/lib";
 import { twMerge } from "tailwind-merge";
 import AnimatedNumber from "../../components/AnimatedNumber";
 import "./SummaryCard.scss";
+import BoxComponent from "../../components/Box/BoxComponent";
 
 const cx = bem("summary-card");
 
@@ -25,7 +26,7 @@ const SummaryCard: React.FC<SummaryCardProps> = ({
 }) => {
   const Icon = icon || FaArrowDown;
   return (
-    <div className={cx()}>
+    <BoxComponent className={cx()}>
       <div className={cx("body")}>
         <p className={cx("text")}>{title}</p>
         <div className="flex items-baseline">
@@ -45,11 +46,10 @@ const SummaryCard: React.FC<SummaryCardProps> = ({
             duration={1000}
             className={cx("title")}
             value={result}
-            sign
           />
         </div>
       </div>
-    </div>
+    </BoxComponent>
   );
 };
 
