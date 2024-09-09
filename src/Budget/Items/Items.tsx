@@ -24,7 +24,7 @@ import ItemToolbar from "./ItemToolbar";
 import "./Items.scss";
 import { useItemsTable } from "./useItemsTable";
 import Calendar from "../../components/Calendar/Calendar";
-import { DragDropContext } from "react-beautiful-dnd";
+import { DragDropContext } from "@hello-pangea/dnd";
 
 export const itemCx = bem("item-group");
 
@@ -83,6 +83,7 @@ const Items = () => {
   const [params, setParams] = useSearchParams({ view: "table" });
   const viewMode = params.get("view") || "table";
   const [rowSelection, setRowSelection] = useState<Record<number, boolean>>({});
+
   const { columns: tableColumns } = useItemsTable();
   const isFreeUser = store.isFreeUser();
   const handleCreate = (item?: Partial<ItemType>) => {
@@ -94,10 +95,11 @@ const Items = () => {
       return;
     }
     createItems({
-      title: "",
-      description: "",
+      title: "Nouvelle entrée",
+      description: "Description",
       date: new Date().toISOString(),
-      value: 0,
+      value: 1,
+      createdAt: new Date().toISOString(),
       category: "All",
       accountId: accountId || "",
       isExpense: false,
@@ -151,6 +153,15 @@ const Items = () => {
       deleteItem(id);
     }
   };
+  const handleDeleteCalendarItem = async (item: ItemType) => {
+    const confirm: boolean | undefined = await openConfirmModal({
+      message: "Are you sure you want to delete this item?",
+    });
+
+    if (confirm) {
+      deleteItem(item.id);
+    }
+  };
 
   const tableActionButtonStyles =
     "bg-gray-200 dark:bg-primary-600 dark:text-white p-1 rounded";
@@ -186,7 +197,7 @@ const Items = () => {
     {
       label: "Supprimer",
       icon: FaTrashAlt,
-      onClick: handleDeleteItem,
+      onClick: handleDeleteCalendarItem,
     },
     {
       label: "Dupliquer",
@@ -207,58 +218,62 @@ const Items = () => {
   const itemById = keyBy(items, "id");
 
   return (
-    <>
-      <div className={itemCx("filter")}>
-        <div className=" w-full flex gap-2 ">
-          <ItemToolbar
-            classNames=" flex-1 justify-end"
-            items={compact([
-              {
-                label: `${items.length} / 100`,
-              },
-              {
-                label: "Sauvegarder",
-                icon: FaSave,
-                onClick: save,
-              },
-              {
-                label: "Créer",
-                icon: FaEdit,
-                onClick: handleCreate,
-              },
-              {
-                label: "Importer",
-                icon: FaFileImport,
-                onClick: handleImportItems,
-              },
-              {
-                label: "Supprimer",
-                icon: FaTrashAlt,
-                onClick: handleDeleteSelectedItems,
-              },
-              {
-                label: "Vue",
-                icon: viewMode === "table" ? FaTable : FaCalendar,
-                onClick: toggleViewMode,
-              },
-            ])}
-          />
+    <DragDropContext
+      onDragEnd={(p) => {
+        const upadatedItem = {
+          ...itemById[p.draggableId],
+          date: new Date(p.destination?.droppableId as string).toISOString(),
+        };
+        updateItems(upadatedItem);
+      }}
+    >
+      <>
+        <div className={itemCx("filter")}>
+          <div className=" w-full flex gap-2 ">
+            <ItemToolbar
+              classNames=" flex-1 justify-end"
+              items={compact([
+                {
+                  label: `${items.length} / 100`,
+                },
+                {
+                  label: "Sauvegarder",
+                  icon: FaSave,
+                  onClick: () => {
+                    save();
+                  },
+                },
+                {
+                  label: "Créer",
+                  icon: FaEdit,
+                  onClick: () => handleCreate(),
+                },
+                {
+                  label: "Importer",
+                  icon: FaFileImport,
+                  onClick: handleImportItems,
+                },
+                {
+                  label: "Supprimer",
+                  icon: FaTrashAlt,
+                  onClick: handleDeleteSelectedItems,
+                },
+                {
+                  label: "Vue",
+                  icon: viewMode === "table" ? FaTable : FaCalendar,
+                  onClick: toggleViewMode,
+                },
+              ])}
+            />
+          </div>
         </div>
-      </div>
-      <DragDropContext
-        onDragEnd={(p) => {
-          const upadatedItem = {
-            ...itemById[p.draggableId],
-            date: new Date(p.destination?.droppableId as string).toISOString(),
-          };
-          updateItems(upadatedItem);
-        }}
-      >
+
         <div className="flex flex-col flex-1 overflow-hidden ">
           {viewMode === "calendar" && (
             <Calendar
               items={items || []}
               actions={calendarAction}
+              onChange={updateItems}
               onCreate={handleCreate}
             />
           )}
@@ -274,8 +289,8 @@ const Items = () => {
             />
           )}
         </div>
-      </DragDropContext>
-    </>
+      </>
+    </DragDropContext>
   );
 };
 
