@@ -1,6 +1,11 @@
-import { difference } from "lodash";
+import { difference, set } from "lodash";
 import { useEffect, useState } from "react";
-import { useBlocker, useParams, useSearchParams } from "react-router-dom";
+import {
+  useBeforeUnload,
+  useBlocker,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { toast } from "react-toastify";
 import { v4 as uuidv4 } from "uuid";
 import { ItemType } from "../types/item.type";
@@ -73,7 +78,7 @@ const ItemsProvider = ({ children }: { children: React.ReactNode }) => {
     }
     if (data) {
       const editedItems = difference(items, data?.items);
-      await upsertItems(editedItems, publishedItems.length || items.length);
+      await upsertItems(editedItems, publishedItems.length);
       setHasChanged(false);
     }
   };
