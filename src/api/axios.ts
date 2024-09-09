@@ -1,6 +1,5 @@
 import axios from "axios";
-import { join } from "lodash";
-import { FaCheckCircle, FaSadTear } from "react-icons/fa";
+import { FaCheckCircle } from "react-icons/fa";
 import { toast } from "react-toastify";
 
 export const api = axios.create({
@@ -15,13 +14,7 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-const sendNotification = ({
-  statusCode,
-  message,
-}: {
-  statusCode: number;
-  message?: string;
-}) => {
+const sendNotification = (statusCode: number) => {
   if (window.location.pathname !== "/auth") {
     switch (statusCode) {
       case 201:
@@ -32,9 +25,6 @@ const sendNotification = ({
         break;
       case 404:
         toast.error("Data not found");
-        break;
-      case 400:
-        toast.error(message || "Data not found", { icon: FaSadTear });
         break;
       case 401:
         toast.error("Unauthorized");
@@ -56,17 +46,11 @@ const sendNotification = ({
 
 api.interceptors.response.use(
   (response) => {
-    sendNotification({
-      statusCode: response?.status,
-    });
+    sendNotification(response.status);
     return response;
   },
   (error) => {
-    sendNotification({
-      statusCode: error.response?.status,
-      message: join(error.response?.data?.message, "/n"),
-    });
-    console.error(error);
+    sendNotification(error.response.status);
     return Promise.reject(error);
   }
 );

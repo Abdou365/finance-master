@@ -33,7 +33,7 @@ const SummaryContainer = ({ account }: { account?: AccountSummarize }) => {
     },
   ];
   return (
-    <div className=" grid grid-cols-3 gap-2 items-center container">
+    <BoxComponent className=" flex flex-wrap justify-around gap-2 items-center container">
       {result.map((r, key) => {
         return (
           <>
@@ -45,10 +45,15 @@ const SummaryContainer = ({ account }: { account?: AccountSummarize }) => {
               icon={r.icon}
               variant={r.variant}
             />
+            {key === 0 ? (
+              <span className="text-xl font-bold">-</span>
+            ) : (
+              key === 1 && <span className="text-xl font-bold">=</span>
+            )}
           </>
         );
       })}
-    </div>
+    </BoxComponent>
   );
 };
 

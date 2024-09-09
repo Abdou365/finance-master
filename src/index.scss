@@ -24,13 +24,16 @@ body {
   @if $variant == "solid" {
     @apply border text-white active:brightness-95;
     background-color: $color;
-  } @else if $variant == "outlined" {
+  }
+  @else if $variant == "outlined" {
     color: $color;
     &:active {
       background-color: $color;
     }
     @apply bg-transparent active:text-white;
-  } @else if $variant == "link" {
+  }
+
+  @else if $variant == "link" {
     color: $color;
     &:active {
       background-color: $color;
@@ -42,9 +45,11 @@ body {
 @mixin padding($size) {
   @if $size == "small" {
     @apply px-1 py-1 text-sm min-h-8 min-w-8 align-middle;
-  } @else if $size == "large" {
+  }
+  @else if $size == "large" {
     @apply px-4 py-2 text-lg align-middle;
-  } @else if $size == "medium" {
+  }
+  @else if $size == "medium" {
     @apply px-2 py-1 text-base align-middle;
   }
 }
@@ -165,6 +170,7 @@ $buttonVariants: ("solid", "outlined", "ghost", "soft", "white", "link");
     font-size: 0.8em;
   }
 }
+
 
 .form {
   input[type="text"],
@@ -294,10 +300,6 @@ $buttonVariants: ("solid", "outlined", "ghost", "soft", "white", "link");
 
   &__month-container {
     @apply bg-white dark:bg-primary-900 text-primary-900 dark:text-primary-200 rounded shadow-lg overflow-hidden;
-  }
-
-  &__month-text {
-    @apply p-3 flex place-content-center  font-semibold text-primary-900 dark:text-primary-200;
   }
 
   &__navigation {

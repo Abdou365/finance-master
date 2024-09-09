@@ -35,7 +35,7 @@ export const useGetItems = (accountId: string, page: number) => {
 };
 
 export const upsertItems = async (items: ItemType[], count: number) => {
-  const query = await api.post("/item", { items, count });
+  const query = await api.post("/item", { items });
   return query;
 };
 
