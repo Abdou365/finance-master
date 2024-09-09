@@ -64,11 +64,6 @@ const Sidebar = () => {
       </div>
       <div>
         <ul className=" flex flex-col ">
-          <Link to={"/user"}>
-            <li className={sidebarItemStyle}>
-              <FaUserCircle className="m-auto" />
-            </li>
-          </Link>
           <li className={sidebarItemStyle} onClick={() => logout()}>
             <FaDoorOpen className="m-auto" />
           </li>
