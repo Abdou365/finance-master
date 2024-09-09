@@ -1,20 +1,20 @@
+import { Draggable, Droppable } from "@hello-pangea/dnd";
 import { format } from "date-fns";
 import { groupBy, padStart } from "lodash";
 import { useState } from "react";
-import { Draggable, Droppable } from "@hello-pangea/dnd";
 import ReactDatePicker from "react-datepicker";
 import { IconType } from "react-icons";
 import { FaArrowLeft, FaArrowRight, FaEllipsisV, FaPlus } from "react-icons/fa";
+import Textarea from "react-textarea-autosize";
 import { twJoin, twMerge } from "tailwind-merge";
 import { ItemType } from "../../types/item.type";
 import Badge from "../Badge/Badge";
 import BoxComponent from "../Box/BoxComponent";
 import Button from "../Button/Button";
+import NumberInput from "../Input/NumberInput";
 import TabComponent from "../Tab/TabComponent";
 import Tooltip from "../Tooltip/Tooltip";
 import { generateMonthDaysList } from "./calendar.utils";
-import Textarea from "react-textarea-autosize";
-import NumberInput from "../Input/NumberInput";
 
 const calendarItemButtonClass =
   "bg-gray-100 p-1 border rounded hover:bg-gray-200 dark:bg-primary-800 dark:border-primary-600 dark:hover:bg-primary-700 dark:text-primary-400";
@@ -93,7 +93,7 @@ const Calendar = (props: Props) => {
   const [displayedDays, setDisplayedDays] = useState<number>(3);
 
   const monthDays = generateMonthDaysList(selectedDate.toISOString());
-  const weekDays = generateDays(selectedDate, 3);
+  const weekDays = generateDays(selectedDate, displayedDays);
   const today = () => {
     const date = generateDays(new Date(), 1)[0];
     return `${date.year}-${padStart(`${date.month + 1}`, 2, "0")}-${padStart(
@@ -155,11 +155,6 @@ const Calendar = (props: Props) => {
       onChange({ ...item, [e.target.name]: e.target.value });
     };
     if (variant === "large") {
-      const handleChangeItem = (e: any) => {
-        e.preventDefault();
-        e.stopPropagation();
-        onChange({ ...item, [e.target.name]: e.target.value });
-      };
       return (
         <BoxComponent className={twJoin(" place-items-start ")}>
           <div className=" mb-2 flex flex-row-reverse justify-between items-start">
@@ -187,7 +182,7 @@ const Calendar = (props: Props) => {
           <Textarea
             className="font-bold text-sm w-full bg-transparent hover:bg-gray-100 dark:hover:bg-primary-800 line-clamp-2"
             name="title"
-            onBlur={handleChangeItem}
+            onBlur={handleChange}
             defaultValue={item.title}
           />
           <span
@@ -198,27 +193,12 @@ const Calendar = (props: Props) => {
                 : "text-green-500 dark:text-green-400"
             )}
           >
-            <input
-              type="text"
+            <NumberInput
               defaultValue={item.value}
-              inputMode="numeric"
-              pattern="[0-9]*"
-              autoComplete="cc-number"
-              autoCorrect="on"
               name="value"
               min={0}
-              onError={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-
-                alert("error");
-              }}
-              onBeforeInput={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-              }}
-              className={twJoin("text-lg font-bold bg-transparent")}
-              onBlur={handleChangeItem}
+              className={twJoin("text-xl font-bold bg-transparent")}
+              onBlur={handleChange}
             />
           </span>
         </BoxComponent>
@@ -265,22 +245,11 @@ const Calendar = (props: Props) => {
             )}
           >
             <NumberInput
-              type="text"
-              defaultValue={item.value}
-              inputMode="numeric"
-              pattern="[0-9]*"
-              autoComplete="cc-number"
-              autoCorrect="on"
               name="value"
               min={0}
-              className={twMerge(
-                "bg-transparent w-2 text-right",
-                Number(item.value) >= 10 && "w-4",
-                Number(item.value) >= 100 && "w-6",
-                Number(item.value) >= 1000 && "w-8",
-                Number(item.value) >= 10000 && "w-10"
-              )}
               onBlur={handleChange}
+              defaultValue={item.value}
+              className="text-right w-2"
             />
           </span>
           <Tooltip
@@ -308,7 +277,7 @@ const Calendar = (props: Props) => {
   };
 
   return (
-    <div className={twJoin("h-full container m-auto flex flex-col ")}>
+    <div className={twJoin("h-full container m-auto flex flex-col")}>
       <div className="flex gap-1">
         <Button variant="outlined" onClick={moveDateBackward}>
           <FaArrowLeft />
@@ -323,11 +292,21 @@ const Calendar = (props: Props) => {
         <Button variant="outlined" onClick={moveDateForward}>
           <FaArrowRight />
         </Button>
+        {view === "week" && (
+          <input
+            min={1}
+            max={7}
+            type="number"
+            className="w-16 bg-red-50  input"
+            onChange={(v) => setDisplayedDays(+v.target.value)}
+            value={displayedDays}
+          />
+        )}
       </div>
       <TabComponent
         tabs={[
           { name: "month", label: "Mois" },
-          { name: "week", label: "Semaine" },
+          { name: "week", label: "Jour" },
         ]}
         selectedTab={view}
         onSelectTab={(tabName) => {
@@ -336,7 +315,7 @@ const Calendar = (props: Props) => {
       />
 
       {view === "month" && ( // Month view
-        <div className="flex flex-col flex-1 container overflow-x-scroll lk-scroll">
+        <div className="flex flex-col flex-1 container overflow-x-scroll lk-scroll ">
           <div
             className={twJoin(
               "grid grid-cols-7 align-bottom ",
@@ -352,7 +331,9 @@ const Calendar = (props: Props) => {
             style={{
               gridTemplateRows: `repeat(${monthDays.days.length}, 1fr)`,
             }}
-            className="grid grid-cols-7 align-bottom flex-1  sm:min-w-[1280px] overflow-y-auto"
+            className={twJoin(
+              `grid grid-cols-7 align-bottom flex-1  sm:min-w-[1280px] overflow-y-auto`
+            )}
           >
             {monthDays.days.map((v) => {
               return v.map((v2) => {
@@ -429,7 +410,12 @@ const Calendar = (props: Props) => {
         </div>
       )}
       {view === "week" && (
-        <div className="flex flex-1">
+        <div
+          className={twMerge(
+            "flex flex-1  container overflow-auto",
+            displayedDays > 5 && "shadow-inner-lg "
+          )}
+        >
           {weekDays.map((v2) => {
             const currentFormattedDate = `${v2?.year}-${padStart(
               `${(v2?.month || 0) + 1}`,
@@ -447,7 +433,7 @@ const Calendar = (props: Props) => {
                       ref={provided.innerRef}
                       {...provided.droppableProps}
                       className={twMerge(
-                        " border dark:border-primary-600 dark:bg-primary-950 flex-1 p-2 space-y-2",
+                        " border dark:border-primary-600 dark:bg-primary-950 flex-1 p-2 space-y-2 min-w-64",
                         snapshot.isDraggingOver &&
                           "bg-gray-200 dark:bg-primary-900"
                       )}
@@ -464,7 +450,7 @@ const Calendar = (props: Props) => {
                           currentFormattedDate={currentFormattedDate}
                         />
                       </div>
-                      <div className={twJoin("space-y-1 p-1 h-full")}>
+                      <div className={twJoin("space-y-1 p-1 ")}>
                         {cellItems.map((item, index) => {
                           return (
                             <Draggable draggableId={item.id} index={index}>

@@ -1,34 +1,34 @@
-import React, { InputHTMLAttributes, useState } from "react";
-import { twMerge } from "tailwind-merge";
+import { InputHTMLAttributes, useState } from "react";
+import { twJoin } from "tailwind-merge";
+import "./NumberInput.scss";
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {}
 
 const NumberInput = (props: Props) => {
-  const [value, setValue] = useState(props.value || props.defaultValue || "");
-  console.log(value);
+  const { className, onInput, style, ...otherProps } = props;
+  const [enteredValue, setEnteredValue] = useState(
+    props.value || props.defaultValue || ""
+  );
+
+  console.log(enteredValue.toString().length);
 
   return (
     <input
-      type="text"
+      type="number"
       inputMode="numeric"
       pattern="[0-9]*"
       autoComplete="cc-number"
       autoCorrect="on"
-      name="value"
-      min={0}
+      style={{ width: `${enteredValue.toString().length}ch`, ...style }}
+      className={twJoin(className, "lk-input-number")}
       onInput={(e) => {
-        setValue(e.currentTarget.value);
-        props.onInput(e);
+        const value = e.currentTarget.value;
+        setEnteredValue(value);
+        if (onInput) {
+          onInput(e);
+        }
       }}
-      className={twMerge(
-        props.className,
-        "text-right",
-        Number(value) >= 10 && "w-4",
-        Number(value) >= 100 && "w-6",
-        Number(value) >= 1000 && "w-8",
-        Number(value) >= 10000 && "w-10"
-      )}
-      {...props}
+      {...otherProps}
     />
   );
 };
