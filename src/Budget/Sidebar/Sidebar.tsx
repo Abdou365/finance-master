@@ -1,18 +1,15 @@
+import { compact } from "lodash";
 import React from "react";
 import {
   FaChartBar,
-  FaClosedCaptioning,
   FaDoorOpen,
   FaHome,
   FaMoneyBillWave,
   FaTrophy,
-  FaUser,
-  FaUserCircle,
 } from "react-icons/fa";
 import { Link, useParams } from "react-router-dom";
 import { useAuth } from "../../Login/useLogin";
 import Tooltip from "../../components/Tooltip/Tooltip";
-import { compact } from "lodash";
 
 const sidebarItemStyle =
   " border dark:border-none h-12 w-12 flex hover:bg-primary-100 dark:hover:bg-primary-700 cursor-pointer justify-center items-center active:bg-primary-200 dark:active:bg-primary-800 transition-all duration-200 ease-in-out";

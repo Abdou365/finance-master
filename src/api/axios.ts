@@ -1,6 +1,6 @@
 import axios from "axios";
 import { join } from "lodash";
-import { FaCheckCircle, FaSadCry, FaSadTear } from "react-icons/fa";
+import { FaCheckCircle, FaSadTear } from "react-icons/fa";
 import { toast } from "react-toastify";
 
 export const api = axios.create({

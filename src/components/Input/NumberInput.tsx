@@ -10,8 +10,6 @@ const NumberInput = (props: Props) => {
     props.value || props.defaultValue || ""
   );
 
-  console.log(enteredValue.toString().length);
-
   return (
     <input
       type="number"
