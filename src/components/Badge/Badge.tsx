@@ -1,6 +1,6 @@
 import React from "react";
 import { IconBaseProps, IconType } from "react-icons/lib";
-import { twJoin, twMerge } from "tailwind-merge";
+import { twJoin } from "tailwind-merge";
 
 interface BadgeProps {
   variant?:
@@ -38,7 +38,6 @@ const Badge: React.FC<BadgeProps> = ({
   className,
 }) => {
   const Icon = icon ? (props: IconBaseProps) => icon(props) : null;
-  console.log(badgeClasses[variant]);
 
   return (
     <span
