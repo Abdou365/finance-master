@@ -46,6 +46,8 @@ const Objectif: React.FC = () => {
       title: "Créer un objectif",
     });
 
+    const cleanObj = omit(res, "currentAmount", "progress");
+
     if (res) {
       const newObjectif = await upsertObjectif({
         id: uuidv4(),
@@ -58,6 +60,8 @@ const Objectif: React.FC = () => {
         to: res?.to ? new Date(res.to).toISOString() : null,
         targetAmount: res.targetAmount || 1,
         type: res?.type || "savings",
+        status: "active",
+        ...cleanObj,
       });
 
       if (newObjectif?.statusCode === 201) {

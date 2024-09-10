@@ -54,7 +54,7 @@ const FormModal: React.FC<FormModalProps> = (props) => {
         <FormComponent
           data={formState}
           onChange={({ name, value }) => {
-            setFormState((obj) => ({ ...obj, [name]: value }));
+            setFormState((obj: any) => ({ ...obj, [name]: value }));
           }}
           fields={props.fields}
         />

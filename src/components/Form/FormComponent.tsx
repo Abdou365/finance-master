@@ -14,27 +14,27 @@ export interface FieldType {
   name: string;
   label?: string;
   options?: { value: unknown; label: string }[];
-  defaultValue?: string;
+  defaultValue?: any | ((data: Record<string, any>) => any);
   format?: string;
   multiple?: boolean;
   description?: string;
   condition?: (data: Record<string, any>) => boolean;
-  placeholder?: string;
+  placeholder?: string | ((data: Record<string, any>) => string);
   value?: any;
   onChange?: (value: any) => void;
-  required?: boolean;
-  disabled?: boolean;
-  readOnly?: boolean;
-  hidden?: boolean;
-  min?: number;
-  max?: number;
-  step?: number;
+  required?: boolean | ((data: Record<string, any>) => boolean);
+  disabled?: boolean | ((data: Record<string, any>) => boolean);
+  readOnly?: boolean | ((data: Record<string, any>) => boolean);
+  hidden?: boolean | ((data: Record<string, any>) => boolean);
+  min?: number | ((data: Record<string, any>) => number);
+  max?: number | ((data: Record<string, any>) => number);
+  step?: number | ((data: Record<string, any>) => number);
   pattern?: string;
   className?: string;
   style?: React.CSSProperties;
   id?: string;
   autoComplete?: string;
-  autoFocus?: boolean;
+  autoFocus?: boolean | ((data: Record<string, any>) => boolean);
   form?: string;
   list?: string;
   maxLength?: number;
@@ -83,9 +83,12 @@ const FormComponent: React.FC<FormProps> = (props) => {
     switch (field.type) {
       case "date":
       case "datetime-local": {
+        const { hidden, disabled, required, readOnly, placeholder, ...rest } =
+          field;
         return (
           <ReactDatePicker
             {...register(field.name)}
+            {...rest}
             wrapperClassName="w-full"
             className="input w-full"
             icon={<FaCalendar />}
@@ -95,34 +98,78 @@ const FormComponent: React.FC<FormProps> = (props) => {
             onChange={(date) => {
               handleChange(field.name, date?.toISOString());
             }}
-            placeholderText={field.placeholder || "Select a date"}
+            placeholderText={
+              typeof placeholder === "string"
+                ? placeholder
+                : placeholder?.(watch())
+            }
             value={watch(field.name)}
+            hidden={typeof hidden === "boolean" ? hidden : hidden?.(watch())}
+            disabled={
+              typeof disabled === "boolean" ? disabled : disabled?.(watch())
+            }
+            required={
+              typeof required === "boolean" ? required : required?.(watch())
+            }
+            readOnly={
+              typeof readOnly === "boolean" ? readOnly : readOnly?.(watch())
+            }
           />
         );
       }
       case "date-range": {
+        const {
+          hidden,
+          disabled,
+          required,
+          readOnly,
+          placeholder,
+          name,
+          ...rest
+        } = field;
         return (
           <ReactDatePicker
-            {...register(field.name)}
+            {...register(name)}
             wrapperClassName="w-full"
             className="input w-full text-center"
             icon={<FaCalendar />}
             selectsRange
-            placeholderText={field.placeholder || "Select a date range"}
             showIcon
-            startDate={watch(field.name)["from"]}
-            endDate={watch(field.name)["to"]}
+            placeholderText={
+              typeof placeholder === "string"
+                ? placeholder
+                : placeholder?.(watch()) || "Select a date range"
+            }
+            startDate={watch(name)["from"]}
+            endDate={watch(name)["to"]}
             dateFormat={"YYYY-MM-dd"}
             onChange={(date) => {
-              handleChange(field.name, {
+              handleChange(name, {
                 to: date[1]?.toISOString(),
                 from: date[0]?.toISOString(),
               });
             }}
+            value={watch(name)}
+            disabled={
+              typeof disabled === "boolean" ? disabled : disabled?.(watch())
+            }
+            required={
+              typeof required === "boolean" ? required : required?.(watch())
+            }
           />
         );
       }
       case "textarea": {
+        const {
+          hidden,
+          disabled,
+          required,
+          readOnly,
+          placeholder,
+          autoFocus,
+          defaultValue,
+          ...rest
+        } = field;
         return (
           <Textarea
             className="input w-full"
@@ -131,23 +178,64 @@ const FormComponent: React.FC<FormProps> = (props) => {
                 handleChange(field.name, event.target.value);
               },
             })}
-            placeholder={field.placeholder}
+            defaultValue={
+              typeof defaultValue === "string"
+                ? defaultValue
+                : defaultValue?.(watch())
+            }
+            placeholder={
+              typeof placeholder === "string"
+                ? placeholder
+                : placeholder?.(watch())
+            }
+            hidden={typeof hidden === "boolean" ? hidden : hidden?.(watch())}
+            disabled={
+              typeof disabled === "boolean" ? disabled : disabled?.(watch())
+            }
+            required={
+              typeof required === "boolean" ? required : required?.(watch())
+            }
+            autoFocus={
+              typeof autoFocus === "boolean" ? autoFocus : autoFocus?.(watch())
+            }
           />
         );
       }
       case "select": {
+        const { disabled, required, placeholder } = field;
         return (
           <CustomSelect
             options={field.options!}
             initialValue={watch(field.name)}
             isMulti={field.multiple}
             onChange={(value) => handleChange(field.name, value)}
-            placeholder={field.placeholder}
+            placeholder={
+              typeof placeholder === "string"
+                ? placeholder
+                : placeholder?.(watch())
+            }
+            isDisabled={
+              typeof disabled === "boolean" ? disabled : disabled?.(watch())
+            }
+            required={
+              typeof required === "boolean" ? required : required?.(watch())
+            }
           />
         );
       }
       case "number": {
-        const { min, max, step, disabled, hidden, required, readOnly } = field;
+        const {
+          min,
+          max,
+          step,
+          disabled,
+          hidden,
+          required,
+          readOnly,
+          placeholder,
+          defaultValue,
+          ...rest
+        } = field;
         return (
           <input
             className="input w-full"
@@ -158,14 +246,29 @@ const FormComponent: React.FC<FormProps> = (props) => {
               },
               valueAsNumber: true,
             })}
-            placeholder={field.placeholder}
-            min={min}
-            max={max}
-            step={step}
-            disabled={disabled}
-            hidden={hidden}
-            required={required}
-            readOnly={readOnly}
+            placeholder={
+              typeof placeholder === "string"
+                ? placeholder
+                : placeholder?.(watch())
+            }
+            min={typeof min === "number" ? min : min?.(watch())}
+            max={typeof max === "number" ? max : max?.(watch())}
+            step={typeof step === "number" ? step : step?.(watch())}
+            disabled={
+              typeof disabled === "boolean" ? disabled : disabled?.(watch())
+            }
+            hidden={typeof hidden === "boolean" ? hidden : hidden?.(watch())}
+            required={
+              typeof required === "boolean" ? required : required?.(watch())
+            }
+            readOnly={
+              typeof readOnly === "boolean" ? readOnly : readOnly?.(watch())
+            }
+            defaultValue={
+              typeof defaultValue === "number"
+                ? defaultValue
+                : defaultValue?.(watch())
+            }
           />
         );
       }
@@ -175,7 +278,11 @@ const FormComponent: React.FC<FormProps> = (props) => {
           disabled,
           required,
           readOnly,
-          placeholder: plqceholder,
+          placeholder,
+          min,
+          max,
+          step,
+          ...rest
         } = field;
         return (
           <input
@@ -186,11 +293,24 @@ const FormComponent: React.FC<FormProps> = (props) => {
                 handleChange(field.name, event.target.value);
               },
             })}
-            placeholder={plqceholder}
-            hidden={hidden}
-            disabled={disabled}
-            required={required}
-            readOnly={readOnly}
+            placeholder={
+              typeof placeholder === "string"
+                ? placeholder
+                : placeholder?.(watch())
+            }
+            min={typeof min === "number" ? min : min?.(watch())}
+            max={typeof max === "number" ? max : max?.(watch())}
+            step={typeof step === "number" ? step : step?.(watch())}
+            disabled={
+              typeof disabled === "boolean" ? disabled : disabled?.(watch())
+            }
+            hidden={typeof hidden === "boolean" ? hidden : hidden?.(watch())}
+            required={
+              typeof required === "boolean" ? required : required?.(watch())
+            }
+            readOnly={
+              typeof readOnly === "boolean" ? readOnly : readOnly?.(watch())
+            }
           />
         );
       }
