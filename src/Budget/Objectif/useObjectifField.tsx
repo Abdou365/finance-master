@@ -55,6 +55,20 @@ export const useObjectifField = () => {
       label: "Intervalle de récurrence",
       description: "Combien de fois l'objectif doit être répété",
       condition: (data) => data.isRecurrent,
+      defaultValue: 1,
+      min: 1,
+      max: (data) => {
+        if (data.recurrence === "month") {
+          return 12;
+        }
+        if (data.recurrence === "week") {
+          return 4;
+        }
+        if (data.recurrence === "day") {
+          return 31;
+        }
+        return 1;
+      },
     },
     {
       type: "text",

@@ -107,7 +107,7 @@ const CustomSelect: React.FC<Props> = (props) => {
       isMulti={props.isMulti}
       onChange={handleChange}
       menuPosition="fixed"
-      isSearchable={props.creatable || false}
+      isSearchable
       isClearable
     />
   );
