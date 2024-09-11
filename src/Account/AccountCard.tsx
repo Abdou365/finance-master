@@ -62,7 +62,7 @@ export const AccountCard = (props: AccountCardType) => {
             nav(`/app/${props.id}`, { relative: "route" });
           }}
         >
-          <span className="m-auto">Modifier</span>
+          <span className="m-auto">Consulter</span>
           <FaArrowRight className=" m-auto" size={12} />
         </Button>
       </div>
