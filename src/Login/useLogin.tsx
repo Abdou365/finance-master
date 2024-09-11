@@ -23,14 +23,14 @@ export function useAuth() {
       password,
     });
 
-    if (res.data.statusCode === 201) {
+    console.log(res);
+
+    if (res.status === 401) {
+      toast.error("Email ou mot de passe incorrect");
+    }
+    if (res.status === 201) {
       localStorage.setItem("user", JSON.stringify(res.data.data));
       toast.success("Mail de confirmation envoyé");
-    }
-    if (res.data.statusCode === 401) {
-      {
-        toast.error("Email ou mot de passe incorrect");
-      }
     }
 
     return res.data;
@@ -105,6 +105,40 @@ export function useAuth() {
 
     return res.data;
   };
+  const changePassword = async ({
+    email,
+    password,
+    newPassword,
+    token,
+    code,
+  }: {
+    email: string;
+    password: string;
+    newPassword: string;
+    token?: string;
+    code?: number;
+  }) => {
+    const res = await api.post<DBResponseType<null>>(`/auth/recover-password`, {
+      email,
+      password,
+      newPassword,
+      token,
+      code,
+    });
+
+    if (res.status === 401) {
+      toast.error("Email ou mot de passe incorrect");
+    }
+
+    if (res.data.statusCode === 201) {
+      localStorage.setItem("user", JSON.stringify(res.data.data));
+      localStorage.setItem("login", "login");
+      toast.success("Connexion réussie");
+      window.location.replace("/");
+    }
+
+    return res.data;
+  };
 
   const confirmRecoverPassword = async (
     token: string,
@@ -135,5 +169,6 @@ export function useAuth() {
     confirmLogin,
     recoverPassword,
     confirmRecoverPassword,
+    changePassword,
   };
 }

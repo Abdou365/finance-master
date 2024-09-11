@@ -66,7 +66,7 @@ api.interceptors.response.use(
       statusCode: error.response?.status,
       message: join(error.response?.data?.message, "/n"),
     });
-    console.error(error);
-    return Promise.reject(error);
+    console.error({ error });
+    return error;
   }
 );

@@ -10,6 +10,9 @@ import AlertMessage from "../components/Message/Message.tsx";
 import ToggleTheme from "../components/ToggleTheme/ToggleTheme.tsx";
 import { useTheme } from "../store.tsx/theme.ctx.tsx";
 import { useAuth } from "./useLogin.tsx";
+import { toast } from "react-toastify";
+
+const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
 
 const schema: FieldType[] = [
   {
@@ -18,6 +21,7 @@ const schema: FieldType[] = [
     format: "email",
     name: "email",
     description: "Entrez votre email",
+    required: true,
   },
   {
     type: "password",
@@ -25,6 +29,7 @@ const schema: FieldType[] = [
     format: "password",
     name: "password",
     description: "Entrez votre mot de passe",
+    required: true,
   },
 ];
 
@@ -52,7 +57,9 @@ const Login = () => {
       case step === "confirm-recover" && typeof token === "string":
         return <ConfirmRecover token={token} />;
       case step === "recover":
-        return <RecoverPassword />;
+        return <SendRecoverMail />;
+      case step === "recover-password":
+        return <ResetPassword token={token} />;
       case step === "send":
         return <ConfirmSend email={formState.email} />;
       default:
@@ -78,14 +85,13 @@ const Login = () => {
                   if (loginResponse.statusCode === 201) {
                     setParams({ step: "send" });
                   }
+                } else if (isRegister) {
+                  register(formState.email, formState.password);
+                  setParams({ step: "send" });
                 }
-                // else if (isRegister) {
-                //   register(formState.email, formState.password);
-                //   setParams({ step: "send" });
-                // }
               }}
             />
-            {/* <Button
+            <Button
               onClick={() => {
                 setParams({ step: "recover" });
               }}
@@ -93,8 +99,8 @@ const Login = () => {
               color="gray"
             >
               Mot de passe oublier
-            </Button> */}
-            {/* <p>
+            </Button>
+            <p>
               {isLogin ? "Tu es nouveau," : "Tu as déjà un compte,"}
               <a
                 onClick={() => {
@@ -105,7 +111,7 @@ const Login = () => {
               >
                 {isLogin ? "inscris-toi" : "connecte-toi"}
               </a>
-            </p> */}
+            </p>
           </BoxComponent>
         );
     }
@@ -187,7 +193,7 @@ const ConfirmSend: React.FC<{ email: string }> = (props) => {
   );
 };
 
-const RecoverPassword: React.FC = () => {
+const SendRecoverMail: React.FC = () => {
   const { recoverPassword } = useAuth();
   const [params, setParams] = useSearchParams();
   const [formState, setFormState] = useState({ email: "" });
@@ -211,6 +217,64 @@ const RecoverPassword: React.FC = () => {
         onSubmit={async () => {
           await recoverPassword(formState.email);
           setParams({ step: "send" });
+        }}
+      />
+    </BoxComponent>
+  );
+};
+
+const ResetPassword: React.FC<{ token: string }> = ({ token = "" }) => {
+  const { changePassword } = useAuth();
+  const [formState, setFormState] = useState({
+    email: "",
+    password: "",
+    newPassword: "",
+    code: 0,
+  });
+
+  return (
+    <BoxComponent className={loginContainer}>
+      <h3 className=" font-bold text-lg">
+        Modifier votre mot de passe en entrant votre email et un nouveau mot de
+        passe
+      </h3>
+      <FormComponent
+        fields={[
+          {
+            type: "email",
+            label: "Email",
+            format: "email",
+            name: "email",
+            description: "Entrez votre email",
+            required: true,
+          },
+          {
+            type: "password",
+            label: "Mot de passe",
+            name: "password",
+            description: "Entrez votre mot de passe",
+            required: true,
+          },
+          {
+            type: "password",
+            label: "Nouveau mot de passe",
+            name: "newPassword",
+            description: "Entrez votre nouveau mot de passe",
+            required: true,
+          },
+          {
+            type: "number",
+            label: "Code de confirmation",
+            name: "code",
+            description: "Entrez le code de confirmation",
+          },
+        ]}
+        data={formState}
+        onChange={({ name, value }) => {
+          setFormState((obj) => ({ ...obj, [name]: value }));
+        }}
+        onSubmit={async () => {
+          await changePassword({ ...formState, token });
         }}
       />
     </BoxComponent>
