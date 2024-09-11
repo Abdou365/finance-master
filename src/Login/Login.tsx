@@ -10,9 +10,6 @@ import AlertMessage from "../components/Message/Message.tsx";
 import ToggleTheme from "../components/ToggleTheme/ToggleTheme.tsx";
 import { useTheme } from "../store.tsx/theme.ctx.tsx";
 import { useAuth } from "./useLogin.tsx";
-import { toast } from "react-toastify";
-
-const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
 
 const schema: FieldType[] = [
   {

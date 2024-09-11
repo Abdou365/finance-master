@@ -2,16 +2,23 @@ import { slice } from "lodash";
 import { useState } from "react";
 import { FaPlusCircle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { v4 as uuidv4 } from "uuid";
-import { formModal } from "../components/Modal/FormModal";
+import BoxComponent from "../components/Box/BoxComponent";
 import Button from "../components/Button/Button";
 import ListComponent from "../components/List/ListComponent";
 import ListItemComponent from "../components/List/ListItemComponent";
+import { openConfirmModal } from "../components/Modal/ConfirModal";
+import { formModal } from "../components/Modal/FormModal";
 import Pagination from "../components/Pagination/Pagination";
-import { upsertAcount, useAccount } from "../store.tsx/useAccount";
+import {
+  deleteAccount,
+  upsertAcount,
+  useAccount,
+} from "../store.tsx/useAccount";
+import { AccountType } from "../types/account.type";
 import { formatNumber } from "../utils/rounding";
 import { AccountCard } from "./AccountCard";
-import BoxComponent from "../components/Box/BoxComponent";
 
 const fields = [
   {
@@ -29,7 +36,7 @@ const fields = [
 ];
 
 export const AccountList = () => {
-  const data = useAccount();
+  const { data, refetch } = useAccount();
   const [viewIndex, setViewIndex] = useState(0);
   const navigate = useNavigate();
 
@@ -40,6 +47,40 @@ export const AccountList = () => {
 
       if (upsert.statusCode === 201) {
         navigate(`/app/${upsert.data.id}`);
+      }
+    }
+  };
+
+  const editAccountModal = async (id: string) => {
+    const res = (await formModal({
+      fields,
+      data: data?.find((d) => d.id === id),
+    })) as AccountType;
+
+    if (res) {
+      const upsert = await upsertAcount({
+        title: res.title,
+        description: res.description,
+        id,
+      });
+
+      if (upsert.statusCode === 201) {
+        toast.success("Compte mis à jour");
+        refetch();
+      } else {
+        toast.error("Erreur lors de la mise à jour du compte");
+      }
+    }
+  };
+
+  const handleDeleteAccount = async (id: string) => {
+    const open = await openConfirmModal({
+      message: "Voulez-vous vraiment supprimer ce compte ?",
+    });
+    if (open) {
+      const res = await deleteAccount(id);
+      if (res.statusCode === 200) {
+        refetch();
       }
     }
   };
@@ -97,10 +138,14 @@ export const AccountList = () => {
         </Button>
       </div>
 
-      <div className="flex-1 sm:flex block space-y-3">
+      <div className="flex-1 sm:flex block space-x-3">
         <div className=" flex-1 mx-auto grid lg:grid-cols-3 grid-cols-1 gap-3 align-top justify-start place-content-start">
           {currentData?.map((d) => (
-            <AccountCard {...d} />
+            <AccountCard
+              onEdit={editAccountModal}
+              onDelete={handleDeleteAccount}
+              {...d}
+            />
           ))}
         </div>
 

@@ -1,10 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
 import { api } from "../api/axios.ts";
+import { useLoading } from "../Loading/Loading.tsx";
 import { AccountDashboard, AccountType } from "../types/account.type.ts";
 import { DBResponseType } from "../types/fetch.type.ts";
 import store from "./store.ts";
-import { useEffect } from "react";
-import { useLoading } from "../Loading/Loading.tsx";
 
 export const useAccount = () => {
   const response = useQuery({
@@ -17,9 +18,7 @@ export const useAccount = () => {
     },
   });
 
-  if (response.isSuccess) {
-    return response.data;
-  }
+  return response;
 };
 export const useAccountNav = () => {
   const response = useQuery({
@@ -63,5 +62,17 @@ export const upsertAcount = async (params: {
     userId: store.user()?.id,
   });
 
+  return res.data;
+};
+
+export const deleteAccount = async (id: string) => {
+  const userId = store.user()?.id;
+  const res = await api.delete<DBResponseType<any>>(`/account/${userId}/${id}`);
+
+  if (res.status === 200) {
+    toast.success("Account deleted successfully");
+  } else {
+    toast.error("Failed to delete account");
+  }
   return res.data;
 };

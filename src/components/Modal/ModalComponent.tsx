@@ -41,20 +41,10 @@ const ModalComponent: React.FC<ModalProps> = (props) => {
   );
   const modalContainer = twMerge(
     "fixed inset-0 flex max-h-full w-full items-center justify-center",
-    size === "compact" && " sm:h-fit sm:w-[500px] m-auto",
+    size === "compact" && "h-fit max-w-[500px] m-auto",
     size === "medium" && " sm:h-fit sm:w-[800px] m-auto"
   );
   return (
-    // <Transition.Root
-    //   show={isShowing}
-    //   as={Fragment}
-    //   enter="transition duration-300"
-    //   enterFrom="transform  opacity-0"
-    //   enterTo=" transform  opacity-100"
-    //   leave="transition duration-300"
-    //   leaveFrom="transform  opacity-100"
-    //   leaveTo="transform  opacity-0"
-    // >
     <Dialog
       open
       className="h-full w-full bg-black bg-opacity-80 top-0 right-0 absolute p-10 overflow-hidden"
@@ -66,40 +56,6 @@ const ModalComponent: React.FC<ModalProps> = (props) => {
       }}
     >
       <div className={as === "drawer" ? drawerConatainer : modalContainer}>
-        {/* <Transition.Child
-            as={Fragment}
-            // show={isShowing}
-            enter={
-              ["modal", "confirm"].includes(as)
-                ? "transition duration-300"
-                : "transition duration-400"
-            }
-            enterFrom={
-              ["modal", "confirm"].includes(as)
-                ? "transform -translate-x-full opacity-0"
-                : "transform translate-x-full opacity-0"
-            }
-            enterTo={
-              ["modal", "confirm"].includes(as)
-                ? "transform translate-x-0 opacity-100"
-                : "transform translate-x-0 opacity-100"
-            }
-            leave={
-              ["modal", "confirm"].includes(as)
-                ? "transition duration-300"
-                : "transition duration-300"
-            }
-            leaveFrom={
-              ["modal", "confirm"].includes(as)
-                ? "transform translate-x-0 opacity-100"
-                : "transform translate-x-0 opacity-100"
-            }
-            leaveTo={
-              ["modal", "confirm"].includes(as)
-                ? "transform translate-x-full opacity-0"
-                : "transform translate-x-full opacity-0"
-            }
-          > */}
         <Dialog.Panel
           className={twMerge(
             "bg-white dark:bg-primary-950  shadow-lg h-full w-full flex flex-col",

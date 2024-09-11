@@ -1,11 +1,17 @@
-import { FaArrowRight } from "react-icons/fa";
+import { FaArrowRight, FaEdit, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { AccountType } from "../types/account.type";
-import Button from "../components/Button/Button";
 import BoxComponent from "../components/Box/BoxComponent";
+import Button from "../components/Button/Button";
+import { AccountType } from "../types/account.type";
 
-export const AccountCard = (props: AccountType) => {
+interface AccountCardType extends AccountType {
+  onEdit: (id: string) => void;
+  onDelete: (id: string) => void;
+}
+
+export const AccountCard = (props: AccountCardType) => {
   const nav = useNavigate();
+  const { onEdit, onDelete, ...account } = props;
   return (
     <BoxComponent size="medium" className="relative overflow-hidden">
       <div className="relative h-full w-full space-y-3">
@@ -13,6 +19,14 @@ export const AccountCard = (props: AccountType) => {
           <div className="flex flex-col">
             <span className=" uppercase font-bold">solde </span>
             <span className=" text-2xl font-bold">{props.balance} €</span>
+          </div>
+          <div className="flex items-start gap-1">
+            <Button onClick={() => onEdit(account.id)}>
+              <FaEdit />
+            </Button>
+            <Button color="red" onClick={() => onDelete(account.id)}>
+              <FaTrash />
+            </Button>
           </div>
         </div>
         <h3 className=" font-bold text-gray-800 dark:text-white text-xl">
