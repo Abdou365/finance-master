@@ -1,8 +1,11 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { api } from "../api/axios";
 import { DBResponseType } from "../types/fetch.type";
 import { ItemType } from "../types/item.type";
+import { useLoading } from "../Loading/Loading";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
 
 export const defaultCategory = [
   { value: "food", label: "Nourriture" },
@@ -21,7 +24,9 @@ export const defaultCategory = [
   { value: "other", label: "Autre" },
 ];
 
-export const useGetItems = (accountId: string, page: number) => {
+export const useItems = (accountId: string, page: number) => {
+  const { setIsLoading } = useLoading();
+
   const query = useQuery({
     queryKey: ["getAllItems", accountId, page],
     queryFn: async () => {
@@ -31,12 +36,48 @@ export const useGetItems = (accountId: string, page: number) => {
       return data.data;
     },
   });
-  return query;
-};
 
-export const upsertItems = async (items: ItemType[], count: number) => {
-  const query = await api.post("/item", { items, count });
-  return query;
+  const upsertItems = useMutation<
+    DBResponseType<unknown>,
+    unknown,
+    { items: ItemType[]; count: number }
+  >({
+    mutationFn: async ({
+      items,
+      count,
+    }: {
+      items: ItemType[];
+      count: number;
+    }) => {
+      const { data } = await api.post<DBResponseType<unknown>>("/item", {
+        items,
+        count,
+      });
+      return data;
+    },
+    mutationKey: ["post", "upsertItems"],
+    onMutate: (items) => {
+      toast.info("Sauvegarde en cours", { isLoading: true });
+      return;
+    },
+    onSuccess: (data) => {
+      if (data.statusCode === 201) {
+        toast.dismiss();
+        toast.success("Sauvegarde réussie");
+        query.refetch();
+      }
+    },
+    onError: () => {
+      toast.dismiss();
+      toast.error("Erreur lors de la sauvegarde");
+    },
+  });
+
+  useEffect(() => {
+    setIsLoading(query.isLoading);
+  }, [query.isLoading]);
+
+  return { ...query, upsertItems: upsertItems.mutate };
 };
 
 export const useGetItemsCategory = () => {

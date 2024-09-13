@@ -9,7 +9,7 @@ import { openConfirmModal } from "../../components/Modal/ConfirModal";
 import { formModal } from "../../components/Modal/FormModal";
 import TabComponent from "../../components/Tab/TabComponent";
 import store from "../../store.tsx/store";
-import { upsertObjectif, useGetAllObjectif } from "../../store.tsx/useObject";
+import { useObjectif } from "../../store.tsx/useObject";
 import { ObjectifType } from "../../types/objectif.type";
 import "./Objectif.scss";
 import { ObjectifCard } from "./ObjectifCard";
@@ -27,7 +27,7 @@ const Objectif: React.FC = () => {
   const itemFields = useObjectifField();
   const [setselected, setSetselected] = useState<ObjectifType[]>([]);
   const { user } = store;
-  const { data, refetch } = useGetAllObjectif();
+  const { data, upsertObjectif } = useObjectif();
   const { savings = [], incomes = [], summary } = data;
   const allObjectifTabs = {
     objectifs: [...savings, ...incomes],
@@ -49,7 +49,7 @@ const Objectif: React.FC = () => {
     const cleanObj = omit(res, "currentAmount", "progress");
 
     if (res) {
-      const newObjectif = await upsertObjectif({
+      upsertObjectif({
         id: uuidv4(),
         accountId,
         userId: user()?.id,
@@ -63,10 +63,6 @@ const Objectif: React.FC = () => {
         status: "active",
         ...cleanObj,
       });
-
-      if (newObjectif?.statusCode === 201) {
-        refetch();
-      }
     }
   };
 
@@ -99,14 +95,10 @@ const Objectif: React.FC = () => {
       return;
     }
 
-    const deletedObjectif = await upsertObjectif({
+    await upsertObjectif({
       ...omit(obj, "currentAmount", "progress"),
       status: "deleted",
     });
-
-    if (deletedObjectif?.statusCode === 201) {
-      refetch();
-    }
   };
 
   /**
@@ -121,18 +113,14 @@ const Objectif: React.FC = () => {
     if (!confirm) {
       return;
     }
-    const deletedObjectif = await Promise.all(
+    await Promise.all(
       setselected.map(async (obj) => {
-        return await upsertObjectif({
+        return upsertObjectif({
           ...omit(obj, "currentAmount", "progress"),
           status: "deleted",
         });
       })
     );
-
-    if (deletedObjectif?.[0]?.statusCode === 201) {
-      refetch();
-    }
   };
 
   if (!objectifs.length && !objectifSumary) {
@@ -165,14 +153,10 @@ const Objectif: React.FC = () => {
     });
 
     if (res) {
-      const update = await upsertObjectif({
+      upsertObjectif({
         ...cleanObj,
         ...res,
       });
-
-      if (update?.statusCode === 201) {
-        refetch();
-      }
     }
   };
 

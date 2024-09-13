@@ -25,7 +25,6 @@ const sendNotification = ({
   if (window.location.pathname !== "/auth") {
     switch (statusCode) {
       case 201:
-        toast.success("Data saved successfully", { icon: FaCheckCircle });
         break;
       case 204:
         toast.success("Data updated successfully", { icon: FaCheckCircle });
@@ -34,7 +33,7 @@ const sendNotification = ({
         toast.error("Data not found");
         break;
       case 400:
-        toast.error(message || "Data not found", { icon: FaSadTear });
+        // toast.error(message || "Data not found", { icon: FaSadTear });
         break;
       case 401:
         toast.error("Unauthorized");

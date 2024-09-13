@@ -51,8 +51,6 @@ const Login = () => {
       case step === "confirm-login" && typeof token === "string":
       case step === "confirm-register" && typeof token === "string":
         return <ConfirmAuth token={token} />;
-      case step === "confirm-recover" && typeof token === "string":
-        return <ConfirmRecover token={token} />;
       case step === "recover":
         return <SendRecoverMail />;
       case step === "recover-password":
@@ -75,16 +73,15 @@ const Login = () => {
               }}
               onSubmit={async () => {
                 if (isLogin) {
-                  const loginResponse = await login(
-                    formState.email,
-                    formState.password
-                  );
-                  if (loginResponse.statusCode === 201) {
-                    setParams({ step: "send" });
-                  }
+                  login({
+                    email: formState.email,
+                    password: formState.password,
+                  });
                 } else if (isRegister) {
-                  register(formState.email, formState.password);
-                  setParams({ step: "send" });
+                  register({
+                    email: formState.email,
+                    password: formState.password,
+                  });
                 }
               }}
             />
@@ -115,7 +112,7 @@ const Login = () => {
   };
 
   return (
-    <main className="   bg-gradient-to-tr from-primary-300 dark:from-primary-800 from-0% via-white dark:via-primary-950 via-50% to-white dark:to-primary-950 to-100%  ">
+    <main className="bg-gradient-to-tr from-primary-300 dark:from-primary-800 from-0% via-white dark:via-primary-950 via-50% to-white dark:to-primary-950 to-100%  ">
       <div className="flex h-screen p-5 gap-4 container m-auto">
         <div className="rounded-xl flex-1 hidden md:block">
           <img
@@ -147,15 +144,12 @@ const ConfirmAuth: React.FC<{ token: string }> = (props) => {
 
   const handleSubmit = async (data: { code: number }) => {
     if (step === "confirm-register" || typeof props.token !== "string") {
-      const res = await confirmRegistration(props.token, data.code);
-      if (res.statusCode === 201) {
-        window.location.replace("/");
-      }
+      confirmRegistration({
+        token: props.token,
+        code: data.code,
+      });
     } else if (step === "confirm-login" || typeof props.token === "string") {
-      const res = await confirmLogin(props.token, data.code);
-      if (res.statusCode === 201) {
-        window.location.replace("/");
-      }
+      confirmLogin({ token: props.token, code: data.code });
     }
   };
 
@@ -171,7 +165,7 @@ const ConfirmAuth: React.FC<{ token: string }> = (props) => {
           },
         ]}
         onSubmit={async (data) => {
-          await handleSubmit(data);
+          await handleSubmit({ code: data.code });
         }}
       />
     </BoxComponent>
@@ -192,7 +186,6 @@ const ConfirmSend: React.FC<{ email: string }> = (props) => {
 
 const SendRecoverMail: React.FC = () => {
   const { recoverPassword } = useAuth();
-  const [params, setParams] = useSearchParams();
   const [formState, setFormState] = useState({ email: "" });
 
   return (
@@ -212,15 +205,14 @@ const SendRecoverMail: React.FC = () => {
           setFormState((obj) => ({ ...obj, [name]: value }));
         }}
         onSubmit={async () => {
-          await recoverPassword(formState.email);
-          setParams({ step: "send" });
+          recoverPassword({ email: formState.email });
         }}
       />
     </BoxComponent>
   );
 };
 
-const ResetPassword: React.FC<{ token: string }> = ({ token = "" }) => {
+const ResetPassword: React.FC<{ token: string | null }> = ({ token = "" }) => {
   const { changePassword } = useAuth();
   const [formState, setFormState] = useState({
     email: "",
@@ -253,13 +245,6 @@ const ResetPassword: React.FC<{ token: string }> = ({ token = "" }) => {
             required: true,
           },
           {
-            type: "password",
-            label: "Nouveau mot de passe",
-            name: "newPassword",
-            description: "Entrez votre nouveau mot de passe",
-            required: true,
-          },
-          {
             type: "number",
             label: "Code de confirmation",
             name: "code",
@@ -271,57 +256,9 @@ const ResetPassword: React.FC<{ token: string }> = ({ token = "" }) => {
           setFormState((obj) => ({ ...obj, [name]: value }));
         }}
         onSubmit={async () => {
-          await changePassword({ ...formState, token });
+          await changePassword({ ...formState, token: token || "" });
         }}
       />
     </BoxComponent>
-  );
-};
-
-const ConfirmRecover: React.FC<{ token: string }> = ({ token }) => {
-  const { confirmRecoverPassword } = useAuth();
-
-  const handleSubmit = async (data: any) => {
-    const res = await confirmRecoverPassword(
-      token,
-      data.code,
-      data.password,
-      data.password_confirmation
-    );
-    if (res.statusCode === 201) {
-      window.location.replace("/");
-    }
-  };
-
-  return (
-    <div className={loginContainer}>
-      <FormComponent
-        fields={[
-          {
-            type: "password",
-            label: "Nouveau mot de passe",
-            format: "password",
-            name: "password",
-            description: "Entrez votre nouveau mot de passe",
-          },
-          {
-            type: "password",
-            label: "Confirmation du mot de passe",
-            format: "password",
-            name: "password_confirmation",
-            description: "Confirmez votre mot de passe",
-          },
-          {
-            type: "number",
-            label: "Code de confirmation",
-            name: "code",
-            description: "Entrez le code de confirmation",
-          },
-        ]}
-        onSubmit={async (data) => {
-          await handleSubmit(data);
-        }}
-      />
-    </div>
   );
 };

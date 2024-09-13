@@ -33,4 +33,4 @@ export const initialState: StoreType = {
 
 export const ItemCtx = createContext(initialState);
 
-export const useItems = () => useContext(ItemCtx);
+export const useItemsStore = () => useContext(ItemCtx);

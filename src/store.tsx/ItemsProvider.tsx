@@ -3,21 +3,19 @@ import { useEffect, useState } from "react";
 import { useBlocker, useParams, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { v4 as uuidv4 } from "uuid";
-import { useLoading } from "../Loading/Loading";
 import { ItemType } from "../types/item.type";
 import store from "./store";
 import { ItemCtx } from "./store.ctx";
-import { upsertItems, useGetItems } from "./useItems";
+import { useItems } from "./useItems";
 
 const ItemsProvider = ({ children }: { children: React.ReactNode }) => {
   const { accountId = "" } = useParams();
   const [searchParams] = useSearchParams();
-  const { setIsLoading } = useLoading();
   const page = searchParams.get("page") || "";
   const isFreeUser = store.isFreeUser();
   const [hasChanged, setHasChanged] = useState(false);
 
-  const { data, refetch, isLoading } = useGetItems(accountId, +page);
+  const { data, refetch, upsertItems } = useItems(accountId, +page);
 
   const [items, setItems] = useState<ItemType[]>([]);
 
@@ -28,10 +26,6 @@ const ItemsProvider = ({ children }: { children: React.ReactNode }) => {
       setItems(data.items);
     }
   }, [data]);
-
-  useEffect(() => {
-    setIsLoading(isLoading);
-  }, [isLoading]);
 
   const updateItems = (item: ItemType) => {
     const newItem = items.map((i) => {
@@ -73,7 +67,7 @@ const ItemsProvider = ({ children }: { children: React.ReactNode }) => {
     }
     if (data) {
       const editedItems = difference(items, data?.items);
-      await upsertItems(editedItems, publishedItems.length || items.length);
+      upsertItems({ items: editedItems, count: data.count });
       setHasChanged(false);
     }
   };

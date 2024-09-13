@@ -249,7 +249,7 @@ const Calendar = (props: Props) => {
               min={0}
               onBlur={handleChange}
               defaultValue={item.value}
-              className="text-right w-2"
+              className="text-right w-2 bg-transparent"
             />
           </span>
           <Tooltip

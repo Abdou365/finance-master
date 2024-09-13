@@ -17,7 +17,7 @@ import { formModal } from "../../components/Modal/FormModal";
 import { importModal } from "../../components/Modal/ImportModal/ImportModal";
 import Table, { TableAcion } from "../../components/Table/Table";
 import store from "../../store.tsx/store";
-import { useItems } from "../../store.tsx/store.ctx";
+import { useItemsStore } from "../../store.tsx/store.ctx";
 import { useGetItemsCategory } from "../../store.tsx/useItems";
 import { ItemType } from "../../types/item.type";
 import ItemToolbar from "./ItemToolbar";
@@ -77,7 +77,7 @@ const useItemSchema = (): FieldType[] => {
 
 const Items = () => {
   const { items, updateItems, createItems, save, bulkDelete, deleteItem } =
-    useItems();
+    useItemsStore();
   const itemFields = useItemSchema();
   const { accountId } = useParams();
   const [params, setParams] = useSearchParams({ view: "table" });

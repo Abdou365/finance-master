@@ -2,7 +2,6 @@ import { slice } from "lodash";
 import { useState } from "react";
 import { FaPlusCircle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import { v4 as uuidv4 } from "uuid";
 import BoxComponent from "../components/Box/BoxComponent";
 import Button from "../components/Button/Button";
@@ -11,11 +10,7 @@ import ListItemComponent from "../components/List/ListItemComponent";
 import { openConfirmModal } from "../components/Modal/ConfirModal";
 import { formModal } from "../components/Modal/FormModal";
 import Pagination from "../components/Pagination/Pagination";
-import {
-  deleteAccount,
-  upsertAcount,
-  useAccount,
-} from "../store.tsx/useAccount";
+import { useAccount } from "../store.tsx/useAccount";
 import { AccountType } from "../types/account.type";
 import { formatNumber } from "../utils/rounding";
 import { AccountCard } from "./AccountCard";
@@ -36,18 +31,19 @@ const fields = [
 ];
 
 export const AccountList = () => {
-  const { data, refetch } = useAccount();
+  const { data, deleteAccount, upsertAcount } = useAccount();
   const [viewIndex, setViewIndex] = useState(0);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const createAccountModal = async () => {
     const res = (await formModal({ fields })) as unknown;
     if (res) {
-      const upsert = await upsertAcount({ ...res, id: uuidv4() });
+      const upsert = upsertAcount({ ...res, id: uuidv4() });
+      console.log(upsert);
 
-      if (upsert.statusCode === 201) {
-        navigate(`/app/${upsert.data.id}`);
-      }
+      // if (upsert.statusCode === 201) {
+      //   navigate(`/app/${upsert.data.id}`);
+      // }
     }
   };
 
@@ -58,18 +54,11 @@ export const AccountList = () => {
     })) as AccountType;
 
     if (res) {
-      const upsert = await upsertAcount({
+      upsertAcount({
         title: res.title,
         description: res.description,
         id,
       });
-
-      if (upsert.statusCode === 201) {
-        toast.success("Compte mis à jour");
-        refetch();
-      } else {
-        toast.error("Erreur lors de la mise à jour du compte");
-      }
     }
   };
 
@@ -78,10 +67,7 @@ export const AccountList = () => {
       message: "Voulez-vous vraiment supprimer ce compte ?",
     });
     if (open) {
-      const res = await deleteAccount(id);
-      if (res.statusCode === 200) {
-        refetch();
-      }
+      await deleteAccount({ id });
     }
   };
 
@@ -138,8 +124,8 @@ export const AccountList = () => {
         </Button>
       </div>
 
-      <div className="flex-1 sm:flex block space-x-3">
-        <div className=" flex-1 mx-auto grid lg:grid-cols-3 grid-cols-1 gap-3 align-top justify-start place-content-start">
+      <div className="flex-1 flex sm:flex-row flex-col gap-3">
+        <div className=" flex-1 grid lg:grid-cols-3 grid-cols-1 gap-3 align-top justify-start place-content-start">
           {currentData?.map((d) => (
             <AccountCard
               onEdit={editAccountModal}

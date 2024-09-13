@@ -30,7 +30,7 @@ const Account = () => {
   };
 
   return (
-    <div className=" h-screen flex">
+    <div className="h-screen flex">
       <Sidebar />
       <div className="flex-1 flex flex-col overflow-hidden">
         <NavBar />
