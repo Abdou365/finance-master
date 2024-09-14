@@ -64,7 +64,6 @@ export const useItems = (accountId: string, page: number) => {
       if (data.statusCode === 201) {
         toast.dismiss();
         toast.success("Sauvegarde réussie");
-        query.refetch();
       }
     },
     onError: () => {

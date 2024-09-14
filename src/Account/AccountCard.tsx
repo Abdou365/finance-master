@@ -47,11 +47,11 @@ export const AccountCard = (props: AccountCardType) => {
               <td className="text-right px-2">{props.expenseSum} €</td>
             </tr>
             <tr>
-              <td className="px-2">Dépense</td>
+              <td className="px-2">Revenus</td>
               <td className="text-right px-2">{props.paymentCount}</td>
             </tr>
             <tr>
-              <td className="px-2">Dépense</td>
+              <td className="px-2">Somme des revenus</td>
               <td className="text-right px-2">{props.paymentSum} €</td>
             </tr>
           </tbody>

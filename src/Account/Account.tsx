@@ -1,10 +1,9 @@
-import { FaFolderOpen, FaUserCircle } from "react-icons/fa";
+import { FaFolderOpen } from "react-icons/fa";
 import { useSearchParams } from "react-router-dom";
 import Sidebar from "../Budget/Sidebar/Sidebar";
 import NavBar from "../components/NavBar/NavBar";
 import TabComponent from "../components/Tab/TabComponent";
 import { AccountList } from "./AccountList";
-import Profile from "./Profile";
 import { ProfileHeader } from "./ProfileHeader";
 
 const tabs = [
@@ -14,12 +13,12 @@ const tabs = [
     icon: FaFolderOpen,
     content: <AccountList />,
   },
-  {
-    name: "profile",
-    label: "Profile",
-    icon: FaUserCircle,
-    content: <Profile />,
-  },
+  // {
+  //   name: "profile",
+  //   label: "Profile",
+  //   icon: FaUserCircle,
+  //   content: <Profile />,
+  // },
 ];
 
 const Account = () => {

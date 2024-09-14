@@ -95,7 +95,7 @@ const Objectif: React.FC = () => {
       return;
     }
 
-    await upsertObjectif({
+    upsertObjectif({
       ...omit(obj, "currentAmount", "progress"),
       status: "deleted",
     });
@@ -127,10 +127,7 @@ const Objectif: React.FC = () => {
     return (
       <Empty
         action={
-          <Button
-            onClick={handleCreate}
-            className="objectif__button btn-primary"
-          >
+          <Button onClick={handleCreate}>
             <FaTrophy /> Ajouter un Objectif
           </Button>
         }

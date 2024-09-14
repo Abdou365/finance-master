@@ -1,3 +1,4 @@
+import { DragDropContext } from "@hello-pangea/dnd";
 import bem from "bem-ts";
 import { compact, keyBy } from "lodash";
 import { useState } from "react";
@@ -9,8 +10,12 @@ import {
   FaTable,
   FaTimes,
   FaTrashAlt,
+  FaTrophy,
 } from "react-icons/fa";
 import { useParams, useSearchParams } from "react-router-dom";
+import Button from "../../components/Button/Button";
+import Calendar from "../../components/Calendar/Calendar";
+import Empty from "../../components/Empty/Empty";
 import { FieldType } from "../../components/Form/FormComponent";
 import { openConfirmModal } from "../../components/Modal/ConfirModal";
 import { formModal } from "../../components/Modal/FormModal";
@@ -23,8 +28,6 @@ import { ItemType } from "../../types/item.type";
 import ItemToolbar from "./ItemToolbar";
 import "./Items.scss";
 import { useItemsTable } from "./useItemsTable";
-import Calendar from "../../components/Calendar/Calendar";
-import { DragDropContext } from "@hello-pangea/dnd";
 
 export const itemCx = bem("item-group");
 
@@ -62,6 +65,7 @@ const useItemSchema = (): FieldType[] => {
           value: category,
           label: category,
         })) || [],
+      creatable: true,
     },
     {
       type: "select",
@@ -76,8 +80,15 @@ const useItemSchema = (): FieldType[] => {
 };
 
 const Items = () => {
-  const { items, updateItems, createItems, save, bulkDelete, deleteItem } =
-    useItemsStore();
+  const {
+    items,
+    updateItems,
+    createItems,
+    save,
+    bulkDelete,
+    deleteItem,
+    hasChanged,
+  } = useItemsStore();
   const itemFields = useItemSchema();
   const { accountId } = useParams();
   const [params, setParams] = useSearchParams({ view: "table" });
@@ -89,8 +100,7 @@ const Items = () => {
   const handleCreate = (item?: Partial<ItemType>) => {
     if (isFreeUser && items.length >= 100) {
       openConfirmModal({
-        message:
-          "You have reached the maximum number of items for the free plan",
+        message: "Vous avez dépassé le nombres maximal d'entrées autorisées",
       });
       return;
     }
@@ -217,6 +227,18 @@ const Items = () => {
 
   const itemById = keyBy(items, "id");
 
+  if (items.length === 0 && !hasChanged) {
+    return (
+      <Empty
+        action={
+          <Button onClick={() => handleCreate()}>
+            <FaTrophy /> Ajouter une entrée
+          </Button>
+        }
+      />
+    );
+  }
+
   return (
     <DragDropContext
       onDragEnd={(p) => {
@@ -240,8 +262,9 @@ const Items = () => {
                   label: "Sauvegarder",
                   icon: FaSave,
                   onClick: () => {
-                    save();
+                    if (hasChanged) save();
                   },
+                  active: hasChanged,
                 },
                 {
                   label: "Créer",

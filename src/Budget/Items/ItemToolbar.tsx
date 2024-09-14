@@ -8,6 +8,7 @@ type Props = {
     icon?: IconType;
     label?: string;
     onClick?: () => void;
+    active?: boolean;
   }[];
   orientation?: "horizontal" | "vertical";
   classNames?: string;
@@ -30,7 +31,11 @@ const ItemToolbar: React.FC<Props> = ({
         const Icon = item.icon || FaIcons;
         return (
           <li
-            className="flex place-items-center cursor-pointer p-2 gap-2 border dark:border-primary-600 hover:bg-gray-100 dark:hover:bg-primary-900  dark:text-primary-100 "
+            className={twMerge(
+              "flex place-items-center cursor-pointer p-2 gap-2 border dark:border-primary-600 hover:bg-gray-100 dark:hover:bg-primary-900  dark:text-primary-100 ",
+              item.active &&
+                "bg-primary-100 dark:bg-primary-800 dark:text-primary-100 text-primary-500"
+            )}
             onClick={item.onClick}
             key={index}
           >

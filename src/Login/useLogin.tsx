@@ -80,6 +80,30 @@ export function useAuth() {
     },
   });
 
+  const logDemo = useMutation({
+    mutationFn: async () => {
+      const res = await api.get<LoginResponse>(`/auth/demo`);
+      return res.data;
+    },
+    mutationKey: ["get", "demo"],
+    onMutate: () => {
+      toast.info("Connexion en cours", { isLoading: true });
+    },
+    onError: () => {
+      toast.dismiss();
+      toast.error("Erreur lors de la connexion");
+    },
+    onSuccess: (data) => {
+      toast.dismiss();
+      if (data.statusCode === 200) {
+        localStorage.setItem("user", JSON.stringify(data.data));
+        localStorage.setItem("login", "login");
+        toast.success("Connexion réussie");
+        window.location.replace("/");
+      }
+    },
+  });
+
   const register = useMutation({
     mutationFn: async ({
       email,
@@ -254,6 +278,7 @@ export function useAuth() {
   return {
     register: register.mutate,
     login: login.mutate,
+    logDemo: logDemo.mutate,
     logout: logout.mutate,
     confirmRegistration: confirRegistration.mutate,
     confirmLogin: confirmLogin.mutate,

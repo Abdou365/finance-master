@@ -33,7 +33,7 @@ const schema: FieldType[] = [
 const loginContainer = "flex flex-col m-auto max-w-96 w-full gap-4";
 
 const Login = () => {
-  const { login, register } = useAuth();
+  const { login, register, logDemo } = useAuth();
   const [params, setParams] = useSearchParams({});
   const { theme } = useTheme();
   const [formState, setFormState] = useState({ email: "", password: "" });
@@ -93,6 +93,9 @@ const Login = () => {
               color="gray"
             >
               Mot de passe oublier
+            </Button>
+            <Button onClick={() => logDemo()} size="medium">
+              Essayer le compte de démonstration
             </Button>
             <p>
               {isLogin ? "Tu es nouveau," : "Tu as déjà un compte,"}

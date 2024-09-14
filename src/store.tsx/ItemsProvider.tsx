@@ -128,6 +128,7 @@ const ItemsProvider = ({ children }: { children: React.ReactNode }) => {
         bulkDelete,
         save,
         deleteItem,
+        hasChanged,
       }}
     >
       {children}

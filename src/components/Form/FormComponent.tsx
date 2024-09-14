@@ -40,6 +40,7 @@ export interface FieldType {
   maxLength?: number;
   minLength?: number;
   size?: number;
+  creatable?: boolean;
 }
 
 interface FormProps {
@@ -83,12 +84,18 @@ const FormComponent: React.FC<FormProps> = (props) => {
     switch (field.type) {
       case "date":
       case "datetime-local": {
-        const { hidden, disabled, required, readOnly, placeholder, ...rest } =
-          field;
+        const {
+          hidden,
+          disabled,
+          required,
+          readOnly,
+          placeholder,
+          format,
+          ...rest
+        } = field;
         return (
           <ReactDatePicker
             {...register(field.name)}
-            {...rest}
             wrapperClassName="w-full"
             className="input w-full"
             icon={<FaCalendar />}
@@ -104,7 +111,6 @@ const FormComponent: React.FC<FormProps> = (props) => {
                 : placeholder?.(watch())
             }
             value={watch(field.name)}
-            hidden={typeof hidden === "boolean" ? hidden : hidden?.(watch())}
             disabled={
               typeof disabled === "boolean" ? disabled : disabled?.(watch())
             }
@@ -202,7 +208,7 @@ const FormComponent: React.FC<FormProps> = (props) => {
         );
       }
       case "select": {
-        const { disabled, required, placeholder } = field;
+        const { disabled, required, placeholder, creatable } = field;
         return (
           <CustomSelect
             options={field.options!}
@@ -220,6 +226,7 @@ const FormComponent: React.FC<FormProps> = (props) => {
             required={
               typeof required === "boolean" ? required : required?.(watch())
             }
+            creatable={creatable}
           />
         );
       }

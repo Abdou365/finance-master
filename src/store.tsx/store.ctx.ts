@@ -17,6 +17,7 @@ export type StoreType = {
   bulkDelete: (ids: string[]) => void;
   save: () => void;
   refetch: () => void;
+  hasChanged: boolean;
 };
 
 export const initialState: StoreType = {
@@ -29,6 +30,7 @@ export const initialState: StoreType = {
   refetch: function (): void {},
   bulkDelete: function (_ids: string[]) {},
   deleteItem: function (_id: string): void {},
+  hasChanged: false,
 };
 
 export const ItemCtx = createContext(initialState);

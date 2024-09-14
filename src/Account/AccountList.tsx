@@ -1,7 +1,6 @@
 import { slice } from "lodash";
 import { useState } from "react";
 import { FaPlusCircle } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import BoxComponent from "../components/Box/BoxComponent";
 import Button from "../components/Button/Button";
@@ -33,17 +32,12 @@ const fields = [
 export const AccountList = () => {
   const { data, deleteAccount, upsertAcount } = useAccount();
   const [viewIndex, setViewIndex] = useState(0);
-  // const navigate = useNavigate();
 
   const createAccountModal = async () => {
     const res = (await formModal({ fields })) as unknown;
     if (res) {
       const upsert = upsertAcount({ ...res, id: uuidv4() });
       console.log(upsert);
-
-      // if (upsert.statusCode === 201) {
-      //   navigate(`/app/${upsert.data.id}`);
-      // }
     }
   };
 
@@ -120,7 +114,7 @@ export const AccountList = () => {
           )}
         </div>
         <Button onClick={createAccountModal}>
-          <FaPlusCircle /> Create new Item
+          <FaPlusCircle /> Ajouter un nouveau compte
         </Button>
       </div>
 
