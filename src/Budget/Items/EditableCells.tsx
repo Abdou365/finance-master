@@ -4,7 +4,6 @@ import { format } from "date-fns";
 import React, { useEffect, useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import DatePicker from "../../components/DatePicker/DatePicker";
-import LoadingBalls from "../../components/LoadingBalls/LoadingBalls";
 import { TableColumnType } from "../../components/Table/Table";
 import CustomSelect from "./CompactSelect";
 
@@ -23,17 +22,6 @@ export const wait = async (time?: number) => {
 
 const EditableCells: React.FC<Props> = (props) => {
   const [inputState, setInputState] = useState(props.getValue());
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setLoading(true);
-    }, 300);
-    setTimeout(async () => {
-      await wait();
-      setLoading(false);
-    }, 300);
-  }, [props.cell.getValue()]);
 
   const handleUpdate = () => {
     props.onChange({
@@ -41,10 +29,6 @@ const EditableCells: React.FC<Props> = (props) => {
       [props.column.id]: inputState,
     });
   };
-
-  if (loading) {
-    return <LoadingBalls />;
-  }
 
   if (props.columnOptions.type === "date") {
     return (
