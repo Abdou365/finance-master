@@ -36,8 +36,7 @@ export const AccountList = () => {
   const createAccountModal = async () => {
     const res = (await formModal({ fields })) as unknown;
     if (res) {
-      const upsert = upsertAcount({ ...res, id: uuidv4() });
-      console.log(upsert);
+      upsertAcount({ ...res, id: uuidv4() });
     }
   };
 

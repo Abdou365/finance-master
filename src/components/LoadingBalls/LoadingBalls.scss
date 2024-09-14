@@ -1,0 +1,25 @@
+.balls {
+  @apply w-8 flex flex-row flex-nowrap items-center justify-between;
+}
+
+.balls div {
+  @apply w-2 h-2 rounded-full bg-gray-400 dark:bg-primary-500;
+  animation: fade 0.4s ease-in-out alternate infinite;
+}
+
+.balls div:nth-of-type(1) {
+  animation-delay: -0.2s;
+}
+
+.balls div:nth-of-type(2) {
+  animation-delay: -0.1s;
+}
+
+@keyframes fade {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}

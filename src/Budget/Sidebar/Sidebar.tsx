@@ -7,10 +7,10 @@ import {
   FaMoneyBillWave,
   FaTrophy,
 } from "react-icons/fa";
-import { Link, useParams, useSearchParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { twMerge } from "tailwind-merge";
 import { useAuth } from "../../Login/useLogin";
 import Tooltip from "../../components/Tooltip/Tooltip";
-import { twMerge } from "tailwind-merge";
 
 const sidebarItemStyle =
   " border dark:border-none h-12 w-12 flex hover:bg-primary-100 dark:hover:bg-primary-700 cursor-pointer justify-center items-center active:bg-primary-200 dark:active:bg-primary-800 transition-all duration-200 ease-in-out";
@@ -18,8 +18,6 @@ const Sidebar = () => {
   const { logout } = useAuth();
   const { accountId } = useParams();
   const path = window.location.pathname;
-
-  console.log(path);
 
   const routes: { icon: React.ReactNode; link: string; name: string }[] =
     compact([

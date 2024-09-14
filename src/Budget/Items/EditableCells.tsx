@@ -1,25 +1,50 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { CellContext } from "@tanstack/react-table";
 import { format } from "date-fns";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import DatePicker from "../../components/DatePicker/DatePicker";
-import CustomSelect from "./CompactSelect";
+import LoadingBalls from "../../components/LoadingBalls/LoadingBalls";
 import { TableColumnType } from "../../components/Table/Table";
+import CustomSelect from "./CompactSelect";
 
 interface Props extends CellContext<any, string> {
   onChange: (item: any) => void;
   columnOptions: TableColumnType;
 }
 
+export const wait = async (time?: number) => {
+  return new Promise<void>((resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, time || 1000);
+  });
+};
+
 const EditableCells: React.FC<Props> = (props) => {
   const [inputState, setInputState] = useState(props.getValue());
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(true);
+    }, 300);
+    setTimeout(async () => {
+      await wait();
+      setLoading(false);
+    }, 300);
+  }, [props.cell.getValue()]);
+
   const handleUpdate = () => {
     props.onChange({
       ...props.row.original,
       [props.column.id]: inputState,
     });
   };
+
+  if (loading) {
+    return <LoadingBalls />;
+  }
 
   if (props.columnOptions.type === "date") {
     return (

@@ -62,7 +62,6 @@ export const useObjectif = () => {
 
   useEffect(() => {
     setIsLoading(isLoading);
-    console.log("isLoading", isLoading);
   }, [isLoading]);
 
   const upsertObjectif = useMutation({
