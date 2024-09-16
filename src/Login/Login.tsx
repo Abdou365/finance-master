@@ -92,7 +92,7 @@ const Login = () => {
               variant="link"
               color="gray"
             >
-              Mot de passe oublier
+              Mot de passe oubliée
             </Button>
             <Button onClick={() => logDemo()} size="medium">
               Essayer le compte de démonstration
