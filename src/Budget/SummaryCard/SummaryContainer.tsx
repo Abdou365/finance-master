@@ -11,7 +11,7 @@ const SummaryContainer = ({ account }: { account?: AccountSummarize }) => {
   const result = [
     {
       name: "encaissement",
-      title: "Total de mes entrée",
+      title: "Total de mes entrées",
       result: intelligentRound(account.sumPayment, "standard", 1, 2),
       image: "../assets/getting-paid.svg",
       icon: FaAngleDoubleUp,
@@ -19,7 +19,7 @@ const SummaryContainer = ({ account }: { account?: AccountSummarize }) => {
     },
     {
       name: "decaissement",
-      title: "Total de mes sortie",
+      title: "Total de mes sorties",
       result: intelligentRound(account.sumExpense, "standard", 1, 2),
       image: "../assets/spend-your-money-alt.svg",
       icon: FaAngleDoubleDown,
